@@ -1,0 +1,42 @@
+[
+  {
+    "car_brands": "Acura",
+    "price": 37037
+  },
+  {
+    "car_brands": "Toyota",
+    "price": 40943
+  },
+  {
+    "car_brands": "Audi",
+    "price": 85178
+  },
+  {
+    "car_brands": "Ferrari",
+    "price": 290000
+  },
+  {
+    "car_brands": "Buick",
+    "price": 28627
+  },
+  {
+    "car_brands": "Cadillac",
+    "price": 27722
+  },
+  {
+    "car_brands": "Chevrolet",
+    "price": 20418
+  },
+  {
+    "car_brands": "Chrysler",
+    "price": 27493
+  },
+  {
+    "car_brands": "Dodge",
+    "price": 22582
+  },
+  {
+    "car_brands": "Kia",
+    "price": 20000
+  }
+]

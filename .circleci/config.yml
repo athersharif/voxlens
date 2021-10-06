@@ -1,0 +1,30 @@
+version: 2
+
+jobs:
+  test:
+    docker:
+      - image: circleci/node:12.16
+    steps:
+      - checkout
+      - run: echo "Running tests"
+      - run: npm install
+      - run: npm run lint
+      - run: npm run test:ci
+  build:
+    docker:
+      - image: circleci/node:12.16
+    steps:
+      - checkout
+      - run: echo "build project"
+      - run: npm install
+      - run: npm run lint
+      - run: npm run build
+
+workflows:
+  version: 2
+  test_build:
+    jobs:
+      - test
+      - build:
+          requires:
+            - test

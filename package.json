@@ -1,0 +1,70 @@
+{
+  "name": "voxlens",
+  "version": "1.0.0",
+  "description": "JavaScript Library to Make Online Data Visualizations Accessible to Screen-Reader Users",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "babel src --ignore src/setupTests.js,src/__tests__ --out-dir dist --no-comments",
+    "docs": "jsdoc -c jsdoc.conf.json -d docs/ src/*.js src/**/*.js",
+    "lint": "eslint src/",
+    "lint-staged": "lint-staged",
+    "install-p5-speech": "cd node_modules/ && git clone https://github.com/IDMNYU/p5.js-speech",
+    "prepublish": "rm -rf dist/* && npm run build",
+    "prettier": "prettier --single-quote --write '{,!(coverage|node_modules|docs|dist)/**/}*.{js,css,json}'",
+    "test": "mocha --require @babel/register --require testHelpers.js --watch '__tests__/**/*.js'",
+    "test:ci": "./node_modules/.bin/nyc --reporter=html --reporter=text mocha --require @babel/register --require testHelpers.js --recursive '__tests__/**/*.js'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/athersharif/voxlens.git"
+  },
+  "keywords": [
+    "accessibility",
+    "visualization",
+    "graph",
+    "data-visualization",
+    "javascript",
+    "blind"
+  ],
+  "author": "Ather Sharif <ather.sharif@gmail.com>",
+  "license": "MIT",
+  "pre-commit": "lint-staged",
+  "lint-staged": {
+    "*.{js,json,css},!dist/*.{js,json,css}": [
+      "npm run prettier",
+      "git add -u"
+    ]
+  },
+  "nyc": {
+    "include": "src"
+  },
+  "dependencies": {
+    "defaults": "^1.0.3",
+    "hotkeys-js": "^3.8.7",
+    "lodash": "^4.17.21",
+    "p5": "^1.4.0",
+    "sonifier": "^1.0.0",
+    "stats-lite": "^2.2.0",
+    "tone": "^14.7.77",
+    "ua-parser-js": "^0.7.28",
+    "words-to-numbers": "^1.5.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-proposal-class-properties": "^7.14.5",
+    "@babel/preset-env": "^7.15.8",
+    "@babel/register": "^7.15.3",
+    "babel-eslint": "^10.1.0",
+    "babel-plugin-rewire": "^1.2.0",
+    "chai": "^4.3.4",
+    "eslint": "^7.32.0",
+    "jsdoc": "^3.6.7",
+    "jsdom": "^18.0.0",
+    "mocha": "^9.1.2",
+    "mock-require": "^3.0.3",
+    "nyc": "^15.1.0",
+    "prettier": "^2.4.1",
+    "sinon": "^11.1.2"
+  }
+}
