@@ -15,6 +15,8 @@ var _wordsToNumbers = _interopRequireDefault(require("words-to-numbers"));
 
 var _uniq = _interopRequireDefault(require("lodash/uniq"));
 
+var _utils = require("../utils");
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
@@ -55,7 +57,7 @@ var resolver = function resolver(data, _, voiceText) {
         return d === p;
       });
       var value = data.y[index];
-      response += " The value for ".concat(p, " is ").concat(value, ".");
+      response += " The value for ".concat(p, " is ").concat(_get__("addThousandsSeparators")(value), ".");
     });
   }
 
@@ -179,6 +181,9 @@ function _get_original__(variableName) {
 
     case "uniq":
       return _uniq["default"];
+
+    case "addThousandsSeparators":
+      return _utils.addThousandsSeparators;
 
     case "resolver":
       return resolver;

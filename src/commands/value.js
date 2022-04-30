@@ -4,6 +4,7 @@
 
 import wordsToNumbers from 'words-to-numbers';
 import uniq from 'lodash/uniq';
+import { addThousandsSeparators } from '../utils';
 
 /**
  * Finds the individual data point and generates the response for the "value" command.
@@ -46,7 +47,7 @@ const resolver = (data, _, voiceText) => {
       const index = data.x.findIndex((d) => d === p);
       const value = data.y[index];
 
-      response += ` The value for ${p} is ${value}.`;
+      response += ` The value for ${p} is ${addThousandsSeparators(value)}.`;
     });
   }
 
