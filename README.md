@@ -32,7 +32,7 @@ Currently, VoxLens supports:
 
 ### Sample Implementation
 
-```
+```js
 import voxlens from 'voxlens';
 
 const container = document.getElementById('chart');
@@ -56,19 +56,19 @@ const voxlensOptions = {
 
 Add this line to the appropriate nested element:
 
-```
+```js
 .call((d) => voxlens('d3', d, data, voxlensOptions));
 ```
 
 #### **For Google Charts:**
 
-```
+```js
 voxlens('googlecharts', chart, data, voxlensOptions);
 ```
 
 #### **For ChartJS:**
 
-```
+```js
 voxlens('chartjs', container, data, voxlensOptions);
 ```
 
