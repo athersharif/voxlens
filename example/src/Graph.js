@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import shuffle from 'lodash/shuffle';
 import { createChartJS, createD3, createGoogleCharts } from './helpers';
 import data from './data';
 
@@ -9,6 +10,13 @@ class Graph extends Component {
     this.createChart();
   }
 
+  settings = {
+    fillColor: 'steelblue',
+    title: 'COVID-19 Cases per US State',
+    xKey: 'state',
+    yKey: 'cases',
+  };
+
   createChart = () => {
     const { library } = this.props;
     const chartContainer = document.getElementById('chart');
@@ -17,11 +25,8 @@ class Graph extends Component {
       chartContainer.innerHTML = '';
 
       const settings = {
-        data,
-        fillColor: 'steelblue',
-        title: 'Price by Car Brands',
-        xKey: 'car_brands',
-        yKey: 'price',
+        ...this.settings,
+        data: shuffle(data),
       };
 
       let func = null;
@@ -41,7 +46,7 @@ class Graph extends Component {
 
     return (
       <div id="graph">
-        <h1>Visualization for Price by Car Brands</h1>
+        <h1>{this.settings.title}</h1>
         {library === 'chartjs' ? (
           <canvas id="chart" tabIndex="0" role="img" />
         ) : (

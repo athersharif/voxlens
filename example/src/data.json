@@ -1,42 +1,206 @@
 [
   {
-    "car_brands": "Acura",
-    "price": 37037
+    "state": "California",
+    "cases": 8767944
   },
   {
-    "car_brands": "Toyota",
-    "price": 40943
+    "state": "Texas",
+    "cases": 6498687
   },
   {
-    "car_brands": "Audi",
-    "price": 85178
+    "state": "Florida",
+    "cases": 5767014
   },
   {
-    "car_brands": "Ferrari",
-    "price": 290000
+    "state": "New York",
+    "cases": 5020179
   },
   {
-    "car_brands": "Buick",
-    "price": 28627
+    "state": "Illinois",
+    "cases": 2987502
   },
   {
-    "car_brands": "Cadillac",
-    "price": 27722
+    "state": "Pennsylvania",
+    "cases": 2713459
   },
   {
-    "car_brands": "Chevrolet",
-    "price": 20418
+    "state": "Ohio",
+    "cases": 2625551
   },
   {
-    "car_brands": "Chrysler",
-    "price": 27493
+    "state": "North Carolina",
+    "cases": 2518195
   },
   {
-    "car_brands": "Dodge",
-    "price": 22582
+    "state": "Georgia",
+    "cases": 2429839
   },
   {
-    "car_brands": "Kia",
-    "price": 20000
+    "state": "Michigan",
+    "cases": 2316871
+  },
+  {
+    "state": "New Jersey",
+    "cases": 2139579
+  },
+  {
+    "state": "Tennessee",
+    "cases": 1954202
+  },
+  {
+    "state": "Arizona",
+    "cases": 1939021
+  },
+  {
+    "state": "Indiana",
+    "cases": 1661563
+  },
+  {
+    "state": "Massachusetts",
+    "cases": 1645809
+  },
+  {
+    "state": "Virginia",
+    "cases": 1598416
+  },
+  {
+    "state": "Wisconsin",
+    "cases": 1551117
+  },
+  {
+    "state": "South Carolina",
+    "cases": 1431047
+  },
+  {
+    "state": "Washington",
+    "cases": 1391026
+  },
+  {
+    "state": "Minnesota",
+    "cases": 1383555
+  },
+  {
+    "state": "Missouri",
+    "cases": 1373435
+  },
+  {
+    "state": "Colorado",
+    "cases": 1285987
+  },
+  {
+    "state": "Alabama",
+    "cases": 1256745
+  },
+  {
+    "state": "Kentucky",
+    "cases": 1227638
+  },
+  {
+    "state": "Louisiana",
+    "cases": 1207405
+  },
+  {
+    "state": "Oklahoma",
+    "cases": 1003158
+  },
+  {
+    "state": "Maryland",
+    "cases": 967917
+  },
+  {
+    "state": "Utah",
+    "cases": 909109
+  },
+  {
+    "state": "Iowa",
+    "cases": 815206
+  },
+  {
+    "state": "Arkansas",
+    "cases": 802198
+  },
+  {
+    "state": "Mississippi",
+    "cases": 774505
+  },
+  {
+    "state": "Kansas",
+    "cases": 752974
+  },
+  {
+    "state": "Connecticut",
+    "cases": 711695
+  },
+  {
+    "state": "Nevada",
+    "cases": 672296
+  },
+  {
+    "state": "Oregon",
+    "cases": 671923
+  },
+  {
+    "state": "New Mexico",
+    "cases": 499392
+  },
+  {
+    "state": "West Virginia",
+    "cases": 470807
+  },
+  {
+    "state": "Nebraska",
+    "cases": 450048
+  },
+  {
+    "state": "Idaho",
+    "cases": 400299
+  },
+  {
+    "state": "Rhode Island",
+    "cases": 351334
+  },
+  {
+    "state": "New Hampshire",
+    "cases": 287020
+  },
+  {
+    "state": "Montana",
+    "cases": 255411
+  },
+  {
+    "state": "Delaware",
+    "cases": 252567
+  },
+  {
+    "state": "North Dakota",
+    "cases": 233538
+  },
+  {
+    "state": "South Dakota",
+    "cases": 232400
+  },
+  {
+    "state": "Hawaii",
+    "cases": 229531
+  },
+  {
+    "state": "Alaska",
+    "cases": 222608
+  },
+  {
+    "state": "Maine",
+    "cases": 184614
+  },
+  {
+    "state": "Wyoming",
+    "cases": 152206
+  },
+  {
+    "state": "District Of Columbia",
+    "cases": 132628
+  },
+  {
+    "state": "Vermont",
+    "cases": 108577
   }
 ]
