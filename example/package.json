@@ -14,8 +14,19 @@
   "scripts": {
     "start": "react-app-rewired start",
     "build": "react-app-rewired build",
+    "copy-to-docs": "cp -R ./build/ ./docs/",
     "test": "react-app-rewired test",
-    "eject": "react-app-rewired eject"
+    "lint-staged": "lint-staged",
+    "prettier": "prettier --single-quote --write '{,!(node_modules|docs|build)/**/}*.{js,css,scss,json}'"
+  },
+  "lint-staged": {
+    "*.{js,json,css,scss}": [
+      "npm run prettier",
+      "npm run build",
+      "npm run copy-to-docs",
+      "git add docs",
+      "git add -u"
+    ]
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -33,6 +44,8 @@
     ]
   },
   "devDependencies": {
+    "lint-staged": "^13.0.0",
+    "prettier": "^2.6.2",
     "react-app-rewired": "^2.1.6"
   }
 }
