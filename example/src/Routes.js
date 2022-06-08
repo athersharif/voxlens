@@ -1,4 +1,5 @@
 import { Switch, Route } from 'react-router';
+import Home from './Home';
 import Graph from './Graph';
 
 const renderComponent = (appProps, props, library) =>
@@ -10,7 +11,7 @@ const renderComponent = (appProps, props, library) =>
 
 const Routes = (appProps) => (
   <Switch>
-    <Route exact path="/" render={() => <div />} />
+    <Route exact path='/' component={Home} />
     {appProps.supportedLibraries.map((library) => (
       <Route
         key={library}

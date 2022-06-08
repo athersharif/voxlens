@@ -1,0 +1,20 @@
+{
+  "files": {
+    "main.css": "/voxlens/playground/static/css/main.ce3c7b8c.chunk.css",
+    "main.js": "/voxlens/playground/static/js/main.0e802b0a.chunk.js",
+    "main.js.map": "/voxlens/playground/static/js/main.0e802b0a.chunk.js.map",
+    "runtime-main.js": "/voxlens/playground/static/js/runtime-main.04e22a14.js",
+    "runtime-main.js.map": "/voxlens/playground/static/js/runtime-main.04e22a14.js.map",
+    "static/js/2.317d207e.chunk.js": "/voxlens/playground/static/js/2.317d207e.chunk.js",
+    "static/js/2.317d207e.chunk.js.map": "/voxlens/playground/static/js/2.317d207e.chunk.js.map",
+    "index.html": "/voxlens/playground/index.html",
+    "static/css/main.ce3c7b8c.chunk.css.map": "/voxlens/playground/static/css/main.ce3c7b8c.chunk.css.map",
+    "static/js/2.317d207e.chunk.js.LICENSE.txt": "/voxlens/playground/static/js/2.317d207e.chunk.js.LICENSE.txt"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.04e22a14.js",
+    "static/js/2.317d207e.chunk.js",
+    "static/css/main.ce3c7b8c.chunk.css",
+    "static/js/main.0e802b0a.chunk.js"
+  ]
+}
