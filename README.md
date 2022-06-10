@@ -4,7 +4,7 @@ VoxLens is a JavaScript library that improves the accessibility of online data v
 
 This library is part of an ongoing research project being conducted at the University of Washington, led by [Ather Sharif](https://athersharif.me). Citations and links to our published work can be found at the end of this document.
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/athersharif/voxlens/blob/master/LICENSE) [![npm version](https://img.shields.io/npm/v/voxlens.svg?style=flat)](https://www.npmjs.com/package/voxlens) [![CircleCI](https://circleci.com/gh/athersharif/voxlens/tree/main.svg?style=svg)](https://circleci.com/gh/athersharif/voxlens/?branch=main)
+[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/athersharif/voxlens/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/voxlens.svg?style=flat)](https://www.npmjs.com/package/voxlens) [![CircleCI](https://circleci.com/gh/athersharif/voxlens/tree/main.svg?style=svg)](https://circleci.com/gh/athersharif/voxlens/?branch=main)
 
 ## Installation
 
@@ -76,9 +76,11 @@ voxlens('chartjs', container, data, voxlensOptions);
 
 Examples are provided under the `example` folder. Run `npm start` from within the `example` folder. A sample React app will run on `localhost:3000`. URLs for each library are as follows:
 
-- *ChartJS*: localhost:3000/chartjs
-- *D3*: localhost:3000/d3
-- *Google Charts*: localhost:3000/googlecharts
+- *ChartJS*: localhost:3000/voxlens/playground/chartjs
+- *D3*: localhost:3000/voxlens/playground/d3
+- *Google Charts*: localhost:3000/voxlens/playground/googlecharts
+
+Additionally, you can interact with the examples at: [https://athersharif.github.io/voxlens/playground/#/](https://athersharif.github.io/voxlens/playground/#/)
 
 ### Interaction Modes
 
@@ -115,7 +117,7 @@ To generate coverage report:
 
 ### Docs
 
-[JSDoc](https://github.com/jsdoc/jsdoc) is used for documentation. It's important to follow the guidelines for JSDoc to add informative and descriptive comments and documentation to the code. Documentation can be found [here](https://athersharif.github.io/voxlens/).
+[JSDoc](https://github.com/jsdoc/jsdoc) is used for documentation. It's important to follow the guidelines for JSDoc to add informative and descriptive comments and documentation to the code. Documentation can be found [here](https://athersharif.github.io/voxlens/documentation/).
 
 Command: `make docs` / `npm run docs`
 
@@ -133,11 +135,11 @@ Command: `make build` / `npm run prepublish`
 
 ## Contributing
 
-Pull requests are welcome and appreciated. Contributing guidelines can be found [here](https://github.com/athersharif/voxlens/blob/master/CONTRIBUTING.md).
+Pull requests are welcome and appreciated. Contributing guidelines can be found [here](https://github.com/athersharif/voxlens/blob/main/CONTRIBUTING.md).
 
 ## License
 
-Licensed under MIT. Can be found [here](https://github.com/athersharif/voxlens/blob/master/LICENSE).
+Licensed under MIT. Can be found [here](https://github.com/athersharif/voxlens/blob/main/LICENSE).
 
 ## Citations
 
@@ -147,4 +149,4 @@ Sharif, A., Chintalapati, S. S., Wobbrock, J. O., & Reinecke, K. (2021, October)
 
 Sharif, A., Wang, O.H., Muongchan, A.T., Reinecke, K. and Wobbrock, J.O. (2022). VoxLens: Making online data visualizations accessible with an interactive JavaScript plug-in. Proceedings of the ACM Conference on Human Factors in Computing Systems (CHI '22). New Orleans, Louisiana (April 30 - May 6, 2022). New York: ACM Press. To appear.
 
-PDF | Presentation
+[PDF](https://athersharif.me/documents/chi-2022-voxlens.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
