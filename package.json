@@ -10,7 +10,7 @@
     "lint-staged": "lint-staged",
     "install-p5-speech": "cd node_modules/ && git clone https://github.com/IDMNYU/p5.js-speech",
     "prepublish": "rm -rf dist/* && npm run build",
-    "prettier": "prettier --single-quote --write '{,!(coverage|node_modules|docs|dist)/**/}*.{js,css,json}'",
+    "prettier": "prettier --single-quote --write '{,!(.circleci|.nyc_output|coverage|dist|docs|example|node_modules)/**/}*.{js,css,json}' && prettier --single-quote --write 'example/{,!(node_modules|docs|build)/**/}*.{js,css,scss,json}'",
     "test": "mocha --require @babel/register --require testHelpers.js --watch '__tests__/**/*.js'",
     "test:ci": "./node_modules/.bin/nyc --reporter=html --reporter=text mocha --require @babel/register --require testHelpers.js --recursive '__tests__/**/*.js'"
   },

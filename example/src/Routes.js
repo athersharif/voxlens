@@ -11,7 +11,7 @@ const renderComponent = (appProps, props, library) =>
 
 const Routes = (appProps) => (
   <Switch>
-    <Route exact path='/' component={Home} />
+    <Route exact path="/" component={Home} />
     {appProps.supportedLibraries.map((library) => (
       <Route
         key={library}

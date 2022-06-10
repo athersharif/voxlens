@@ -5,17 +5,17 @@ import { setHotkeysArgs, setP5Args, stubs } from '../testHelpers';
 
 const data = [
   {
-    xKey: 'x1',
+    xKey: 'dummy',
     yKey: 1,
   },
   {
-    xKey: 'x2',
+    xKey: 'fake',
     yKey: 2,
   },
 ];
 
 const expectedData = {
-  x: ['x1', 'x2'],
+  x: ['dummy', 'fake'],
   y: [1, 2],
 };
 
@@ -154,7 +154,7 @@ describe('index.js', () => {
       'Command issued: maximum'
     );
     expect(stubs.console.log.getCall(2).args.join('')).to.contain(
-      'Maximum value of Y Label for X Label is 2 belonging to x2.'
+      'Maximum value of Y Label for X Label is 2 belonging to fake.'
     );
 
     stubs.console.log.resetHistory();
@@ -193,7 +193,7 @@ describe('index.js', () => {
       'Command issued: summary'
     );
     expect(stubs.console.log.getCall(2).args.join('')).to.contain(
-      'Graph with title: some title. The X-axis is X Label. The Y-axis is Y Label. The maximum data point is 2 belonging to x2, and the minimum data point is 1 belonging to x1. The average is 1.5.'
+      'Graph with title: some title. The X-axis is X Label. The Y-axis is Y Label. The maximum data point is 2 belonging to fake, and the minimum data point is 1 belonging to dummy. The average is 1.5.'
     );
 
     stubs.console.log.resetHistory();
@@ -317,7 +317,7 @@ describe('index.js', () => {
       'Command issued: maximum'
     );
     expect(stubs.console.log.getCall(2).args.join('')).to.contain(
-      'Maximum value of Y Label for X Label is 2 belonging to x2.'
+      'Maximum value of Y Label for X Label is 2 belonging to fake.'
     );
 
     stubs.console.log.resetHistory();
@@ -339,7 +339,7 @@ describe('index.js', () => {
       'Command issued: summary'
     );
     expect(stubs.console.log.getCall(2).args.join('')).to.contain(
-      'Graph with title: some title. The X-axis is X Label. The Y-axis is Y Label. The maximum data point is 2 belonging to x2, and the minimum data point is 1 belonging to x1. The average is 1.5.'
+      'Graph with title: some title. The X-axis is X Label. The Y-axis is Y Label. The maximum data point is 2 belonging to fake, and the minimum data point is 1 belonging to dummy. The average is 1.5.'
     );
 
     stubs.console.log.resetHistory();
@@ -447,7 +447,7 @@ describe('index.js', () => {
       'Command issued: minimum'
     );
     expect(stubs.console.log.getCall(3).args.join('')).to.contain(
-      'Average of Y Label for X Label is 1.5. Minimum value of Y Label for X Label is 1 belonging to x1.'
+      'Average of Y Label for X Label is 1.5. Minimum value of Y Label for X Label is 1 belonging to dummy.'
     );
 
     stubs.console.log.resetHistory();

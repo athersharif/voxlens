@@ -31,37 +31,55 @@ function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToAr
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-var resolver = function resolver(data, _, voiceText) {
-  voiceText = voiceText ? voiceText.replace(/(\d+)(st|nd|rd|th)/, '$1') : '';
-  var possibleDataPoints = [];
+var resolver = function resolver(data, _) {
+  var voiceText = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
+  voiceText = _get__("sanitizeVoiceText")(voiceText);
   var response = "Could not find the data you're looking for. Please try again.";
 
-  if (voiceText.length > 0) {
-    voiceText.split(' ').map(function (text) {
-      return {
-        text: text,
-        matches: data.x.filter(function (d) {
-          d = d.toString().toLowerCase();
-          text = _get__("wordsToNumbers")(text.toString().toLowerCase());
-          return d.includes(text);
-        })
-      };
-    }).filter(function (c) {
-      return c.matches.length > 0;
-    }).forEach(function (c) {
-      possibleDataPoints = _get__("uniq")([].concat(_toConsumableArray(possibleDataPoints), _toConsumableArray(c.matches)));
-    });
-    if (possibleDataPoints.length > 0) response = 'Found the following possible matches in the data.';
-    possibleDataPoints.forEach(function (p) {
-      var index = data.x.findIndex(function (d) {
-        return d === p;
-      });
-      var value = data.y[index];
-      response += " The value for ".concat(p, " is ").concat(_get__("addThousandsSeparators")(value), ".");
-    });
-  }
+  var matchingDataPointIndices = _get__("uniq")(_get__("getPossibleDataPointIndices")(data, voiceText));
 
+  if (matchingDataPointIndices.length > 0) response = 'Found the following possible matches in the data.';
+  matchingDataPointIndices.forEach(function (i) {
+    var key = data.x[i];
+    var value = data.y[i];
+    response += " The value for ".concat(key, " is ").concat(_get__("addThousandsSeparators")(value), ".");
+  });
   return response;
+};
+
+var getPossibleDataPointIndices = function getPossibleDataPointIndices(data, voiceText) {
+  voiceText = _get__("sanitizeVoiceText")(voiceText);
+  if (!voiceText || voiceText.replaceAll(' ', '') === '') return {
+    indices: []
+  };
+
+  var xFilter = function xFilter(arr, text) {
+    return _get__("uniq")(arr.filter(function (x) {
+      return Number.isNaN(parseInt(x)) && Number.isNaN(parseInt(text)) ? x.toString().toLowerCase().includes(text) : x.toString().toLowerCase() === text;
+    }));
+  };
+
+  var filteredData = [];
+  voiceText = voiceText.split(' ').map(function (text) {
+    return _get__("wordsToNumbers")(text.toString().toLowerCase());
+  });
+  voiceText.forEach(function (text) {
+    filteredData = [].concat(_toConsumableArray(filteredData), _toConsumableArray(xFilter(data.x, text)));
+  });
+  var indices = [];
+  filteredData.forEach(function (d) {
+    indices = [].concat(_toConsumableArray(indices), _toConsumableArray(data.x.map(function (d, i) {
+      return {
+        d: d,
+        i: i
+      };
+    }).filter(function (x) {
+      return x.d === d;
+    }).map(function (x) {
+      return x.i;
+    })));
+  });
+  return indices;
 };
 
 var _default = _get__("resolver");
@@ -176,14 +194,20 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
   switch (variableName) {
-    case "wordsToNumbers":
-      return _wordsToNumbers["default"];
+    case "sanitizeVoiceText":
+      return _utils.sanitizeVoiceText;
 
     case "uniq":
       return _uniq["default"];
 
+    case "getPossibleDataPointIndices":
+      return getPossibleDataPointIndices;
+
     case "addThousandsSeparators":
       return _utils.addThousandsSeparators;
+
+    case "wordsToNumbers":
+      return _wordsToNumbers["default"];
 
     case "resolver":
       return resolver;

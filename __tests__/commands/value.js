@@ -4,7 +4,7 @@ import * as allCommands from '../../src/commands';
 const commands = allCommands.commands;
 
 const data = {
-  x: ['x1', 'x2'],
+  x: ['dummy', 'fake'],
   y: [12, 22],
 };
 
@@ -43,11 +43,21 @@ describe('getIndividualDataPoint', () => {
   });
 
   it('should return correct response when voice input has matches', () => {
-    const voiceText = 'tell me about x1';
+    const voiceText = 'tell me about dummy';
     const result = command.func(data, options, voiceText);
 
     expect(result).to.equal(
-      'Found the following possible matches in the data. The value for x1 is 12.'
+      'Found the following possible matches in the data. The value for dummy is 12.'
+    );
+  });
+
+  it('should return correct response when voice input has numbers as keys', () => {
+    const voiceText = 'tell me about 2014';
+    const data = { x: [2014], y: [2345] };
+    const result = command.func(data, options, voiceText);
+
+    expect(result).to.equal(
+      'Found the following possible matches in the data. The value for 2014 is 2,345.'
     );
   });
 });
