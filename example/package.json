@@ -8,26 +8,13 @@
     "d3": "^7.1.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
-    "react-router-dom": "^5.3.0",
-    "react-scripts": "4.0.3",
-    "web-vitals": "^1.0.1"
+    "react-router-dom": "^5.3.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
-    "build": "react-app-rewired build",
-    "copy-to-docs": "cp -R ./build/ ./docs/",
+    "build": "react-app-rewired build && cp -R ./build/ ./docs/",
     "test": "react-app-rewired test",
-    "lint-staged": "lint-staged",
     "prettier": "prettier --single-quote --write '{,!(node_modules|docs|build)/**/}*.{js,css,scss,json}'"
-  },
-  "lint-staged": {
-    "*.{js,json,css,scss}": [
-      "npm run prettier",
-      "npm run build",
-      "npm run copy-to-docs",
-      "git add docs",
-      "git add -u"
-    ]
   },
   "eslintConfig": {
     "extends": "react-app"
@@ -45,8 +32,7 @@
     ]
   },
   "devDependencies": {
-    "lint-staged": "^13.0.0",
     "prettier": "^2.6.2",
-    "react-app-rewired": "^2.1.6"
+    "react-app-rewired": "^2.2.1"
   }
 }
