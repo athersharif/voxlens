@@ -59,7 +59,7 @@ global.screen = window.screen;
 global.navigator = window.navigator;
 global.console = stubs.console;
 
-mock('p5.js-speech/lib/p5.speech', {});
+mock('./src/dependencies/p5Speech.js', {});
 
 mock('lodash/uniqueId', () => 'unique-id');
 

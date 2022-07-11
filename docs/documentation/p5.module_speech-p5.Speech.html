@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="utf-8">
-    <title>JSDoc: Source: commands/variance.js</title>
+    <title>JSDoc: Class: Speech</title>
 
     <script src="scripts/prettify/prettify.js"> </script>
     <script src="scripts/prettify/lang-css.js"> </script>
@@ -17,45 +17,141 @@
 
 <div id="main">
 
-    <h1 class="page-title">Source: commands/variance.js</h1>
+    <h1 class="page-title">Class: Speech</h1>
 
     
 
 
 
+
+<section>
+
+<header>
     
-    <section>
-        <article>
-            <pre class="prettyprint source linenums"><code>/**
- * @namespace commands.variance
- */
+        <h2><span class="attribs"><span class="type-signature"></span></span>Speech<span class="signature">()</span><span class="type-signature"></span></h2>
+        
+            <div class="class-description"><p>p5.Speech</p></div>
+        
+    
+</header>
 
-import stats from 'stats-lite';
-import { generateSentence } from './helpers';
-import { addThousandsSeparators } from '../utils';
+<article>
+    <div class="container-overview">
+    
+        
 
-/**
- * Generates the response for the "variance" command.
- * @memberOf commands.variance
- * @param {Object} data - The data from the viz.
- * @param {string[]} data.x - Values of the independent variable.
- * @param {string[]} data.y - Values of the dependent variable.
- * @param {Object} options - The options supplied to voxlens when creating the viz.
- * @param {string} options.xLabel - Label for the x-axis.
- * @param {number} options.yLabel - Label for the y-axis.
- * @returns {string} - Response for the "variance" command.
- */
-const resolver = (data, options) =>
-  generateSentence(
-    'Variance',
-    addThousandsSeparators(stats.variance(data.y)),
-    options
-  );
+    
+    <h2>Constructor</h2>
+    
 
-export default resolver;
-</code></pre>
-        </article>
-    </section>
+    
+    <h4 class="name" id="Speech"><span class="type-signature"></span>new Speech<span class="signature">()</span><span class="type-signature"></span></h4>
+    
+
+    
+
+
+
+<div class="description">
+    <p>Base class for a Speech Synthesizer</p>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<dl class="details">
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+    <dt class="tag-source">Source:</dt>
+    <dd class="tag-source"><ul class="dummy"><li>
+        <a href="dependencies_p5Speech.js.html">dependencies/p5Speech.js</a>, <a href="dependencies_p5Speech.js.html#line40">line 40</a>
+    </li></ul></dd>
+    
+
+    
+
+    
+
+    
+</dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+</article>
+
+</section>
 
 
 

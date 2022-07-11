@@ -1,6 +1,6 @@
 {
   "name": "voxlens",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "JavaScript Library to Make Online Data Visualizations Accessible to Screen-Reader Users",
   "main": "dist/index.js",
   "scripts": {
@@ -8,11 +8,10 @@
     "docs": "rm -r docs/documentation/* && jsdoc -c jsdoc.conf.json -d docs/documentation/ src/*.js src/**/*.js && rm -r docs/playground/* && cp -R example/docs/ docs/playground/",
     "lint": "eslint src/",
     "lint-staged": "lint-staged",
-    "install-p5-speech": "cd node_modules/ && git clone https://github.com/IDMNYU/p5.js-speech",
     "prepublish": "rm -rf dist/* && npm run build",
     "prettier": "prettier --single-quote --write '{,!(.circleci|.nyc_output|coverage|dist|docs|example|node_modules)/**/}*.{js,css,json}' && prettier --single-quote --write 'example/{,!(node_modules|docs|build)/**/}*.{js,css,scss,json}'",
     "test": "mocha --require @babel/register --require testHelpers.js --watch '__tests__/**/*.js'",
-    "test:ci": "./node_modules/.bin/nyc --reporter=html --reporter=text mocha --require @babel/register --require testHelpers.js --recursive '__tests__/**/*.js'"
+    "test:ci": "./node_modules/.bin/nyc --reporter=html --reporter=text --exclude 'src/dependencies/*.js' mocha --require @babel/register --require testHelpers.js --recursive '__tests__/**/*.js' --exclude 'src/dependencies/*.js'"
   },
   "repository": {
     "type": "git",
@@ -22,7 +21,7 @@
     "accessibility",
     "visualization",
     "graph",
-    "data-visualization",
+    "dataviz",
     "javascript",
     "blind"
   ],

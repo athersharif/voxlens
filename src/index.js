@@ -5,7 +5,6 @@
 import defaults from 'defaults';
 import p5 from 'p5';
 import * as Tone from 'tone';
-import 'p5.js-speech/lib/p5.speech';
 import hotkeys from 'hotkeys-js';
 import uniqueId from 'lodash/uniqueId';
 import sonifier, { resetSonifier } from 'sonifier';
@@ -24,6 +23,8 @@ import {
   logKeyPresses,
   validate,
 } from './utils';
+
+require('./dependencies/p5Speech');
 
 let lastIssuedCommand = {
   command: null,

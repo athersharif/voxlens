@@ -30,11 +30,6 @@ install:
 	@npm cache clean -f
 	@echo "\nInstalling all dependencies\n"
 	@npm install
-	@echo "\nInstalling P5 Speech\n"
-	@npm run install-p5-speech
 	@echo "\nDone"
-
-install-p5-speech:
-	@npm run install-p5-speech
 
 .PHONY: start ready build test prettier lint docs

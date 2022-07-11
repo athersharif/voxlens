@@ -17,8 +17,6 @@ var _p = _interopRequireDefault(require("p5"));
 
 var Tone = _interopRequireWildcard(require("tone"));
 
-require("p5.js-speech/lib/p5.speech");
-
 var _hotkeysJs = _interopRequireDefault(require("hotkeys-js"));
 
 var _uniqueId = _interopRequireDefault(require("lodash/uniqueId"));
@@ -48,6 +46,8 @@ function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symb
 function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+require('./dependencies/p5Speech');
 
 var lastIssuedCommand = {
   command: null,
