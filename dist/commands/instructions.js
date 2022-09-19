@@ -14,7 +14,9 @@ exports["default"] = void 0;
 var _utils = require("../utils");
 
 var resolver = function resolver(_, options) {
-  return _get__("getInstructionsText")(options.triggers, options.title, _get__("getSettings")());
+  return {
+    sentence: _get__("getInstructionsText")(options.triggers, options.title, _get__("getSettings")())
+  };
 };
 
 var _default = _get__("resolver");

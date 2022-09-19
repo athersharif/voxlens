@@ -22,10 +22,16 @@ var _utils = require("../utils");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var resolver = function resolver(data, options) {
+  var key = _get__("generateXLabel")(options);
+
   var mode = _get__("stats").mode(data.y);
 
   if (Array.isArray(mode)) {
-    return 'There is no mode. No value appears more than any other.';
+    return {
+      key: key,
+      value: null,
+      sentence: 'There is no mode. No value appears more than any other.'
+    };
   }
 
   if (_get__("isSet")(mode)) {
@@ -34,7 +40,11 @@ var resolver = function resolver(data, options) {
     mode = [mode];
   }
 
-  return _get__("generateSentence")('Mode', _get__("verbalise")(mode), options);
+  return {
+    key: key,
+    value: mode,
+    sentence: _get__("generateSentence")('Mode', _get__("verbalise")(mode), options)
+  };
 };
 
 var _default = _get__("resolver");
@@ -149,6 +159,9 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
   switch (variableName) {
+    case "generateXLabel":
+      return _helpers.generateXLabel;
+
     case "stats":
       return _statsLite["default"];
 

@@ -9,8 +9,8 @@ const data = {
 };
 
 const options = {
-  xLabel: 'labelX',
-  yLabel: 'labelY',
+  xLabel: 'dummy',
+  yLabel: 'label',
 };
 
 describe('getSumSummary', () => {
@@ -19,6 +19,6 @@ describe('getSumSummary', () => {
   it('should return correct sum', () => {
     const result = command.func(data, options);
 
-    expect(result).to.equal('Sum of labelY for labelX is 34.');
+    expect(result.sentence).to.equal('Total label for dummies is 34.');
   });
 });

@@ -13,7 +13,8 @@ import { getInstructionsText, getSettings } from '../utils';
  * @param {number} options.yLabel - Label for the y-axis.
  * @returns {string} - Response for the "instructions" command.
  */
-const resolver = (_, options) =>
-  getInstructionsText(options.triggers, options.title, getSettings());
+const resolver = (_, options) => ({
+  sentence: getInstructionsText(options.triggers, options.title, getSettings()),
+});
 
 export default resolver;

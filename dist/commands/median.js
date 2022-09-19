@@ -20,7 +20,15 @@ var _utils = require("../utils");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var resolver = function resolver(data, options) {
-  return _get__("generateSentence")('Median', _get__("addThousandsSeparators")(_get__("stats").median(data.y)), options);
+  var value = _get__("stats").median(data.y);
+
+  var key = _get__("generateXLabel")(options);
+
+  return {
+    key: key,
+    value: value,
+    sentence: _get__("generateSentence")('Median', _get__("addThousandsSeparators")(value), options)
+  };
 };
 
 var _default = _get__("resolver");
@@ -135,14 +143,17 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
   switch (variableName) {
+    case "stats":
+      return _statsLite["default"];
+
+    case "generateXLabel":
+      return _helpers.generateXLabel;
+
     case "generateSentence":
       return _helpers.generateSentence;
 
     case "addThousandsSeparators":
       return _utils.addThousandsSeparators;
-
-    case "stats":
-      return _statsLite["default"];
 
     case "resolver":
       return resolver;

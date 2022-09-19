@@ -9,8 +9,8 @@ const data = {
 };
 
 const options = {
-  xLabel: 'labelX',
-  yLabel: 'labelY',
+  xLabel: 'dummy',
+  yLabel: 'label',
 };
 
 describe('getMedianSummary', () => {
@@ -19,6 +19,6 @@ describe('getMedianSummary', () => {
   it('should return correct median', () => {
     const result = command.func(data, options);
 
-    expect(result).to.equal('Median of labelY for labelX is 17.');
+    expect(result.sentence).to.equal('Median label for dummies is 17.');
   });
 });

@@ -3,7 +3,7 @@
  */
 
 import stats from 'stats-lite';
-import { generateSentence } from './helpers';
+import { generateSentence, generateXLabel } from './helpers';
 import { addThousandsSeparators } from '../utils';
 
 /**
@@ -17,11 +17,19 @@ import { addThousandsSeparators } from '../utils';
  * @param {number} options.yLabel - Label for the y-axis.
  * @returns {string} - Response for the "variance" command.
  */
-const resolver = (data, options) =>
-  generateSentence(
-    'Variance',
-    addThousandsSeparators(stats.variance(data.y)),
-    options
-  );
+const resolver = (data, options) => {
+  const value = stats.variance(data.y);
+  const key = generateXLabel(options);
+
+  return {
+    key,
+    value,
+    sentence: generateSentence(
+      'Variance',
+      addThousandsSeparators(value),
+      options
+    ),
+  };
+};
 
 export default resolver;

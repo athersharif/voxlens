@@ -11,75 +11,20 @@ exports.__set__ = exports.__Rewire__ = _set__;
 exports.__GetDependency__ = exports.__get__ = _get__;
 exports["default"] = void 0;
 
-var _wordsToNumbers = _interopRequireDefault(require("words-to-numbers"));
-
-var _uniq = _interopRequireDefault(require("lodash/uniq"));
+var _round = _interopRequireDefault(require("lodash/round"));
 
 var _utils = require("../utils");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-var resolver = function resolver(data, _) {
-  var voiceText = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
-  voiceText = _get__("sanitizeVoiceText")(voiceText);
-  var response = "Could not find the data you're looking for. Please try again.";
-
-  var matchingDataPointIndices = _get__("uniq")(_get__("getPossibleDataPointIndices")(data, voiceText));
-
-  if (matchingDataPointIndices.length > 0) response = 'Found the following possible matches in the data.';
-  matchingDataPointIndices.forEach(function (i) {
-    var key = data.x[i];
-    var value = data.y[i];
-    response += " The value for ".concat(key, " is ").concat(_get__("addThousandsSeparators")(value), ".");
-  });
-  return response;
-};
-
-var getPossibleDataPointIndices = function getPossibleDataPointIndices(data, voiceText) {
-  voiceText = _get__("sanitizeVoiceText")(voiceText);
-  if (!voiceText || voiceText.replaceAll(' ', '') === '') return {
-    indices: []
+var resolver = function resolver(data, options) {
+  var key = data.x[0];
+  var value = data.y[0];
+  return {
+    key: key,
+    value: value,
+    sentence: "".concat(options.yLabel, " for ").concat(key, " is ").concat(_get__("addThousandsSeparators")(_get__("round")(value, 2)), ".")
   };
-
-  var xFilter = function xFilter(arr, text) {
-    return _get__("uniq")(arr.filter(function (x) {
-      return Number.isNaN(parseInt(x)) && Number.isNaN(parseInt(text)) ? x.toString().toLowerCase().includes(text) : x.toString().toLowerCase() === text;
-    }));
-  };
-
-  var filteredData = [];
-  voiceText = voiceText.split(' ').map(function (text) {
-    return _get__("wordsToNumbers")(text.toString().toLowerCase());
-  });
-  voiceText.forEach(function (text) {
-    filteredData = [].concat(_toConsumableArray(filteredData), _toConsumableArray(xFilter(data.x, text)));
-  });
-  var indices = [];
-  filteredData.forEach(function (d) {
-    indices = [].concat(_toConsumableArray(indices), _toConsumableArray(data.x.map(function (d, i) {
-      return {
-        d: d,
-        i: i
-      };
-    }).filter(function (x) {
-      return x.d === d;
-    }).map(function (x) {
-      return x.i;
-    })));
-  });
-  return indices;
 };
 
 var _default = _get__("resolver");
@@ -194,20 +139,11 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
   switch (variableName) {
-    case "sanitizeVoiceText":
-      return _utils.sanitizeVoiceText;
-
-    case "uniq":
-      return _uniq["default"];
-
-    case "getPossibleDataPointIndices":
-      return getPossibleDataPointIndices;
-
     case "addThousandsSeparators":
       return _utils.addThousandsSeparators;
 
-    case "wordsToNumbers":
-      return _wordsToNumbers["default"];
+    case "round":
+      return _round["default"];
 
     case "resolver":
       return resolver;
