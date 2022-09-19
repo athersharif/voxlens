@@ -1,4 +1,51 @@
 #graph {
-  margin: 30px;
+  margin-bottom: 30px;
   text-align: center;
+  width: 100%;
+}
+
+#graph p {
+  text-align: center;
+}
+
+#graph path {
+  stroke: #a9a9a9;
+  stroke-width: 1;
+}
+
+#graph path:hover {
+  fill-opacity: 0.5;
+}
+
+#graph .tooltip {
+  position: absolute;
+  margin: 10px;
+  font: 14px sans-serif;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.9);
+  border: 1px solid grey;
+  border-radius: 5px;
+  width: auto;
+  padding: 4px;
+  color: white;
+  opacity: 0;
+}
+
+#graph .tooltip h4 {
+  margin: 0;
+  font-size: 15px;
+  color: white;
+}
+
+#graph .tooltip table {
+  table-layout: fixed;
+}
+
+#graph .tooltip tr td {
+  padding: 0;
+  margin: 0;
+}
+
+#graph .tooltip tr td:nth-child(1) {
+  width: 50px;
 }

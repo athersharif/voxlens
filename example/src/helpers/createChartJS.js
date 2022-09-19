@@ -1,6 +1,6 @@
 import Chart from 'chart.js';
 import startCase from 'lodash/startCase';
-import voxlens from '../../../dist';
+import voxlens from '../../../src';
 
 const createChartJS = (options) => {
   const { data, fillColor, title, xKey, yKey } = options;

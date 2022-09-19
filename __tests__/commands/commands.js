@@ -9,8 +9,8 @@ describe('getAllCommands', () => {
   it('should return correct list of commands', () => {
     const result = command.func();
 
-    expect(result).to.equal(
-      'VoxLens supports the following commands. average, mean, median, mode, maximum, highest, minimum, lowest, variance, standard deviation, total, instructions, directions, help, summary, value, data, commands.'
+    expect(result.sentence).to.equal(
+      'VoxLens supports the following commands. average, mean, median, mode, maximum, highest, minimum, lowest, variance, standard deviation, total, instructions, directions, help, summary, value, data, ranking, commands.'
     );
   });
 });

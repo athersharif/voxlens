@@ -11,13 +11,6 @@ const { window } = new JSDOM(
 );
 
 export const stubs = {
-  console: {
-    error: sinon.stub(),
-    log: sinon.stub(),
-  },
-  hotkeys: {
-    setScope: sinon.stub(),
-  },
   tone: {
     Transport: {
       start: sinon.stub(),
@@ -57,7 +50,6 @@ global.document = window.document;
 global.HTMLElement = window.HTMLElement;
 global.screen = window.screen;
 global.navigator = window.navigator;
-global.console = stubs.console;
 
 mock('./src/dependencies/p5Speech.js', {});
 
@@ -70,23 +62,14 @@ mock('tone', {
   Transport: stubs.tone.Transport,
 });
 
-export const setP5Args = (command, success) => {
-  p5Args = { command, success };
-};
-
-let p5Args = {
-  command: '',
-  success: true,
-};
-
 mock('p5', {
   SpeechRec: () => ({
-    resultString: p5Args.command,
+    resultString: process.env.TEST_P5_RESULT || '',
     start: function () {
-      if (p5Args.success) {
-        this.onResult();
-      } else {
+      if (process.env.TEST_P5_FAIL === 'true') {
         this.onError();
+      } else {
+        this.onResult();
       }
     },
     onResult: () => {},
@@ -94,26 +77,31 @@ mock('p5', {
   }),
 });
 
-export const setHotkeysArgs = (letter) => {
-  hotkeysArgs = { code: letter };
+const keyMapper = {
+  1: 49,
+  2: 50,
+  3: 51,
+  4: 52,
+  5: 53,
+  a: 65,
+  i: 73,
+  m: 77,
+  p: 80,
+  s: 83,
 };
 
-let hotkeysArgs = {
-  code: '',
+export const fireEvent = (key) => {
+  window.document.dispatchEvent(
+    new window.KeyboardEvent('keydown', {
+      keyCode: keyMapper[key],
+      code: 'Key' + key.toUpperCase(),
+      altKey: true,
+      bubbles: true,
+    })
+  );
 };
 
-const hotkeys = (binds, id, call) => {
-  binds = binds.split(',').map((b) => b.split('+').pop());
-  const event = {
-    code: 'key' + hotkeysArgs.code,
-    preventDefault: () => {},
-  };
-
-  if (binds.includes(hotkeysArgs.code)) {
-    call(event);
-  }
+export const element = {
+  setAttribute: () => {},
+  children: [{ setAttribute: () => {} }, { setAttribute: () => {} }],
 };
-
-hotkeys.setScope = stubs.hotkeys.setScope;
-
-mock('hotkeys-js', hotkeys);

@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import shuffle from 'lodash/shuffle';
 import { createChartJS, createD3, createGoogleCharts } from './helpers';
-import data from './data';
 
 import './Graph.css';
 
@@ -18,7 +17,7 @@ class Graph extends Component {
   };
 
   createChart = () => {
-    const { library } = this.props;
+    const { combination } = this.props;
     const chartContainer = document.getElementById('chart');
 
     if (chartContainer) {
@@ -26,14 +25,17 @@ class Graph extends Component {
 
       const settings = {
         ...this.settings,
-        data: shuffle(data),
+        chartType: combination.type,
+        dataModule: combination.type === 'map' ? 'state' : null,
+        data: shuffle(require('./data/' + combination.type)),
       };
 
       let func = null;
 
-      if (library === 'chartjs') func = createChartJS;
-      else if (library === 'd3') func = createD3;
-      else if (library === 'googlecharts') func = createGoogleCharts;
+      if (combination.library === 'chartjs') func = createChartJS;
+      else if (combination.library === 'd3') func = createD3;
+      else if (combination.library === 'googlecharts')
+        func = createGoogleCharts;
 
       return func ? func(settings) : null;
     } else {
@@ -42,12 +44,12 @@ class Graph extends Component {
   };
 
   render() {
-    const { library } = this.props;
+    const { combination } = this.props;
 
     return (
       <div id="graph">
-        <h1>{this.settings.title}</h1>
-        {library === 'chartjs' ? (
+        {combination.library === 'd3' && <h1>{this.settings.title}</h1>}
+        {combination.library === 'chartjs' ? (
           <canvas id="chart" tabIndex="0" role="img" />
         ) : (
           <div id="chart" />

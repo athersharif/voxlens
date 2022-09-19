@@ -20,7 +20,9 @@ var resolver = function resolver() {
     return response += ' ' + c.name + ',';
   });
 
-  return response.replace(/.$/, '.');
+  return {
+    sentence: response.replace(/.$/, '.')
+  };
 };
 
 var _default = _get__("resolver");

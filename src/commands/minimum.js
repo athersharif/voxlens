@@ -18,13 +18,21 @@ import { addThousandsSeparators } from '../utils';
  * @returns {string} - Response for the "minimum" command.
  */
 const resolver = (data, options) => {
-  const [minValue, independentValues] = getIndependentValues(data, min);
-
-  return generateSentence(
-    'Minimum value',
-    `${addThousandsSeparators(minValue)} belonging to ${independentValues}`,
+  const [minValue, independentValues] = getIndependentValues(
+    data,
+    min,
     options
   );
+
+  return {
+    key: independentValues,
+    value: minValue,
+    sentence: generateSentence(
+      'Minimum',
+      `${addThousandsSeparators(minValue)} belonging to ${independentValues}`,
+      options
+    ),
+  };
 };
 
 export default resolver;

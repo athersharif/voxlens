@@ -36,12 +36,12 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var resolver = function resolver(data, options) {
-  var _get__2 = _get__("getIndependentValues")(data, _get__("max")),
+  var _get__2 = _get__("getIndependentValues")(data, _get__("max"), options),
       _get__3 = _slicedToArray(_get__2, 2),
       maxValue = _get__3[0],
       maxIndependentValues = _get__3[1];
 
-  var _get__4 = _get__("getIndependentValues")(data, _get__("min")),
+  var _get__4 = _get__("getIndependentValues")(data, _get__("min"), options),
       _get__5 = _slicedToArray(_get__4, 2),
       minValue = _get__5[0],
       minIndependentValues = _get__5[1];
@@ -52,7 +52,9 @@ var resolver = function resolver(data, options) {
 
   var average = _get__("addThousandsSeparators")(_get__("stats").mean(data.y));
 
-  return "Graph with title: ".concat(options.title, ". The X-axis is ").concat(options.xLabel, ". The Y-axis is ").concat(options.yLabel, ". The maximum data point is ").concat(maximum, " belonging to ").concat(maxIndependentValues, ", and the minimum data point is ").concat(minimum, " belonging to ").concat(minIndependentValues, ". The average is ").concat(average, ".");
+  return {
+    sentence: "Graph with title: ".concat(options.title, ". The X-axis is ").concat(options.xLabel, ". The Y-axis is ").concat(options.yLabel, ". The maximum data point is ").concat(maximum, " belonging to ").concat(maxIndependentValues, ", and the minimum data point is ").concat(minimum, " belonging to ").concat(minIndependentValues, ". The average is ").concat(average, ".")
+  };
 };
 
 var _default = _get__("resolver");

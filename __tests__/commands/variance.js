@@ -9,8 +9,8 @@ const data = {
 };
 
 const options = {
-  xLabel: 'labelX',
-  yLabel: 'labelY',
+  xLabel: 'dummy',
+  yLabel: 'label',
 };
 
 describe('getVarianceSummary', () => {
@@ -19,6 +19,6 @@ describe('getVarianceSummary', () => {
   it('should return correct variance', () => {
     const result = command.func(data, options);
 
-    expect(result).to.equal('Variance of labelY for labelX is 25.');
+    expect(result.sentence).to.equal('Variance label for dummies is 25.');
   });
 });

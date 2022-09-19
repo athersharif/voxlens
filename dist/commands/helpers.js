@@ -9,9 +9,13 @@ exports.__ResetDependency__ = _reset__;
 exports.__RewireAPI__ = void 0;
 exports.__set__ = exports.__Rewire__ = _set__;
 exports.__GetDependency__ = exports.__get__ = _get__;
-exports.getIndependentValues = exports.generateSentence = exports["default"] = void 0;
+exports.getIndependentValues = exports.generateXLabel = exports.generateSentence = exports["default"] = void 0;
+
+var _pluralize = _interopRequireDefault(require("pluralize"));
 
 var _utils = require("../utils");
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 
 var getAllIndices = function getAllIndices(data, value) {
   var indices = [];
@@ -38,10 +42,30 @@ var getIndependentValues = function getIndependentValues(data, func) {
 exports.getIndependentValues = getIndependentValues;
 
 var generateSentence = function generateSentence(preText, postText, options) {
-  return "".concat(preText, " of ").concat(options.yLabel, " for ").concat(options.xLabel, " is ").concat(postText, ".");
+  var yLabel = options.yLabel;
+
+  var xLabel = _get__("generateXLabel")(options);
+
+  return "".concat(preText, " ").concat(yLabel, " for ").concat(_get__("pluralize")(xLabel), " is ").concat(postText, ".");
 };
 
 exports.generateSentence = generateSentence;
+
+var generateXLabel = function generateXLabel(_ref) {
+  var key = _ref.key,
+      type = _ref.type,
+      xLabel = _ref.xLabel;
+
+  if (key) {
+    key = key.toString().split('.');
+    xLabel = key[0];
+    if (key.length > 1) xLabel = key[1] + ' ' + xLabel;
+  }
+
+  return "".concat(xLabel).concat(type === ' region' ? type : '');
+};
+
+exports.generateXLabel = generateXLabel;
 
 function _getGlobalObject() {
   try {
@@ -156,6 +180,12 @@ function _get_original__(variableName) {
 
     case "verbalise":
       return _utils.verbalise;
+
+    case "generateXLabel":
+      return generateXLabel;
+
+    case "pluralize":
+      return _pluralize["default"];
   }
 
   return undefined;

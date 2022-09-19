@@ -4,7 +4,7 @@
 
 import stats from 'stats-lite';
 import isSet from 'lodash/isSet';
-import { generateSentence } from './helpers';
+import { generateSentence, generateXLabel } from './helpers';
 import { verbalise } from '../utils';
 
 /**
@@ -19,10 +19,15 @@ import { verbalise } from '../utils';
  * @returns {string} - Response for the "mode" command.
  */
 const resolver = (data, options) => {
+  const key = generateXLabel(options);
   let mode = stats.mode(data.y);
 
   if (Array.isArray(mode)) {
-    return 'There is no mode. No value appears more than any other.';
+    return {
+      key,
+      value: null,
+      sentence: 'There is no mode. No value appears more than any other.',
+    };
   }
 
   if (isSet(mode)) {
@@ -31,7 +36,11 @@ const resolver = (data, options) => {
     mode = [mode];
   }
 
-  return generateSentence('Mode', verbalise(mode), options);
+  return {
+    key,
+    value: mode,
+    sentence: generateSentence('Mode', verbalise(mode), options),
+  };
 };
 
 export default resolver;

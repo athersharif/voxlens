@@ -14,7 +14,9 @@ const resolver = () => {
 
   commands.forEach((c) => (response += ' ' + c.name + ','));
 
-  return response.replace(/.$/, '.');
+  return {
+    sentence: response.replace(/.$/, '.'),
+  };
 };
 
 export default resolver;

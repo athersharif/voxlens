@@ -1,5 +1,5 @@
 import startCase from 'lodash/startCase';
-import voxlens from '../../../dist';
+import voxlens from '../../../src';
 
 const createGoogleCharts = (options) => {
   let { data, fillColor, title, xKey, yKey } = options;

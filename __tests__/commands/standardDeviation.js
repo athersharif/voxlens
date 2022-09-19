@@ -9,8 +9,8 @@ const data = {
 };
 
 const options = {
-  xLabel: 'labelX',
-  yLabel: 'labelY',
+  xLabel: 'dummy',
+  yLabel: 'label',
 };
 
 describe('getStandardDeviationSummary', () => {
@@ -19,6 +19,8 @@ describe('getStandardDeviationSummary', () => {
   it('should return correct standard deviation', () => {
     const result = command.func(data, options);
 
-    expect(result).to.equal('Standard Deviation of labelY for labelX is 5.');
+    expect(result.sentence).to.equal(
+      'Standard Deviation label for dummies is 5.'
+    );
   });
 });
