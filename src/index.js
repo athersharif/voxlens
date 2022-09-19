@@ -68,6 +68,7 @@ const startApp = (data, options, hotKeysId) => {
           voiceText,
           data,
           options,
+          true,
           lastIssuedCommand
         );
         if (result) lastIssuedCommand = result.lastIssuedCommand;
@@ -105,6 +106,7 @@ const startApp = (data, options, hotKeysId) => {
         'instructions',
         data,
         options,
+        false,
         lastIssuedCommand
       );
       if (result) lastIssuedCommand = result.lastIssuedCommand;
@@ -143,6 +145,7 @@ const startApp = (data, options, hotKeysId) => {
         'summary',
         data,
         options,
+        false,
         lastIssuedCommand
       );
       if (result) lastIssuedCommand = result.lastIssuedCommand;

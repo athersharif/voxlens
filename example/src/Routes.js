@@ -2,25 +2,40 @@ import { Switch, Route } from 'react-router';
 import Home from './Home';
 import Graph from './Graph';
 
-const renderComponent = (appProps, props, library) =>
-  appProps.supportedLibraries.includes(library) ? (
-    <Graph {...appProps} {...props} library={library} />
-  ) : (
-    <div>Supported libraries: {appProps.supportedLibraries.join(', ')}</div>
-  );
+const renderComponent = (appProps, props, combination) => {
+  if (!appProps.supportedLibraries.includes(combination.library)) {
+    return (
+      <div>Supported libraries: {appProps.supportedLibraries.join(', ')}</div>
+    );
+  } else if (!appProps.supportedTypes.includes(combination.type)) {
+    return <div>Supported types: {appProps.supportedTypes.join(', ')}</div>;
+  } else {
+    return <Graph {...appProps} {...props} combination={combination} />;
+  }
+};
 
-const Routes = (appProps) => (
-  <Switch>
-    <Route exact path="/" component={Home} />
-    {appProps.supportedLibraries.map((library) => (
-      <Route
-        key={library}
-        exact
-        path={'/' + library}
-        render={(props) => renderComponent(appProps, props, library)}
-      />
-    ))}
-  </Switch>
-);
+const Routes = (appProps) => {
+  let combinations = [];
+
+  appProps.supportedLibraries.forEach((library) => {
+    appProps.supportedTypes.forEach((type) => {
+      combinations.push({ library, type });
+    });
+  });
+
+  return (
+    <Switch>
+      <Route exact path="/" component={Home} />
+      {combinations.map((combination) => (
+        <Route
+          key={combination.library + '-' + combination.type}
+          exact
+          path={'/' + combination.library + '/' + combination.type}
+          render={(props) => renderComponent(appProps, props, combination)}
+        />
+      ))}
+    </Switch>
+  );
+};
 
 export default Routes;

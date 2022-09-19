@@ -17,7 +17,7 @@ This library is part of an ongoing research project being conducted at the Unive
 Currently, VoxLens supports:
 
 - Visualization Libraries: `D3`, `Google Charts`, and `ChartJS`. 
-- Data Types: 2-D single-series data. Sample data sets are provided under `examples/src/data`.
+- Data Types: 2-D single-series and geosptial data. Sample data sets are provided under `examples/src/data`.
 - Browser: Chrome
 
 ### Configuration Options
@@ -27,6 +27,8 @@ Currently, VoxLens supports:
 |x|Required|The key name of the indepedent variable in the dataset.|
 |y|Required|The key name of the depedent variable in the dataset.|
 |title|Required|The title of the visualization. Should be kept concise.|
+|chartType|Required|The chart type of the visualization. Must be one of `bar`, `scatter`, `line`, `map`.|
+|dataModule|Required|Data module for geospatial data. Only required when chartType is `map`. Must be one of `state`, `country`.|
 |xLabel|Optional|The label for x. Defaults to the value of x. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
 |yLabel|Optional|The label for y. Defaults to the value of y. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
 
@@ -143,10 +145,14 @@ Licensed under MIT. Can be found [here](https://github.com/athersharif/voxlens/b
 
 ## Citations
 
-Sharif, A., Chintalapati, S. S., Wobbrock, J. O., & Reinecke, K. (2021, October). Understanding Screen-Reader Users’ Experiences with Online Data Visualizations. In The 23rd International ACM SIGACCESS Conference on Computers and Accessibility (pp. 1-16).
+Ather Sharif, Sanjana Shivani Chintalapati, Jacob O. Wobbrock, and Katharina Reinecke. 2021. Understanding Screen-Reader Users’ Experiences with Online Data Visualizations. In The 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21). Association for Computing Machinery, New York, NY, USA, Article 14, 1–16.
 
 [PDF](https://athersharif.me/documents/assets-2021-understanding-sru-experiences-online-data-viz.pdf) | [Presentation](https://www.youtube.com/watch?v=nOHcQYm9HKQ)
 
-Sharif, A., Wang, O.H., Muongchan, A.T., Reinecke, K. and Wobbrock, J.O. (2022). VoxLens: Making online data visualizations accessible with an interactive JavaScript plug-in. Proceedings of the ACM Conference on Human Factors in Computing Systems (CHI '22). New Orleans, Louisiana (April 30 - May 6, 2022). New York: ACM Press. To appear.
+Ather Sharif, Olivia H. Wang, Alida T. Muongchan, Katharina Reinecke, and Jacob O. Wobbrock. 2022. VoxLens: Making Online Data Visualizations Accessible with an Interactive JavaScript Plug-In. In Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems (CHI '22). Association for Computing Machinery, New York, NY, USA, Article 478, 1–19.
 
 [PDF](https://athersharif.me/documents/chi-2022-voxlens.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
+
+Ather Sharif, Andrew M. Zhang, Anna Shih, Jacob O. Wobbrock, and Katharina Reinecke. 2022. Understanding and Improving Information Extraction From Online Geospatial Data Visualizations for Screen-Reader Users. In The 24th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '22). Association for Computing Machinery, New York, NY, USA. To appear.
+
+[PDF](https://athersharif.me/documents/assets-2022-voxlens-geospatial.pdf) | [Presentation]()

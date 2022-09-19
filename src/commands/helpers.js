@@ -2,6 +2,7 @@
  * @namespace commands.helpers
  */
 
+import pluralize from 'pluralize';
 import { verbalise } from '../utils';
 
 /**
@@ -51,5 +52,29 @@ export const getIndependentValues = (data, func) => {
  * @param {number} options.yLabel - Label for the y-axis.
  * @returns {string} - Response for the "average" command.
  */
-export const generateSentence = (preText, postText, options) =>
-  `${preText} of ${options.yLabel} for ${options.xLabel} is ${postText}.`;
+export const generateSentence = (preText, postText, options) => {
+  const { yLabel } = options;
+  const xLabel = generateXLabel(options);
+
+  return `${preText} ${yLabel} for ${pluralize(xLabel)} is ${postText}.`;
+};
+
+/**
+ * Generates the full label for the x-axis.
+ * @memberOf commands.helpers
+ * @param {Object} options - The options supplied to voxlens when creating the viz.
+ * @param {string} options.key - Key for the matching data.
+ * @param {string} options.type - Type for the data set.
+ * @param {string} options.xLabel - Label for the x-axis.
+ * @returns {string} - The full label for the x-axis.
+ */
+export const generateXLabel = ({ key, type, xLabel }) => {
+  if (key) {
+    key = key.toString().split('.');
+    xLabel = key[0];
+
+    if (key.length > 1) xLabel = key[1] + ' ' + xLabel;
+  }
+
+  return `${xLabel}${type === ' region' ? type : ''}`;
+};

@@ -20,14 +20,24 @@ import { addThousandsSeparators } from '../utils';
  * @returns {string} - Response for the "summary" command.
  */
 const resolver = (data, options) => {
-  const [maxValue, maxIndependentValues] = getIndependentValues(data, max);
-  const [minValue, minIndependentValues] = getIndependentValues(data, min);
+  const [maxValue, maxIndependentValues] = getIndependentValues(
+    data,
+    max,
+    options
+  );
+  const [minValue, minIndependentValues] = getIndependentValues(
+    data,
+    min,
+    options
+  );
 
   const maximum = addThousandsSeparators(maxValue);
   const minimum = addThousandsSeparators(minValue);
   const average = addThousandsSeparators(stats.mean(data.y));
 
-  return `Graph with title: ${options.title}. The X-axis is ${options.xLabel}. The Y-axis is ${options.yLabel}. The maximum data point is ${maximum} belonging to ${maxIndependentValues}, and the minimum data point is ${minimum} belonging to ${minIndependentValues}. The average is ${average}.`;
+  return {
+    sentence: `Graph with title: ${options.title}. The X-axis is ${options.xLabel}. The Y-axis is ${options.yLabel}. The maximum data point is ${maximum} belonging to ${maxIndependentValues}, and the minimum data point is ${minimum} belonging to ${minIndependentValues}. The average is ${average}.`,
+  };
 };
 
 export default resolver;

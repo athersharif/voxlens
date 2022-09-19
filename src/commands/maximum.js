@@ -18,13 +18,21 @@ import { addThousandsSeparators } from '../utils';
  * @returns {string} - Response for the "maximum" command.
  */
 const resolver = (data, options) => {
-  const [maxValue, independentValues] = getIndependentValues(data, max);
-
-  return generateSentence(
-    'Maximum value',
-    `${addThousandsSeparators(maxValue)} belonging to ${independentValues}`,
+  const [maxValue, independentValues] = getIndependentValues(
+    data,
+    max,
     options
   );
+
+  return {
+    key: independentValues,
+    value: maxValue,
+    sentence: generateSentence(
+      'Maximum',
+      `${addThousandsSeparators(maxValue)} belonging to ${independentValues}`,
+      options
+    ),
+  };
 };
 
 export default resolver;

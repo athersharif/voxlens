@@ -1,6 +1,6 @@
 {
   "name": "voxlens",
-  "version": "1.2.0",
+  "version": "2.1.0",
   "description": "JavaScript Library to Make Online Data Visualizations Accessible to Screen-Reader Users",
   "main": "dist/index.js",
   "scripts": {
@@ -42,7 +42,8 @@
     "hotkeys-js": "^3.8.7",
     "lodash": "^4.17.21",
     "p5": "^1.4.0",
-    "sonifier": "^1.0.0",
+    "pluralize": "^8.0.0",
+    "sonifier": "^2.0.0",
     "stats-lite": "^2.2.0",
     "tone": "^14.7.77",
     "ua-parser-js": "^0.7.28",
@@ -60,10 +61,10 @@
     "eslint": "^7.32.0",
     "jsdoc": "^3.6.7",
     "jsdom": "^18.0.0",
-    "mocha": "^9.1.2",
+    "mocha": "^8.4.0",
     "mock-require": "^3.0.3",
     "nyc": "^15.1.0",
     "prettier": "^2.4.1",
-    "sinon": "^11.1.2"
+    "sinon": "^14.0.0"
   }
 }

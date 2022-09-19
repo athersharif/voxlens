@@ -32,12 +32,16 @@ function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Sy
 function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 
 var resolver = function resolver(data, options) {
-  var _get__2 = _get__("getIndependentValues")(data, _get__("min")),
+  var _get__2 = _get__("getIndependentValues")(data, _get__("min"), options),
       _get__3 = _slicedToArray(_get__2, 2),
       minValue = _get__3[0],
       independentValues = _get__3[1];
 
-  return _get__("generateSentence")('Minimum value', "".concat(_get__("addThousandsSeparators")(minValue), " belonging to ").concat(independentValues), options);
+  return {
+    key: independentValues,
+    value: minValue,
+    sentence: _get__("generateSentence")('Minimum', "".concat(_get__("addThousandsSeparators")(minValue), " belonging to ").concat(independentValues), options)
+  };
 };
 
 var _default = _get__("resolver");

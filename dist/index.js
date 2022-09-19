@@ -76,7 +76,7 @@ var startApp = function startApp(data, options, hotKeysId) {
     mic.onResult = function () {
       var voiceText = mic.resultString.toLowerCase();
 
-      var result = _get__("processCommand")(voiceText, data, options, _get__("lastIssuedCommand"));
+      var result = _get__("processCommand")(voiceText, data, options, true, _get__("lastIssuedCommand"));
 
       if (result) _assign__("lastIssuedCommand", result.lastIssuedCommand);
     };
@@ -113,7 +113,7 @@ var startApp = function startApp(data, options, hotKeysId) {
 
     _assign__("oscillations", []);
 
-    var result = _get__("processCommand")('instructions', data, options, _get__("lastIssuedCommand"));
+    var result = _get__("processCommand")('instructions', data, options, false, _get__("lastIssuedCommand"));
 
     if (result) _assign__("lastIssuedCommand", result.lastIssuedCommand);
   });
@@ -152,7 +152,7 @@ var startApp = function startApp(data, options, hotKeysId) {
 
     _assign__("oscillations", []);
 
-    var result = _get__("processCommand")('summary', data, options, _get__("lastIssuedCommand"));
+    var result = _get__("processCommand")('summary', data, options, false, _get__("lastIssuedCommand"));
 
     if (result) _assign__("lastIssuedCommand", result.lastIssuedCommand);
   });

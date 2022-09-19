@@ -9,8 +9,8 @@ const data = {
 };
 
 const options = {
-  xLabel: 'labelX',
-  yLabel: 'labelY',
+  xLabel: 'dummy',
+  yLabel: 'label',
 };
 
 describe('getModeSummary', () => {
@@ -19,7 +19,7 @@ describe('getModeSummary', () => {
   it('should return no mode when there is no mode', () => {
     const result = command.func(data, options);
 
-    expect(result).to.equal(
+    expect(result.sentence).to.equal(
       'There is no mode. No value appears more than any other.'
     );
   });
@@ -31,7 +31,7 @@ describe('getModeSummary', () => {
     };
     const result = command.func(data, options);
 
-    expect(result).to.equal('Mode of labelY for labelX is 12, and 14.');
+    expect(result.sentence).to.equal('Mode label for dummies is 12, and 14.');
   });
 
   it('should return correct mode when single modes are present', () => {
@@ -41,6 +41,6 @@ describe('getModeSummary', () => {
     };
     const result = command.func(data, options);
 
-    expect(result).to.equal('Mode of labelY for labelX is 12.');
+    expect(result.sentence).to.equal('Mode label for dummies is 12.');
   });
 });

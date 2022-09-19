@@ -3,7 +3,7 @@
  */
 
 import stats from 'stats-lite';
-import { generateSentence } from './helpers';
+import { generateSentence, generateXLabel } from './helpers';
 import { addThousandsSeparators } from '../utils';
 
 /**
@@ -17,11 +17,19 @@ import { addThousandsSeparators } from '../utils';
  * @param {number} options.yLabel - Label for the y-axis.
  * @returns {string} - Response for the "standard deviation" command.
  */
-const resolver = (data, options) =>
-  generateSentence(
-    'Standard Deviation',
-    addThousandsSeparators(stats.stdev(data.y)),
-    options
-  );
+const resolver = (data, options) => {
+  const value = stats.stdev(data.y);
+  const key = generateXLabel(options);
+
+  return {
+    key,
+    value,
+    sentence: generateSentence(
+      'Standard Deviation',
+      addThousandsSeparators(value),
+      options
+    ),
+  };
+};
 
 export default resolver;

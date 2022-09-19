@@ -3,7 +3,7 @@
  */
 
 import stats from 'stats-lite';
-import { generateSentence } from './helpers';
+import { generateSentence, generateXLabel } from './helpers';
 import { addThousandsSeparators } from '../utils';
 
 /**
@@ -17,11 +17,19 @@ import { addThousandsSeparators } from '../utils';
  * @param {number} options.yLabel - Label for the y-axis.
  * @returns {string} - Response for the "average" command.
  */
-const resolver = (data, options) =>
-  generateSentence(
-    'Average',
-    addThousandsSeparators(stats.mean(data.y)),
-    options
-  );
+const resolver = (data, options) => {
+  const value = stats.mean(data.y);
+  const key = generateXLabel(options);
+
+  return {
+    key,
+    value,
+    sentence: generateSentence(
+      'Average',
+      addThousandsSeparators(value),
+      options
+    ),
+  };
+};
 
 export default resolver;

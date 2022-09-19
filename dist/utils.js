@@ -192,7 +192,7 @@ exports.getSettings = getSettings;
 var addFeedbackToResponse = function addFeedbackToResponse(response, commands) {
   commands = _get__("verbalise")(commands);
   response = response.replace(/ +(?= )/g, '');
-  return "".concat(_get__("getFeedbackText")(), " ").concat(commands, ". ").concat(response);
+  return commands ? "".concat(_get__("getFeedbackText")(), " ").concat(commands, ". ").concat(response) : response;
 };
 
 exports.addFeedbackToResponse = addFeedbackToResponse;
@@ -237,7 +237,7 @@ var logKeyPresses = function logKeyPresses(listeningKeys, event) {
 exports.logKeyPresses = logKeyPresses;
 
 var logCommand = function logCommand(command, response) {
-  console.log('[VoxLens] Command issued: ' + command);
+  if (command && command.trim() !== '') console.log('[VoxLens] Command issued: ' + command);
   var commandsIssued = window.localStorage.getItem('commandsIssued') || '[]';
   commandsIssued = JSON.parse(commandsIssued);
   commandsIssued.push({
@@ -270,7 +270,8 @@ var isCommandDuplicate = function isCommandDuplicate(lastIssuedCommand, activate
 
 exports.isCommandDuplicate = isCommandDuplicate;
 
-var sanitizeVoiceText = function sanitizeVoiceText(voiceText) {
+var sanitizeVoiceText = function sanitizeVoiceText() {
+  var voiceText = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
   voiceText = voiceText.replace(/(\d+)(st|nd|rd|th)/, '$1');
   voiceText = voiceText.replaceAll("'s", '');
   voiceText = voiceText.split(' ').filter(function (v) {

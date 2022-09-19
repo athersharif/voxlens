@@ -11,12 +11,259 @@ exports.__set__ = exports.__Rewire__ = _set__;
 exports.__GetDependency__ = exports.__get__ = _get__;
 exports.processCommand = exports["default"] = exports.commands = void 0;
 
+var _capitalize = _interopRequireDefault(require("lodash/capitalize"));
+
+var _orderBy = _interopRequireDefault(require("lodash/orderBy"));
+
+var _uniq = _interopRequireDefault(require("lodash/uniq"));
+
+var _uniqBy = _interopRequireDefault(require("lodash/uniqBy"));
+
+var _wordsToNumbers = _interopRequireDefault(require("words-to-numbers"));
+
+var _modules = _interopRequireDefault(require("../modules"));
+
 var _utils = require("../utils");
 
-var processCommand = function processCommand(voiceText, data, options, lastIssuedCommand) {
-  var activatedCommands = _get__("commands").filter(function (c) {
-    return voiceText.includes(c.name);
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
+
+function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
+
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
+var nonVACommands = [];
+
+var getComparisonText = function getComparisonText(values, options) {
+  values = values.map(function (v) {
+    var text = v.key;
+    if (v.command === 'average') text += ' average';
+    return _objectSpread(_objectSpread({}, v), {}, {
+      text: text
+    });
   });
+
+  var orderedValues = _get__("orderBy")(values, ['value'], ['desc']);
+
+  var highest = orderedValues.shift();
+  var lowest = orderedValues.pop();
+  var preText = "".concat(options.yLabel, " for ").concat(highest.text, " is ");
+
+  if (values.length === 2) {
+    return preText + 'greater than ' + lowest.text + '.';
+  }
+
+  return preText + 'the highest, followed by ' + orderedValues.map(function (v) {
+    return v.text;
+  }).join(', ') + ', and ' + lowest.text + '.';
+};
+
+var getMatchingRanking = function getMatchingRanking(voiceText, datapoints, factors, data) {
+  voiceText = _get__("sanitizeVoiceText")(voiceText);
+  var words = voiceText.split(' ');
+  var size = data.x.length;
+  var matches = [];
+  var types = [{
+    type: 'top',
+    keywords: ['top', 'first']
+  }, {
+    type: 'bottom',
+    keywords: ['bottom', 'last']
+  }];
+  types.forEach(function (type) {
+    var index = words.findIndex(function (w) {
+      return type.keywords.find(function (t) {
+        return t === w || t === _get__("wordsToNumbers")(w);
+      });
+    });
+
+    if (index >= 0 && words.length > index + 1) {
+      var rankingCount = parseInt(_get__("wordsToNumbers")(words[index + 1]));
+
+      if (!Number.isNaN(parseInt(rankingCount)) && rankingCount > 0 && rankingCount <= size) {
+        matches.push({
+          command: 'ranking',
+          opts: {
+            datapoints: datapoints,
+            factors: factors,
+            rankingType: type.type,
+            rankingCount: rankingCount
+          }
+        });
+      }
+    }
+  });
+  return matches;
+};
+
+var getPossibleDataPoints = function getPossibleDataPoints(data, voiceText) {
+  voiceText = _get__("sanitizeVoiceText")(voiceText);
+  if (!voiceText || voiceText.replaceAll(' ', '') === '') return {
+    indices: []
+  };
+
+  var xFilter = function xFilter(arr, text) {
+    return _get__("uniq")(arr.filter(function (x) {
+      return Number.isNaN(parseInt(x)) && Number.isNaN(parseInt(text)) ? x.toString().toLowerCase().includes(text) : x.toString().toLowerCase() === text;
+    }));
+  };
+
+  var filteredData = [];
+  voiceText = voiceText.split(' ').map(function (text) {
+    return _get__("wordsToNumbers")(text.toString().toLowerCase());
+  });
+  voiceText.forEach(function (text) {
+    filteredData = [].concat(_toConsumableArray(filteredData), _toConsumableArray(xFilter(data.x, text)));
+  });
+  var indices = [];
+  filteredData.forEach(function (d) {
+    indices = [].concat(_toConsumableArray(indices), _toConsumableArray(data.x.map(function (d, i) {
+      return {
+        d: d,
+        i: i
+      };
+    }).filter(function (x) {
+      return x.d === d;
+    }).map(function (x) {
+      return x.i;
+    })));
+  });
+  return {
+    indices: indices
+  };
+};
+
+var getMatchingDataPoints = function getMatchingDataPoints(data, voiceText) {
+  var getKey = function getKey(k) {
+    return data.x[k];
+  };
+
+  var _get__2 = _get__("getPossibleDataPoints")(data, voiceText),
+      indices = _get__2.indices;
+
+  indices = _get__("uniq")(indices);
+  return indices.map(function (i) {
+    var key = getKey(i);
+    return {
+      type: 'datapoint',
+      key: key,
+      command: 'value',
+      data: {
+        x: [key],
+        y: [data.y[i]]
+      }
+    };
+  });
+};
+
+var processCommand = function processCommand(voiceText, data, options) {
+  var isVoiceCommand = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
+  var lastIssuedCommand = arguments.length > 4 ? arguments[4] : undefined;
+  var chartType = options.chartType,
+      dataModule = options.dataModule;
+  var allData = [];
+  var regions = [];
+  var mod = dataModule ? _get__("dataModules")[dataModule] : null;
+
+  var activatedCommands = _get__("uniqBy")(_get__("commands").filter(function (c) {
+    var voiceCommandCheck = true;
+
+    if (isVoiceCommand) {
+      voiceCommandCheck = !(_get__("nonVACommands").includes(c.name) || _get__("nonVACommands").includes(c.alias));
+    }
+
+    return voiceText && voiceText.includes(c.name) && voiceCommandCheck;
+  }).map(function (ac) {
+    return ac.alias ? _get__("commands").find(function (c) {
+      return c.name === ac.alias;
+    }) : ac;
+  }), function (ac) {
+    return ac.name;
+  });
+
+  activatedCommands.forEach(function (ac) {
+    if (ac.kind && ac.kind === 'stats') {
+      allData.push({
+        type: 'all',
+        key: null,
+        data: data,
+        command: ac.name
+      });
+    }
+  });
+
+  if (chartType === 'map' && mod) {
+    var moduleHelper = require('../modules/helpers/' + mod.category)["default"];
+
+    regions = moduleHelper.getMatchingRegions(voiceText, dataModule);
+
+    if (regions.length > 0) {
+      regions.forEach(function (r) {
+        var filteredData = moduleHelper.filterDataByRegion(data, r, mod);
+
+        if (filteredData.x.length > 0) {
+          if (activatedCommands.length > 0) {
+            activatedCommands.forEach(function (ac) {
+              allData.push({
+                type: 'region',
+                key: _get__("capitalize")(r.name) + ' region',
+                data: filteredData,
+                command: ac.kind === 'stats' ? ac.name : 'average'
+              });
+            });
+          } else {
+            allData.push({
+              type: 'region',
+              key: _get__("capitalize")(r.name) + ' region',
+              data: filteredData,
+              command: 'average'
+            });
+          }
+        }
+      });
+    }
+  }
+
+  var dataPoints = _get__("getMatchingDataPoints")(data, voiceText);
+
+  if (dataPoints && dataPoints.length > 0) {
+    dataPoints.forEach(function (d) {
+      allData.push(d);
+    });
+  }
+
+  var rankings = _get__("getMatchingRanking")(voiceText, dataPoints, [], data);
+
+  rankings.forEach(function (ranking) {
+    allData.push({
+      type: 'metadata',
+      key: null,
+      data: data,
+      command: ranking.command,
+      opts: ranking.opts
+    });
+  });
+
+  if (allData.length === 0) {
+    allData = [{
+      key: null,
+      type: 'all',
+      data: data
+    }];
+  }
 
   if (_get__("isCommandDuplicate")(lastIssuedCommand, activatedCommands)) return;
   lastIssuedCommand = {
@@ -25,38 +272,72 @@ var processCommand = function processCommand(voiceText, data, options, lastIssue
     }).join(','),
     time: Date.now()
   };
-  var response = '';
+  var response = 'Found the following possible results in the data. ';
+  var commandsStaged = [];
+  var dataValues = [];
+  allData.forEach(function (_ref) {
+    var command = _ref.command,
+        data = _ref.data,
+        key = _ref.key,
+        type = _ref.type,
+        _ref$opts = _ref.opts,
+        opts = _ref$opts === void 0 ? {} : _ref$opts;
+    var acs = activatedCommands;
 
-  if (activatedCommands.length > 0) {
-    var commandsStaged = [];
-    activatedCommands.forEach(function (ac) {
-      var name = ac.name,
-          func = ac.func,
-          alias = ac.alias;
+    if (type === 'datapoint' || type === 'metadata' || type === 'all' && command) {
+      acs = [_get__("commands").find(function (c) {
+        return c.name === command;
+      })];
+    } else if (acs.length === 0 && type !== 'all') {
+      acs = [_get__("commands").find(function (c) {
+        return c.name === 'value';
+      })];
+    }
 
-      if (alias) {
-        var command = _get__("commands").filter(function (a) {
-          return a.name === alias;
-        })[0];
-
-        func = command.func;
-        name = command.name;
+    acs.forEach(function (ac) {
+      if (type === 'region' && ac.name === 'value') {
+        ac = _get__("commands").find(function (c) {
+          return c.name === 'average';
+        });
       }
 
-      if (!commandsStaged.includes(name)) {
-        var functionResponse = func(data, options, voiceText);
-        response += functionResponse + ' ';
+      var _ac = ac,
+          kind = _ac.kind,
+          name = _ac.name,
+          func = _ac.func;
+      var functionResponse = func(data, _objectSpread(_objectSpread(_objectSpread({}, options), opts), {}, {
+        key: key,
+        type: type
+      }), voiceText);
+      dataValues.push({
+        command: name,
+        kind: kind,
+        type: type,
+        key: functionResponse.key,
+        value: functionResponse.value
+      });
+      response += functionResponse.sentence + ' ';
 
-        _get__("logCommand")(name, response);
-      }
+      _get__("logCommand")(name, response);
 
       commandsStaged.push(name);
     });
-    response = _get__("addFeedbackToResponse")(response, commandsStaged);
-  } else {
-    response = "I heard you say ".concat(voiceText, ". Command not recognized. Please try again.");
+  });
+
+  if (dataValues.length === 0) {
+    response = 'Unable to get data. Please try again.';
+    if (voiceText && voiceText.trim() !== '') response = "I heard you say ".concat(voiceText.trim(), ". ") + response;
 
     _get__("logCommand")(voiceText, response);
+  }
+
+  response = _get__("addFeedbackToResponse")(response, _get__("uniq")(commandsStaged));
+  dataValues = dataValues.filter(function (d) {
+    return d.type === 'region' && d.command === 'average' || d.type !== 'region' && (d.kind === 'stats' || d.command === 'value');
+  });
+
+  if (dataValues.length > 1) {
+    response = response.trim() + ' ' + _get__("getComparisonText")(dataValues, options);
   }
 
   console.log('Response is ', response);
@@ -71,37 +352,45 @@ var processCommand = function processCommand(voiceText, data, options, lastIssue
 exports.processCommand = processCommand;
 var commands = [{
   name: 'average',
-  func: require('./average')["default"]
+  func: require('./average')["default"],
+  kind: 'stats'
 }, {
   name: 'mean',
   alias: 'average'
 }, {
   name: 'median',
-  func: require('./median')["default"]
+  func: require('./median')["default"],
+  kind: 'stats'
 }, {
   name: 'mode',
-  func: require('./mode')["default"]
+  func: require('./mode')["default"],
+  kind: 'stats'
 }, {
   name: 'maximum',
-  func: require('./maximum')["default"]
+  func: require('./maximum')["default"],
+  kind: 'stats'
 }, {
   name: 'highest',
   alias: 'maximum'
 }, {
   name: 'minimum',
-  func: require('./minimum')["default"]
+  func: require('./minimum')["default"],
+  kind: 'stats'
 }, {
   name: 'lowest',
   alias: 'minimum'
 }, {
   name: 'variance',
-  func: require('./variance')["default"]
+  func: require('./variance')["default"],
+  kind: 'stats'
 }, {
   name: 'standard deviation',
-  func: require('./standardDeviation')["default"]
+  func: require('./standardDeviation')["default"],
+  kind: 'stats'
 }, {
   name: 'total',
-  func: require('./total')["default"]
+  func: require('./total')["default"],
+  kind: 'stats'
 }, {
   name: 'instructions',
   func: require('./instructions')["default"]
@@ -120,6 +409,9 @@ var commands = [{
 }, {
   name: 'data',
   alias: 'value'
+}, {
+  name: 'ranking',
+  func: require('./ranking')["default"]
 }, {
   name: 'commands',
   func: require('./commands')["default"]
@@ -234,8 +526,41 @@ function _get__(variableName) {
 
 function _get_original__(variableName) {
   switch (variableName) {
+    case "orderBy":
+      return _orderBy["default"];
+
+    case "sanitizeVoiceText":
+      return _utils.sanitizeVoiceText;
+
+    case "wordsToNumbers":
+      return _wordsToNumbers["default"];
+
+    case "uniq":
+      return _uniq["default"];
+
+    case "getPossibleDataPoints":
+      return getPossibleDataPoints;
+
+    case "dataModules":
+      return _modules["default"];
+
+    case "uniqBy":
+      return _uniqBy["default"];
+
     case "commands":
       return commands;
+
+    case "nonVACommands":
+      return nonVACommands;
+
+    case "capitalize":
+      return _capitalize["default"];
+
+    case "getMatchingDataPoints":
+      return getMatchingDataPoints;
+
+    case "getMatchingRanking":
+      return getMatchingRanking;
 
     case "isCommandDuplicate":
       return _utils.isCommandDuplicate;
@@ -245,6 +570,9 @@ function _get_original__(variableName) {
 
     case "addFeedbackToResponse":
       return _utils.addFeedbackToResponse;
+
+    case "getComparisonText":
+      return getComparisonText;
 
     case "createTemporaryElement":
       return _utils.createTemporaryElement;

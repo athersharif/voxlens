@@ -3,7 +3,7 @@
  */
 
 import stats from 'stats-lite';
-import { generateSentence } from './helpers';
+import { generateSentence, generateXLabel } from './helpers';
 import { addThousandsSeparators } from '../utils';
 
 /**
@@ -17,7 +17,15 @@ import { addThousandsSeparators } from '../utils';
  * @param {number} options.yLabel - Label for the y-axis.
  * @returns {string} - Response for the "total" command.
  */
-const resolver = (data, options) =>
-  generateSentence('Sum', addThousandsSeparators(stats.sum(data.y)), options);
+const resolver = (data, options) => {
+  const value = stats.sum(data.y);
+  const key = generateXLabel(options);
+
+  return {
+    key,
+    value,
+    sentence: generateSentence('Total', addThousandsSeparators(value), options),
+  };
+};
 
 export default resolver;
