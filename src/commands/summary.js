@@ -17,27 +17,17 @@ import { addThousandsSeparators } from '../utils';
  * @param {Object} options - The options supplied to voxlens when creating the viz.
  * @param {string} options.xLabel - Label for the x-axis.
  * @param {number} options.yLabel - Label for the y-axis.
- * @returns {string} - Response for the "summary" command.
+ * @returns {object} - Response for the "summary" command.
  */
-const resolver = (data, options) => {
-  const [maxValue, maxIndependentValues] = getIndependentValues(
-    data,
-    max,
-    options
-  );
-  const [minValue, minIndependentValues] = getIndependentValues(
-    data,
-    min,
-    options
-  );
+export default (data, options) => {
+  const maxValues = getIndependentValues(data, max);
+  const minValues = getIndependentValues(data, min);
 
-  const maximum = addThousandsSeparators(maxValue);
-  const minimum = addThousandsSeparators(minValue);
+  const maximum = addThousandsSeparators(maxValues[0]);
+  const minimum = addThousandsSeparators(minValues[0]);
   const average = addThousandsSeparators(stats.mean(data.y));
 
   return {
-    sentence: `Graph with title: ${options.title}. The X-axis is ${options.xLabel}. The Y-axis is ${options.yLabel}. The maximum data point is ${maximum} belonging to ${maxIndependentValues}, and the minimum data point is ${minimum} belonging to ${minIndependentValues}. The average is ${average}.`,
+    sentence: `Graph with title: ${options.title}. The X-axis is ${options.xLabel}. The Y-axis is ${options.yLabel}. The maximum data point is ${maximum} belonging to ${maxValues[1]}, and the minimum data point is ${minimum} belonging to ${minValues[1]}. The average is ${average}.`,
   };
 };
-
-export default resolver;

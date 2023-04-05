@@ -1,7 +1,6 @@
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -10,44 +9,20 @@ exports.__RewireAPI__ = void 0;
 exports.__set__ = exports.__Rewire__ = _set__;
 exports.__GetDependency__ = exports.__get__ = _get__;
 exports["default"] = void 0;
-
 var _max = _interopRequireDefault(require("lodash/max"));
-
 var _helpers = require("./helpers");
-
 var _utils = require("../utils");
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-
-function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
-
-function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
-function _iterableToArrayLimit(arr, i) { var _i = arr == null ? null : typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]; if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
-
-function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
-
-var resolver = function resolver(data, options) {
-  var _get__2 = _get__("getIndependentValues")(data, _get__("max"), options),
-      _get__3 = _slicedToArray(_get__2, 2),
-      maxValue = _get__3[0],
-      independentValues = _get__3[1];
-
+var _DefaultExportValue = function _DefaultExportValue(data, options) {
+  var values = _get__("getIndependentValues")(data, _get__("max"));
   return {
-    key: independentValues,
-    value: maxValue,
-    sentence: _get__("generateSentence")('Maximum', "".concat(_get__("addThousandsSeparators")(maxValue), " belonging to ").concat(independentValues), options)
+    key: values[1],
+    value: values[0],
+    sentence: _get__("generateSentence")('Maximum', "".concat(_get__("addThousandsSeparators")(values[0]), " belonging to ").concat(values[1]), options)
   };
 };
-
-var _default = _get__("resolver");
-
+var _default = _DefaultExportValue;
 exports["default"] = _default;
-
 function _getGlobalObject() {
   try {
     if (!!global) {
@@ -63,63 +38,46 @@ function _getGlobalObject() {
     }
   }
 }
-
 ;
 var _RewireModuleId__ = null;
-
 function _getRewireModuleId__() {
   if (_RewireModuleId__ === null) {
     var globalVariable = _getGlobalObject();
-
     if (!globalVariable.__$$GLOBAL_REWIRE_NEXT_MODULE_ID__) {
       globalVariable.__$$GLOBAL_REWIRE_NEXT_MODULE_ID__ = 0;
     }
-
     _RewireModuleId__ = __$$GLOBAL_REWIRE_NEXT_MODULE_ID__++;
   }
-
   return _RewireModuleId__;
 }
-
 function _getRewireRegistry__() {
   var theGlobalVariable = _getGlobalObject();
-
   if (!theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__) {
     theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__ = Object.create(null);
   }
-
   return theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__;
 }
-
 function _getRewiredData__() {
   var moduleId = _getRewireModuleId__();
-
   var registry = _getRewireRegistry__();
-
   var rewireData = registry[moduleId];
-
   if (!rewireData) {
     registry[moduleId] = Object.create(null);
     rewireData = registry[moduleId];
   }
-
   return rewireData;
 }
-
 (function registerResetAll() {
   var theGlobalVariable = _getGlobalObject();
-
   if (!theGlobalVariable['__rewire_reset_all__']) {
     theGlobalVariable['__rewire_reset_all__'] = function () {
       theGlobalVariable.__$$GLOBAL_REWIRE_REGISTRY__ = Object.create(null);
     };
   }
 })();
-
 var INTENTIONAL_UNDEFINED = '__INTENTIONAL_UNDEFINED__';
 var _RewireAPI__ = {};
 exports.__RewireAPI__ = _RewireAPI__;
-
 (function () {
   function addPropertyToAPIObject(name, value) {
     Object.defineProperty(_RewireAPI__, name, {
@@ -128,7 +86,6 @@ exports.__RewireAPI__ = _RewireAPI__;
       configurable: true
     });
   }
-
   addPropertyToAPIObject('__get__', _get__);
   addPropertyToAPIObject('__GetDependency__', _get__);
   addPropertyToAPIObject('__Rewire__', _set__);
@@ -137,15 +94,12 @@ exports.__RewireAPI__ = _RewireAPI__;
   addPropertyToAPIObject('__ResetDependency__', _reset__);
   addPropertyToAPIObject('__with__', _with__);
 })();
-
 function _get__(variableName) {
   var rewireData = _getRewiredData__();
-
   if (rewireData[variableName] === undefined) {
     return _get_original__(variableName);
   } else {
     var value = rewireData[variableName];
-
     if (value === INTENTIONAL_UNDEFINED) {
       return undefined;
     } else {
@@ -153,57 +107,39 @@ function _get__(variableName) {
     }
   }
 }
-
 function _get_original__(variableName) {
   switch (variableName) {
     case "getIndependentValues":
       return _helpers.getIndependentValues;
-
     case "max":
       return _max["default"];
-
     case "generateSentence":
       return _helpers.generateSentence;
-
     case "addThousandsSeparators":
       return _utils.addThousandsSeparators;
-
-    case "resolver":
-      return resolver;
   }
-
   return undefined;
 }
-
 function _assign__(variableName, value) {
   var rewireData = _getRewiredData__();
-
   if (rewireData[variableName] === undefined) {
     return _set_original__(variableName, value);
   } else {
     return rewireData[variableName] = value;
   }
 }
-
 function _set_original__(variableName, _value) {
   switch (variableName) {}
-
   return undefined;
 }
-
 function _update_operation__(operation, variableName, prefix) {
   var oldValue = _get__(variableName);
-
   var newValue = operation === '++' ? oldValue + 1 : oldValue - 1;
-
   _assign__(variableName, newValue);
-
   return prefix ? newValue : oldValue;
 }
-
 function _set__(variableName, value) {
   var rewireData = _getRewiredData__();
-
   if (_typeof(variableName) === 'object') {
     Object.keys(variableName).forEach(function (name) {
       rewireData[name] = variableName[name];
@@ -219,65 +155,51 @@ function _set__(variableName, value) {
     } else {
       rewireData[variableName] = value;
     }
-
     return function () {
       _reset__(variableName);
     };
   }
 }
-
 function _reset__(variableName) {
   var rewireData = _getRewiredData__();
-
   delete rewireData[variableName];
-
   if (Object.keys(rewireData).length == 0) {
     delete _getRewireRegistry__()[_getRewireModuleId__];
   }
-
   ;
 }
-
 function _with__(object) {
   var rewireData = _getRewiredData__();
-
   var rewiredVariableNames = Object.keys(object);
   var previousValues = {};
-
   function reset() {
     rewiredVariableNames.forEach(function (variableName) {
       rewireData[variableName] = previousValues[variableName];
     });
   }
-
   return function (callback) {
     rewiredVariableNames.forEach(function (variableName) {
       previousValues[variableName] = rewireData[variableName];
       rewireData[variableName] = object[variableName];
     });
     var result = callback();
-
     if (!!result && typeof result.then == 'function') {
       result.then(reset)["catch"](reset);
     } else {
       reset();
     }
-
     return result;
   };
 }
-
-var _typeOfOriginalExport = _typeof(resolver);
-
+var _typeOfOriginalExport = _typeof(_DefaultExportValue);
 function addNonEnumerableProperty(name, value) {
-  Object.defineProperty(resolver, name, {
+  Object.defineProperty(_DefaultExportValue, name, {
     value: value,
     enumerable: false,
     configurable: true
   });
 }
-
-if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(resolver)) {
+if ((_typeOfOriginalExport === 'object' || _typeOfOriginalExport === 'function') && Object.isExtensible(_DefaultExportValue)) {
   addNonEnumerableProperty('__get__', _get__);
   addNonEnumerableProperty('__GetDependency__', _get__);
   addNonEnumerableProperty('__Rewire__', _set__);

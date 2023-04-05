@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import max from 'lodash/max';
 import startCase from 'lodash/startCase';
+import uniq from 'lodash/uniq';
 import drawMap from './maps';
 import voxlens from '../../../src';
 
@@ -355,6 +356,171 @@ const createD3 = (options) => {
       .style('opacity', 1);
 
     svg.append('g').call(d3.axisLeft(y));
+  } else if (chartType === 'multiseries') {
+    const updatedData = [];
+    const ogData = data;
+
+    const xKeys = xKey;
+    const xKeys1 = uniq(data.map((d) => d[xKeys[0]]));
+    const xKeys2 = uniq(data.map((d) => d[xKeys[1]]));
+
+    xKey = xKey[0];
+
+    xKeys1.forEach((x1) => {
+      let result = {};
+      let min = null;
+      let max = null;
+
+      xKeys2.forEach((x2) => {
+        const record = data.find(
+          (d) => d[xKeys[0]] === x1 && d[xKeys[1]] === x2
+        );
+
+        if (record) {
+          const value = record[yKey];
+          result[x2] = value;
+          if (value < min || !min) min = value;
+          if (value > max || !max) max = value;
+        }
+      });
+
+      updatedData.push({
+        [xKeys[0]]: x1,
+        min,
+        max,
+        ...result,
+      });
+    });
+
+    data = updatedData;
+
+    let maxXLabel = max(data.map((d) => d[xKey].toString().length));
+    let { height, margin, width } = getDimensions(maxXLabel);
+    let transform = margin.left + ',' + margin.top;
+
+    const voxlensOptions = {
+      x: xKeys,
+      y: yKey,
+      title,
+      chartType,
+      dataModule,
+    };
+
+    const svg = d3
+      .select('#chart')
+      .append('svg')
+      .attr('width', width + margin.left + margin.right)
+      .attr('height', height + 40 + margin.top + margin.bottom)
+      .append('g')
+      .attr('transform', 'translate(' + transform + ')');
+
+    const x = d3.scaleBand().range([0, width]);
+    const y = d3.scaleLinear().range([height, 0]);
+
+    const categoriesNames = Object.keys(data[0]).filter(
+      (d) => d !== xKeys[0] && d !== 'min' && d !== 'max'
+    );
+
+    const xAxis = d3.axisBottom(x);
+    const yAxis = d3.axisLeft().scale(y);
+    const color = d3.scaleOrdinal(d3.schemePaired);
+    const line = d3
+      .line()
+      .curve(d3.curveMonotoneX)
+      .x((d) => x(d[xKeys[0]]) + x.bandwidth() / 2)
+      .y((d) => y(d[xKeys[1]]));
+
+    const preferences = categoriesNames.map((c) => ({
+      category: c,
+      datapoints: data.map((d) => ({
+        [xKeys[0]]: d[xKeys[0]],
+        [xKeys[1]]: +d[c],
+      })),
+    }));
+
+    x.domain(data.map((d) => d[xKeys[0]]));
+    y.domain([d3.min(data, (d) => d.min), d3.max(data, (d) => d.max)]);
+    color.domain(categoriesNames);
+
+    svg
+      .append('g')
+      .attr('class', 'x axis')
+      .attr('transform', 'translate(0,' + height + ')')
+      .call(xAxis)
+      .selectAll('text')
+      .attr('y', 0)
+      .attr('x', 9)
+      .attr('dy', '.35em')
+      .attr('transform', 'rotate(90)')
+      .style('text-anchor', 'start')
+      .style('opacity', 1);
+
+    svg
+      .append('text')
+      .attr(
+        'transform',
+        'translate(' + width / 2 + ' ,' + (height + margin.bottom + 20) + ')'
+      )
+      .style('text-anchor', 'middle')
+      .text(startCase(xKey));
+
+    svg
+      .append('g')
+      .attr('class', 'y axis')
+      .call(yAxis)
+      .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 0 - margin.left)
+      .attr('x', 0 - height / 2)
+      .attr('dy', '1em')
+      .style('text-anchor', 'middle')
+      .text(startCase(yKey));
+
+    const categories = svg
+      .selectAll('.category')
+      .data(preferences)
+      .enter()
+      .append('g')
+      .attr('class', 'category');
+
+    categories
+      .append('path')
+      .attr('fill', 'none')
+      .attr('stroke-width', '2px')
+      .attr('d', (d) => line(d.datapoints))
+      .style('stroke', (d) => color(d.category));
+
+    svg
+      .selectAll('.category')
+      .select('g')
+      .data(ogData)
+      .enter()
+      .append('g')
+      .style('opacity', 0)
+      .call((d) => voxlens('d3', d, data, voxlensOptions));
+
+    const legend = svg
+      .selectAll('.legend')
+      .data(categoriesNames)
+      .enter()
+      .append('g')
+      .attr('class', 'legend')
+      .attr('transform', (d, i) => 'translate(0,' + i * 20 + ')');
+
+    legend
+      .append('rect')
+      .attr('x', width - 18)
+      .attr('width', 18)
+      .attr('height', 18)
+      .style('fill', (d) => color(d));
+
+    legend
+      .append('text')
+      .attr('x', width - 24)
+      .attr('y', 9)
+      .attr('dy', '.35em')
+      .style('text-anchor', 'end')
+      .text((d) => d);
   } else if (chartType === 'map') {
     let maxXLabel = 2;
     let { height, margin, width } = getDimensions(maxXLabel);

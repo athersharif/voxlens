@@ -1,6 +1,6 @@
 {
   "name": "voxlens",
-  "version": "2.1.0",
+  "version": "3.0.1",
   "description": "JavaScript Library to Make Online Data Visualizations Accessible to Screen-Reader Users",
   "main": "dist/index.js",
   "scripts": {
@@ -11,7 +11,7 @@
     "prepublish": "rm -rf dist/* && npm run build",
     "prettier": "prettier --single-quote --write '{,!(.circleci|.nyc_output|coverage|dist|docs|example|node_modules)/**/}*.{js,css,json}' && prettier --single-quote --write 'example/{,!(node_modules|docs|build)/**/}*.{js,css,scss,json}'",
     "test": "mocha --require @babel/register --require testHelpers.js --watch '__tests__/**/*.js'",
-    "test:ci": "./node_modules/.bin/nyc --reporter=html --reporter=text --exclude 'src/dependencies/*.js' mocha --require @babel/register --require testHelpers.js --recursive '__tests__/**/*.js' --exclude 'src/dependencies/*.js'"
+    "test:ci": "cross-env NODE_ENV=test nyc mocha --require @babel/register --require testHelpers.js --recursive '__tests__/**/*.js' --exclude 'src/dependencies/*.js'"
   },
   "repository": {
     "type": "git",
@@ -35,7 +35,13 @@
     ]
   },
   "nyc": {
-    "include": "src"
+    "exclude": "src/dependencies/*.js",
+    "include": "src",
+    "reporter": [
+      "html",
+      "text"
+    ],
+    "skipEmpty": true
   },
   "dependencies": {
     "defaults": "^1.0.3",
@@ -56,12 +62,14 @@
     "@babel/preset-env": "^7.15.8",
     "@babel/register": "^7.15.3",
     "babel-eslint": "^10.1.0",
+    "babel-plugin-istanbul": "^6.1.1",
     "babel-plugin-rewire": "^1.2.0",
     "chai": "^4.3.4",
+    "cross-env": "^7.0.3",
     "eslint": "^7.32.0",
-    "jsdoc": "^3.6.7",
+    "jsdoc": "^4.0.2",
     "jsdom": "^18.0.0",
-    "mocha": "^8.4.0",
+    "mocha": "^10.2.0",
     "mock-require": "^3.0.3",
     "nyc": "^15.1.0",
     "prettier": "^2.4.1",

@@ -12,10 +12,10 @@ import { addThousandsSeparators } from '../utils';
  * @param {string[]} data.x - Values of the independent variable.
  * @param {string[]} data.y - Values of the dependent variable.
  * @param {Object} options - The options supplied to voxlens when creating the viz.
- * @param {string} voiceText - Voice input from the microphone.
- * @returns {string} - Response for the "value" command.
+ * @param {string} options.yLabel - The label for the y-axis
+ * @returns {object} - Response for the "value" command.
  */
-const resolver = (data, options) => {
+export default (data, options) => {
   const key = data.x[0];
   const value = data.y[0];
 
@@ -27,5 +27,3 @@ const resolver = (data, options) => {
     )}.`,
   };
 };
-
-export default resolver;

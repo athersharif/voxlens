@@ -1,0 +1,737 @@
+[
+  {
+    "country": "France",
+    "medal_count": 41,
+    "year": 1920
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 43,
+    "year": 1920
+  },
+  {
+    "country": "United States",
+    "medal_count": 94,
+    "year": 1920
+  },
+  {
+    "country": "Japan",
+    "medal_count": 2,
+    "year": 1920
+  },
+  {
+    "country": "Canada",
+    "medal_count": 10,
+    "year": 1920
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 63,
+    "year": 1920
+  },
+  {
+    "country": "Australia",
+    "medal_count": 3,
+    "year": 1920
+  },
+  {
+    "country": "France",
+    "medal_count": 40,
+    "year": 1924
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 36,
+    "year": 1924
+  },
+  {
+    "country": "United States",
+    "medal_count": 99,
+    "year": 1924
+  },
+  {
+    "country": "Japan",
+    "medal_count": 1,
+    "year": 1924
+  },
+  {
+    "country": "Canada",
+    "medal_count": 4,
+    "year": 1924
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 29,
+    "year": 1924
+  },
+  {
+    "country": "Australia",
+    "medal_count": 6,
+    "year": 1924
+  },
+  {
+    "country": "France",
+    "medal_count": 25,
+    "year": 1928
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 22,
+    "year": 1928
+  },
+  {
+    "country": "United States",
+    "medal_count": 56,
+    "year": 1928
+  },
+  {
+    "country": "Japan",
+    "medal_count": 5,
+    "year": 1928
+  },
+  {
+    "country": "Canada",
+    "medal_count": 15,
+    "year": 1928
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 25,
+    "year": 1928
+  },
+  {
+    "country": "Australia",
+    "medal_count": 4,
+    "year": 1928
+  },
+  {
+    "country": "France",
+    "medal_count": 20,
+    "year": 1932
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 17,
+    "year": 1932
+  },
+  {
+    "country": "United States",
+    "medal_count": 110,
+    "year": 1932
+  },
+  {
+    "country": "Japan",
+    "medal_count": 18,
+    "year": 1932
+  },
+  {
+    "country": "Canada",
+    "medal_count": 16,
+    "year": 1932
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 24,
+    "year": 1932
+  },
+  {
+    "country": "Australia",
+    "medal_count": 5,
+    "year": 1932
+  },
+  {
+    "country": "France",
+    "medal_count": 18,
+    "year": 1936
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 14,
+    "year": 1936
+  },
+  {
+    "country": "United States",
+    "medal_count": 57,
+    "year": 1936
+  },
+  {
+    "country": "Japan",
+    "medal_count": 20,
+    "year": 1936
+  },
+  {
+    "country": "Canada",
+    "medal_count": 9,
+    "year": 1936
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 20,
+    "year": 1936
+  },
+  {
+    "country": "Australia",
+    "medal_count": 1,
+    "year": 1936
+  },
+  {
+    "country": "France",
+    "medal_count": 32,
+    "year": 1948
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 26,
+    "year": 1948
+  },
+  {
+    "country": "United States",
+    "medal_count": 84,
+    "year": 1948
+  },
+  {
+    "country": "Japan",
+    "medal_count": 0,
+    "year": 1948
+  },
+  {
+    "country": "Canada",
+    "medal_count": 4,
+    "year": 1948
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 45,
+    "year": 1948
+  },
+  {
+    "country": "Australia",
+    "medal_count": 14,
+    "year": 1948
+  },
+  {
+    "country": "France",
+    "medal_count": 18,
+    "year": 1952
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 11,
+    "year": 1952
+  },
+  {
+    "country": "United States",
+    "medal_count": 74,
+    "year": 1952
+  },
+  {
+    "country": "Japan",
+    "medal_count": 8,
+    "year": 1952
+  },
+  {
+    "country": "Canada",
+    "medal_count": 3,
+    "year": 1952
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 34,
+    "year": 1952
+  },
+  {
+    "country": "Australia",
+    "medal_count": 11,
+    "year": 1952
+  },
+  {
+    "country": "France",
+    "medal_count": 14,
+    "year": 1956
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 24,
+    "year": 1956
+  },
+  {
+    "country": "United States",
+    "medal_count": 72,
+    "year": 1956
+  },
+  {
+    "country": "Japan",
+    "medal_count": 17,
+    "year": 1956
+  },
+  {
+    "country": "Canada",
+    "medal_count": 6,
+    "year": 1956
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 19,
+    "year": 1956
+  },
+  {
+    "country": "Australia",
+    "medal_count": 35,
+    "year": 1956
+  },
+  {
+    "country": "France",
+    "medal_count": 5,
+    "year": 1960
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 20,
+    "year": 1960
+  },
+  {
+    "country": "United States",
+    "medal_count": 71,
+    "year": 1960
+  },
+  {
+    "country": "Japan",
+    "medal_count": 18,
+    "year": 1960
+  },
+  {
+    "country": "Canada",
+    "medal_count": 1,
+    "year": 1960
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 6,
+    "year": 1960
+  },
+  {
+    "country": "Australia",
+    "medal_count": 22,
+    "year": 1960
+  },
+  {
+    "country": "France",
+    "medal_count": 15,
+    "year": 1964
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 18,
+    "year": 1964
+  },
+  {
+    "country": "United States",
+    "medal_count": 90,
+    "year": 1964
+  },
+  {
+    "country": "Japan",
+    "medal_count": 29,
+    "year": 1964
+  },
+  {
+    "country": "Canada",
+    "medal_count": 4,
+    "year": 1964
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 8,
+    "year": 1964
+  },
+  {
+    "country": "Australia",
+    "medal_count": 18,
+    "year": 1964
+  },
+  {
+    "country": "France",
+    "medal_count": 15,
+    "year": 1968
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 13,
+    "year": 1968
+  },
+  {
+    "country": "United States",
+    "medal_count": 107,
+    "year": 1968
+  },
+  {
+    "country": "Japan",
+    "medal_count": 25,
+    "year": 1968
+  },
+  {
+    "country": "Canada",
+    "medal_count": 5,
+    "year": 1968
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 4,
+    "year": 1968
+  },
+  {
+    "country": "Australia",
+    "medal_count": 17,
+    "year": 1968
+  },
+  {
+    "country": "France",
+    "medal_count": 13,
+    "year": 1972
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 17,
+    "year": 1972
+  },
+  {
+    "country": "United States",
+    "medal_count": 95,
+    "year": 1972
+  },
+  {
+    "country": "Japan",
+    "medal_count": 29,
+    "year": 1972
+  },
+  {
+    "country": "Canada",
+    "medal_count": 5,
+    "year": 1972
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 16,
+    "year": 1972
+  },
+  {
+    "country": "Australia",
+    "medal_count": 17,
+    "year": 1972
+  },
+  {
+    "country": "France",
+    "medal_count": 9,
+    "year": 1976
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 13,
+    "year": 1976
+  },
+  {
+    "country": "United States",
+    "medal_count": 94,
+    "year": 1976
+  },
+  {
+    "country": "Japan",
+    "medal_count": 25,
+    "year": 1976
+  },
+  {
+    "country": "Canada",
+    "medal_count": 11,
+    "year": 1976
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 5,
+    "year": 1976
+  },
+  {
+    "country": "Australia",
+    "medal_count": 5,
+    "year": 1976
+  },
+  {
+    "country": "France",
+    "medal_count": 14,
+    "year": 1980
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 21,
+    "year": 1980
+  },
+  {
+    "country": "United States",
+    "medal_count": 0,
+    "year": 1980
+  },
+  {
+    "country": "Japan",
+    "medal_count": 0,
+    "year": 1980
+  },
+  {
+    "country": "Canada",
+    "medal_count": 0,
+    "year": 1980
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 12,
+    "year": 1980
+  },
+  {
+    "country": "Australia",
+    "medal_count": 9,
+    "year": 1980
+  },
+  {
+    "country": "France",
+    "medal_count": 28,
+    "year": 1984
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 37,
+    "year": 1984
+  },
+  {
+    "country": "United States",
+    "medal_count": 173,
+    "year": 1984
+  },
+  {
+    "country": "Japan",
+    "medal_count": 31,
+    "year": 1984
+  },
+  {
+    "country": "Canada",
+    "medal_count": 46,
+    "year": 1984
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 19,
+    "year": 1984
+  },
+  {
+    "country": "Australia",
+    "medal_count": 23,
+    "year": 1984
+  },
+  {
+    "country": "France",
+    "medal_count": 16,
+    "year": 1988
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 24,
+    "year": 1988
+  },
+  {
+    "country": "United States",
+    "medal_count": 94,
+    "year": 1988
+  },
+  {
+    "country": "Japan",
+    "medal_count": 14,
+    "year": 1988
+  },
+  {
+    "country": "Canada",
+    "medal_count": 10,
+    "year": 1988
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 10,
+    "year": 1988
+  },
+  {
+    "country": "Australia",
+    "medal_count": 14,
+    "year": 1988
+  },
+  {
+    "country": "France",
+    "medal_count": 29,
+    "year": 1992
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 20,
+    "year": 1992
+  },
+  {
+    "country": "United States",
+    "medal_count": 108,
+    "year": 1992
+  },
+  {
+    "country": "Japan",
+    "medal_count": 22,
+    "year": 1992
+  },
+  {
+    "country": "Canada",
+    "medal_count": 18,
+    "year": 1992
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 12,
+    "year": 1992
+  },
+  {
+    "country": "Australia",
+    "medal_count": 27,
+    "year": 1992
+  },
+  {
+    "country": "France",
+    "medal_count": 37,
+    "year": 1996
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 15,
+    "year": 1996
+  },
+  {
+    "country": "United States",
+    "medal_count": 102,
+    "year": 1996
+  },
+  {
+    "country": "Japan",
+    "medal_count": 14,
+    "year": 1996
+  },
+  {
+    "country": "Canada",
+    "medal_count": 22,
+    "year": 1996
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 8,
+    "year": 1996
+  },
+  {
+    "country": "Australia",
+    "medal_count": 41,
+    "year": 1996
+  },
+  {
+    "country": "France",
+    "medal_count": 38,
+    "year": 2000
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 28,
+    "year": 2000
+  },
+  {
+    "country": "United States",
+    "medal_count": 93,
+    "year": 2000
+  },
+  {
+    "country": "Japan",
+    "medal_count": 18,
+    "year": 2000
+  },
+  {
+    "country": "Canada",
+    "medal_count": 14,
+    "year": 2000
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 12,
+    "year": 2000
+  },
+  {
+    "country": "Australia",
+    "medal_count": 59,
+    "year": 2000
+  },
+  {
+    "country": "France",
+    "medal_count": 33,
+    "year": 2004
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 30,
+    "year": 2004
+  },
+  {
+    "country": "United States",
+    "medal_count": 103,
+    "year": 2004
+  },
+  {
+    "country": "Japan",
+    "medal_count": 37,
+    "year": 2004
+  },
+  {
+    "country": "Canada",
+    "medal_count": 12,
+    "year": 2004
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 7,
+    "year": 2004
+  },
+  {
+    "country": "Australia",
+    "medal_count": 49,
+    "year": 2004
+  },
+  {
+    "country": "France",
+    "medal_count": 40,
+    "year": 2008
+  },
+  {
+    "country": "United Kingdom",
+    "medal_count": 46,
+    "year": 2008
+  },
+  {
+    "country": "United States",
+    "medal_count": 110,
+    "year": 2008
+  },
+  {
+    "country": "Japan",
+    "medal_count": 25,
+    "year": 2008
+  },
+  {
+    "country": "Canada",
+    "medal_count": 18,
+    "year": 2008
+  },
+  {
+    "country": "Sweden",
+    "medal_count": 4,
+    "year": 2008
+  },
+  {
+    "country": "Australia",
+    "medal_count": 46,
+    "year": 2008
+  }
+]

@@ -15,9 +15,9 @@ import { addThousandsSeparators } from '../utils';
  * @param {Object} options - The options supplied to voxlens when creating the viz.
  * @param {string} options.xLabel - Label for the x-axis.
  * @param {number} options.yLabel - Label for the y-axis.
- * @returns {string} - Response for the "average" command.
+ * @returns {object} - Response for the "average" command.
  */
-const resolver = (data, options) => {
+export default (data, options) => {
   const value = stats.mean(data.y);
   const key = generateXLabel(options);
 
@@ -31,5 +31,3 @@ const resolver = (data, options) => {
     ),
   };
 };
-
-export default resolver;

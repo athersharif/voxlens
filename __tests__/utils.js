@@ -230,4 +230,34 @@ describe('utils.js', () => {
       clock.restore();
     });
   });
+
+  describe('formatOptions', () => {
+    it('should format correctly when single-series data provided', () => {
+      const options = {
+        xLabel: 'something',
+        yLabel: 'dummy',
+      };
+
+      const result = utils.formatOptions(options);
+
+      expect(result).to.deep.equal({
+        xLabel: 'Something',
+        yLabel: 'Dummy',
+      });
+    });
+  });
+
+  it('should format correctly when multi-series data provided', () => {
+    const options = {
+      xLabel: ['something', 'blah'],
+      yLabel: 'dummy',
+    };
+
+    const result = utils.formatOptions(options);
+
+    expect(result).to.deep.equal({
+      xLabel: 'Blah And Something',
+      yLabel: 'Dummy',
+    });
+  });
 });

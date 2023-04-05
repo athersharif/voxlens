@@ -45,6 +45,22 @@ const countryOptions = {
   yLabel: 'score',
 };
 
+const multiSeriesData = {
+  x: [
+    ['Jake', 'Kelly', 'Megan'],
+    [2010, 2010, 2011],
+  ],
+  y: [17, 63, 25],
+};
+
+const multiSeriesOptions = {
+  chartType: 'multiseries',
+  x: ['name', 'year'],
+  y: 'cars',
+  xLabel: 'Name And Year',
+  yLabel: 'Cars',
+};
+
 describe('getIndividualDataPoint', () => {
   let consoleStub = sinon.stub();
 
@@ -201,6 +217,166 @@ describe('getIndividualDataPoint', () => {
     );
     expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Average score for north region Easts is 37. Average score for North regions is 65. Average score for Greatlakes regions is 93. score for Greatlakes region average is the highest, followed by North region average, and north region East average.'
+    );
+  });
+
+  it('should return correct response when value command is issued for multiseries data', () => {
+    allCommands.processCommand(
+      'megan 2011',
+      multiSeriesData,
+      multiSeriesOptions,
+      true,
+      {}
+    );
+
+    sinon.assert.callCount(consoleStub, 2);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Command issued: value'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Cars for 2011 Megan is 25.'
+    );
+  });
+
+  it('should return correct response when value command is issued for average of multiseries data of the first axis', () => {
+    allCommands.processCommand(
+      '2010 average',
+      multiSeriesData,
+      multiSeriesOptions,
+      true,
+      {}
+    );
+
+    sinon.assert.callCount(consoleStub, 3);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Command issued: average'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Command issued: average'
+    );
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
+      'Average Cars for 2010s is 40.'
+    );
+  });
+
+  it('should return correct response when value command is issued for sum of multiseries data of the first axis', () => {
+    allCommands.processCommand(
+      '2010 total',
+      multiSeriesData,
+      multiSeriesOptions,
+      true,
+      {}
+    );
+
+    sinon.assert.callCount(consoleStub, 3);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Command issued: total'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Command issued: total'
+    );
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
+      'Total Cars for 2010s is 80.'
+    );
+  });
+
+  it('should return correct response when value command is issued for average of multiseries data of the second axis', () => {
+    allCommands.processCommand(
+      'jake average',
+      multiSeriesData,
+      multiSeriesOptions,
+      true,
+      {}
+    );
+
+    sinon.assert.callCount(consoleStub, 3);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Command issued: average'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Command issued: average'
+    );
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
+      'Average Cars for Jakes is 17.'
+    );
+  });
+
+  it('should return correct response when value command is issued without an explicit query for average', () => {
+    allCommands.processCommand(
+      'jake value',
+      multiSeriesData,
+      multiSeriesOptions,
+      true
+    );
+
+    sinon.assert.callCount(consoleStub, 2);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Command issued: average'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Average Cars for Jakes is 17.'
+    );
+  });
+
+  it('should return correct response when value command is issued without any explicit command', () => {
+    allCommands.processCommand(
+      'jake',
+      multiSeriesData,
+      multiSeriesOptions,
+      true,
+      {}
+    );
+
+    sinon.assert.callCount(consoleStub, 2);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Command issued: average'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Average Cars for Jakes is 17.'
+    );
+  });
+
+  it('should return correct response when value command is issued without an explicit query for independent variables', () => {
+    allCommands.processCommand(
+      'total',
+      multiSeriesData,
+      multiSeriesOptions,
+      true,
+      {}
+    );
+
+    sinon.assert.callCount(consoleStub, 2);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Command issued: total'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Total Cars for Name And Years is 105.'
+    );
+  });
+
+  it('should return correct response when value command is issued without an incomplete value command', () => {
+    allCommands.processCommand(
+      'value',
+      multiSeriesData,
+      multiSeriesOptions,
+      true,
+      {}
+    );
+
+    sinon.assert.callCount(consoleStub, 2);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Command issued: value'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Unable to get data. Please try again.'
     );
   });
 

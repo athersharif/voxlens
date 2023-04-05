@@ -24,10 +24,10 @@ Currently, VoxLens supports:
 
 |Option|Required/Optional|Description|
 |--- |--- |--- |
-|x|Required|The key name of the indepedent variable in the dataset.|
+|x|Required|The key name(s) of the indepedent variable(s) in the dataset. Can be an array for multi-series data.|
 |y|Required|The key name of the depedent variable in the dataset.|
 |title|Required|The title of the visualization. Should be kept concise.|
-|chartType|Required|The chart type of the visualization. Must be one of `bar`, `scatter`, `line`, `map`.|
+|chartType|Required|The chart type of the visualization. Must be one of `bar`, `scatter`, `line`, `map`, `multiseries`.|
 |dataModule|Required|Data module for geospatial data. Only required when chartType is `map`. Must be one of `state`, `country`.|
 |xLabel|Optional|The label for x. Defaults to the value of x. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
 |yLabel|Optional|The label for y. Defaults to the value of y. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
@@ -153,6 +153,14 @@ Ather Sharif, Olivia H. Wang, Alida T. Muongchan, Katharina Reinecke, and Jacob 
 
 [PDF](https://athersharif.me/documents/chi-2022-voxlens.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
 
-Ather Sharif, Andrew M. Zhang, Anna Shih, Jacob O. Wobbrock, and Katharina Reinecke. 2022. Understanding and Improving Information Extraction From Online Geospatial Data Visualizations for Screen-Reader Users. In The 24th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '22). Association for Computing Machinery, New York, NY, USA. To appear.
+Ather Sharif, Andrew Mingwei Zhang, Anna Shih, Jacob O. Wobbrock, and Katharina Reinecke. 2022. Understanding and Improving Information Extraction From Online Geospatial Data Visualizations for Screen-Reader Users. In Proceedings of the 24th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '22). Association for Computing Machinery, New York, NY, USA, Article 61, 1–5.
 
-[PDF](https://athersharif.me/documents/assets-2022-voxlens-geospatial.pdf) | [Presentation]()
+[PDF](https://athersharif.me/documents/assets-2022-voxlens-geospatial.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
+
+Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In Extended Abstracts of the 20th International Web for All Conference (W4A '23). Association for Computing Machinery, New York, NY, USA. To Appear. 
+
+[PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down-ea.pdf) | [Presentation]()
+
+Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In Proceedings of the 20th International Web for All Conference (W4A '23). Association for Computing Machinery, New York, NY, USA. To Appear. 
+
+[PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down.pdf) | [Presentation]()

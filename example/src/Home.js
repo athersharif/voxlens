@@ -22,6 +22,9 @@ const Home = () => (
         <Link to="/d3/bar">Single-series Bar Graph</Link>
       </li>
       <li>
+        <Link to="/d3/multiseries">Multi-series Line Graph</Link>
+      </li>
+      <li>
         <Link to="/d3/map">Geospatial Map</Link>
       </li>
     </ul>

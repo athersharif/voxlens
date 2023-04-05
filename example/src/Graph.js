@@ -16,6 +16,12 @@ class Graph extends Component {
     yKey: 'cases',
   };
 
+  multiSeriesSettings = {
+    title: 'Olympic medals over the years for top 10 countries',
+    xKey: ['year', 'country'],
+    yKey: 'medal_count',
+  };
+
   createChart = () => {
     const { combination } = this.props;
     const chartContainer = document.getElementById('chart');
@@ -23,11 +29,15 @@ class Graph extends Component {
     if (chartContainer) {
       chartContainer.innerHTML = '';
 
+      const data = require('./data/' + combination.type);
+
       const settings = {
-        ...this.settings,
+        ...(combination.type === 'multiseries'
+          ? this.multiSeriesSettings
+          : this.settings),
         chartType: combination.type,
         dataModule: combination.type === 'map' ? 'state' : null,
-        data: shuffle(require('./data/' + combination.type)),
+        data: combination.type === 'multiseries' ? data : shuffle(data),
       };
 
       let func = null;
@@ -45,10 +55,14 @@ class Graph extends Component {
 
   render() {
     const { combination } = this.props;
+    const settings =
+      combination.type === 'multiseries'
+        ? this.multiSeriesSettings
+        : this.settings;
 
     return (
       <div id="graph">
-        {combination.library === 'd3' && <h1>{this.settings.title}</h1>}
+        {combination.library === 'd3' && <h1>{settings.title}</h1>}
         {combination.library === 'chartjs' ? (
           <canvas id="chart" tabIndex="0" role="img" />
         ) : (
