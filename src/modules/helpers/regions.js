@@ -1,4 +1,4 @@
-const getMatchingRegions = (text, dataModule) => {
+export const getMatchingRegions = (text, dataModule) => {
   const allRegions = require('../' + dataModule).default.allRegions;
 
   text = text.toLowerCase().replaceAll(' ', '').replaceAll('-', '');
@@ -50,7 +50,7 @@ const getMatchingRegions = (text, dataModule) => {
   return result;
 };
 
-const filterDataByRegion = (data, region, mod) => {
+export const filterDataByRegion = (data, region, mod) => {
   const abbreviations = mod.abbreviations || [];
 
   let filteredData = {
@@ -79,9 +79,4 @@ const filterDataByRegion = (data, region, mod) => {
   });
 
   return filteredData;
-};
-
-export default {
-  filterDataByRegion,
-  getMatchingRegions,
 };

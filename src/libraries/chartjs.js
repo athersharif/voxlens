@@ -9,9 +9,7 @@
  * @param {Object[]} data - The raw json data used to create the viz.
  * @returns {Object} - Object containing the viewport element, data, and options
  */
-const setup = (viewportElement, data) => ({
+export default (viewportElement, data) => ({
   data,
   viewportElement,
 });
-
-export default setup;

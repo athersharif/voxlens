@@ -3,9 +3,11 @@
  */
 
 import capitalize from 'lodash/capitalize';
+import intersection from 'lodash/intersection';
 import orderBy from 'lodash/orderBy';
 import uniq from 'lodash/uniq';
 import uniqBy from 'lodash/uniqBy';
+import pluralize from 'pluralize';
 import wordsToNumbers from 'words-to-numbers';
 import dataModules from '../modules';
 import {
@@ -89,7 +91,7 @@ const getMatchingRanking = (voiceText, datapoints, factors, data) => {
   return matches;
 };
 
-const getPossibleDataPoints = (data, voiceText) => {
+const getPossibleDataPoints = (data, voiceText, chartType) => {
   voiceText = sanitizeVoiceText(voiceText);
 
   if (!voiceText || voiceText.replaceAll(' ', '') === '')
@@ -109,46 +111,197 @@ const getPossibleDataPoints = (data, voiceText) => {
     .split(' ')
     .map((text) => wordsToNumbers(text.toString().toLowerCase()));
 
-  voiceText.forEach((text) => {
-    filteredData = [...filteredData, ...xFilter(data.x, text)];
-  });
+  if (chartType === 'multiseries') {
+    voiceText.forEach((text) => {
+      data.x.forEach((arr, i) => {
+        filteredData[i] = [...(filteredData[i] || []), ...xFilter(arr, text)];
+      });
+    });
 
-  let indices = [];
+    let indices = [[], []];
+    let extraOptions = {};
 
-  filteredData.forEach((d) => {
-    indices = [
-      ...indices,
-      ...data.x
-        .map((d, i) => ({ d, i }))
-        .filter((x) => x.d === d)
-        .map((x) => x.i),
-    ];
-  });
+    filteredData[0].forEach((d) => {
+      indices[0] = [
+        ...indices[0],
+        ...data.x[0]
+          .map((d, i) => ({ d, i }))
+          .filter((x) => x.d === d)
+          .map((x) => x.i),
+      ];
+    });
 
-  return { indices };
+    filteredData[1].forEach((d) => {
+      indices[1] = [
+        ...indices[1],
+        ...data.x[1]
+          .map((d, i) => ({ d, i }))
+          .filter((x) => x.d === d)
+          .map((x) => x.i),
+      ];
+    });
+
+    let finalIndices = intersection(indices[0], indices[1]);
+
+    if (filteredData[0].length > 0 && filteredData[1].length === 0) {
+      extraOptions = {
+        combine: true,
+        combineIndex: 0,
+        combineCommand: 'average',
+      };
+      finalIndices = indices[0];
+    }
+
+    if (filteredData[1].length > 0 && filteredData[0].length === 0) {
+      extraOptions = {
+        combine: true,
+        combineIndex: 1,
+        combineCommand: 'average',
+      };
+      finalIndices = indices[1];
+    }
+
+    return {
+      extraOptions,
+      indices: finalIndices,
+    };
+  } else {
+    voiceText.forEach((text) => {
+      filteredData = [...filteredData, ...xFilter(data.x, text)];
+    });
+
+    let indices = [];
+
+    filteredData.forEach((d) => {
+      indices = [
+        ...indices,
+        ...data.x
+          .map((d, i) => ({ d, i }))
+          .filter((x) => x.d === d)
+          .map((x) => x.i),
+      ];
+    });
+
+    return { indices };
+  }
 };
 
-const getMatchingDataPoints = (data, voiceText) => {
-  const getKey = (k) => data.x[k];
-  let { indices } = getPossibleDataPoints(data, voiceText);
+const getMatchingDataPoints = (data, voiceText, options, activatedCommands) => {
+  const getKey = (k) =>
+    options.chartType === 'multiseries'
+      ? data.x[1][k] + ' ' + data.x[0][k]
+      : data.x[k];
+  let { extraOptions = {}, indices } = getPossibleDataPoints(
+    data,
+    voiceText,
+    options.chartType
+  );
 
   indices = uniq(indices);
 
-  return indices.map((i) => {
-    const key = getKey(i);
+  if (extraOptions.combine) {
+    let possibleCommands = [];
+    let datapoints = [];
 
-    return {
-      type: 'datapoint',
-      key,
-      command: 'value',
-      data: {
-        x: [key],
-        y: [data.y[i]],
-      },
-    };
-  });
+    if (activatedCommands && activatedCommands.length > 0) {
+      activatedCommands.forEach((ac) => {
+        possibleCommands.push(ac.name);
+      });
+    }
+
+    if (possibleCommands.length === 0) possibleCommands.push('average');
+
+    const series = uniq(
+      indices.map((i) => data.x[extraOptions.combineIndex][i])
+    );
+
+    const combinedOn = options.x.filter(
+      (x, i) => i !== extraOptions.combineIndex
+    )[0];
+
+    series.forEach((key) => {
+      const keyIndices = indices.filter(
+        (i) => data.x[extraOptions.combineIndex][i] === key
+      );
+      const keys = keyIndices.map((i) => data.x[extraOptions.combineIndex][i]);
+      const values = data.y.filter((y, i) => keyIndices.includes(i));
+
+      let allFilteredData = {
+        x: [
+          data.x[0].filter((x, i) => keyIndices.includes(i)),
+          data.x[1].filter((x, i) => keyIndices.includes(i)),
+        ],
+        y: values,
+      };
+
+      possibleCommands.forEach((command) => {
+        if (options.chartType === 'multiseries' && command === 'value')
+          command = 'average';
+
+        datapoints.push({
+          type: 'all',
+          key,
+          command,
+          data: {
+            x: keys,
+            y: values,
+          },
+          opts: {
+            allFilteredData,
+            combinedOn,
+          },
+        });
+      });
+    });
+
+    return datapoints;
+  } else {
+    return indices.map((i) => {
+      const key = getKey(i);
+
+      return {
+        type: 'datapoint',
+        key,
+        command: 'value',
+        data: {
+          x: [key],
+          y: [data.y[i]],
+        },
+      };
+    });
+  }
 };
 
+const getMatchingFactors = (options, voiceText) => {
+  voiceText = sanitizeVoiceText(voiceText);
+
+  if (!voiceText || voiceText.replaceAll(' ', '') === '') return null;
+
+  const xs = Array.isArray(options.x) ? options.x : [options.x];
+
+  const matches = xs.filter((x) => {
+    const words = voiceText.split(' ');
+
+    return (
+      words.some(
+        (v) =>
+          v.toLowerCase() === x.toLowerCase() ||
+          v.toLowerCase() === pluralize(x.toLowerCase())
+      ) ||
+      (words.includes('data') &&
+        (words.includes('point') || words.includes('points')))
+    );
+  });
+
+  return {
+    factors: matches.length > 0 ? matches : [],
+    opts: {
+      listAll:
+        voiceText.split(' ').includes('levels') ||
+        voiceText.split(' ').includes('level'),
+    },
+  };
+};
 /**
  * Processes the command.
  * @memberOf commands
@@ -175,6 +328,20 @@ export const processCommand = (
   let regions = [];
 
   const mod = dataModule ? dataModules[dataModule] : null;
+
+  const factors = getMatchingFactors(options, voiceText);
+
+  if (factors && factors.factors && factors.factors.length > 0) {
+    factors.factors.forEach((factor) => {
+      allData.push({
+        type: 'metadata',
+        key: factor,
+        data,
+        command: 'factor',
+        opts: factors.opts,
+      });
+    });
+  }
 
   const activatedCommands = uniqBy(
     commands
@@ -205,7 +372,7 @@ export const processCommand = (
   });
 
   if (chartType === 'map' && mod) {
-    const moduleHelper = require('../modules/helpers/' + mod.category).default;
+    const moduleHelper = require('../modules/helpers/' + mod.category);
     regions = moduleHelper.getMatchingRegions(voiceText, dataModule);
 
     if (regions.length > 0) {
@@ -235,7 +402,12 @@ export const processCommand = (
     }
   }
 
-  const dataPoints = getMatchingDataPoints(data, voiceText);
+  const dataPoints = getMatchingDataPoints(
+    data,
+    voiceText,
+    options,
+    activatedCommands
+  );
 
   if (dataPoints && dataPoints.length > 0) {
     dataPoints.forEach((d) => {
@@ -243,7 +415,7 @@ export const processCommand = (
     });
   }
 
-  const rankings = getMatchingRanking(voiceText, dataPoints, [], data);
+  const rankings = getMatchingRanking(voiceText, dataPoints, factors, data);
 
   rankings.forEach((ranking) => {
     allData.push({
@@ -259,7 +431,11 @@ export const processCommand = (
     allData = [{ key: null, type: 'all', data }];
   }
 
-  if (isCommandDuplicate(lastIssuedCommand, activatedCommands)) return;
+  if (
+    lastIssuedCommand &&
+    isCommandDuplicate(lastIssuedCommand, activatedCommands)
+  )
+    return;
 
   lastIssuedCommand = {
     command: activatedCommands.map((a) => a.name).join(','),
@@ -289,6 +465,12 @@ export const processCommand = (
       }
 
       let { kind, name, func } = ac;
+
+      if (
+        (command && name !== command) ||
+        (type === 'all' && key == null && name === 'value')
+      )
+        return;
 
       const functionResponse = func(
         data,
@@ -364,6 +546,8 @@ export const commands = [
   { name: 'summary', func: require('./summary').default },
   { name: 'value', func: require('./value').default },
   { name: 'data', alias: 'value' },
+  { name: 'range', func: require('./range').default },
+  { name: 'factor', func: require('./factor').default },
   { name: 'ranking', func: require('./ranking').default },
   { name: 'commands', func: require('./commands').default },
 ];

@@ -16,9 +16,9 @@ import { verbalise } from '../utils';
  * @param {Object} options - The options supplied to voxlens when creating the viz.
  * @param {string} options.xLabel - Label for the x-axis.
  * @param {number} options.yLabel - Label for the y-axis.
- * @returns {string} - Response for the "mode" command.
+ * @returns {object} - Response for the "mode" command.
  */
-const resolver = (data, options) => {
+export default (data, options) => {
   const key = generateXLabel(options);
   let mode = stats.mode(data.y);
 
@@ -42,5 +42,3 @@ const resolver = (data, options) => {
     sentence: generateSentence('Mode', verbalise(mode), options),
   };
 };
-
-export default resolver;

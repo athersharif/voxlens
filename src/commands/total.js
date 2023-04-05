@@ -15,9 +15,9 @@ import { addThousandsSeparators } from '../utils';
  * @param {Object} options - The options supplied to voxlens when creating the viz.
  * @param {string} options.xLabel - Label for the x-axis.
  * @param {number} options.yLabel - Label for the y-axis.
- * @returns {string} - Response for the "total" command.
+ * @returns {object} - Response for the "total" command.
  */
-const resolver = (data, options) => {
+export default (data, options) => {
   const value = stats.sum(data.y);
   const key = generateXLabel(options);
 
@@ -27,5 +27,3 @@ const resolver = (data, options) => {
     sentence: generateSentence('Total', addThousandsSeparators(value), options),
   };
 };
-
-export default resolver;

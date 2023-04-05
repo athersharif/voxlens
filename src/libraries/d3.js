@@ -10,7 +10,7 @@ import isArray from 'lodash/isArray';
  * @param {Object} viewportElement - Object that contains the container for the viz.
  * @returns {Object} - Object containing the viewport element, data, and options
  */
-const setup = (viewportElement) => {
+export default (viewportElement) => {
   let data = viewportElement.data();
   if (isArray(data[0])) data = data[0];
 
@@ -22,5 +22,3 @@ const setup = (viewportElement) => {
     viewportElement,
   };
 };
-
-export default setup;

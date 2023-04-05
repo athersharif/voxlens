@@ -172,7 +172,10 @@ export const createTemporaryElement = (text, timeout = 1000) => {
  * @param {string} key - The key to extract values from.
  * @return {string[]} - An array of values from a given key.
  */
-export const getArrayFromObject = (data, key) => data.map((d) => d[key]);
+export const getArrayFromObject = (data, key) =>
+  Array.isArray(key)
+    ? key.map((k) => data.map((d) => d[k]))
+    : data.map((d) => d[key]);
 
 /**
  * Validates the data supplied to VoxLens and throws errors where necessary.
@@ -216,11 +219,17 @@ export const addThousandsSeparators = (value) => {
  * @param {number} options.yLabel - Label for the y-axis.
  * @return {Object} - The formatted options.
  */
-export const formatOptions = (options) => ({
-  ...options,
-  xLabel: startCase(options.xLabel),
-  yLabel: startCase(options.yLabel),
-});
+export const formatOptions = (options) => {
+  const xLabel = Array.isArray(options.xLabel)
+    ? options.xLabel.reverse().join(' and ')
+    : options.xLabel;
+
+  return {
+    ...options,
+    xLabel: startCase(xLabel),
+    yLabel: startCase(options.yLabel),
+  };
+};
 
 /**
  * Finds settings based on the operating system.

@@ -15,24 +15,18 @@ import { addThousandsSeparators } from '../utils';
  * @param {Object} options - The options supplied to voxlens when creating the viz.
  * @param {string} options.xLabel - Label for the x-axis.
  * @param {number} options.yLabel - Label for the y-axis.
- * @returns {string} - Response for the "minimum" command.
+ * @returns {object} - Response for the "minimum" command.
  */
-const resolver = (data, options) => {
-  const [minValue, independentValues] = getIndependentValues(
-    data,
-    min,
-    options
-  );
+export default (data, options) => {
+  const values = getIndependentValues(data, min);
 
   return {
-    key: independentValues,
-    value: minValue,
+    key: values[1],
+    value: values[0],
     sentence: generateSentence(
       'Minimum',
-      `${addThousandsSeparators(minValue)} belonging to ${independentValues}`,
+      `${addThousandsSeparators(values[0])} belonging to ${values[1]}`,
       options
     ),
   };
 };
-
-export default resolver;

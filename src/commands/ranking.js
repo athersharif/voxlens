@@ -15,9 +15,9 @@ import pluralize from 'pluralize';
  * @param {number} options.rankingCount - Number of elements to rank.
  * @param {string} options.rankingType - Type of ranking.
  * @param {string} options.xLabel - Label for the x-axis.
- * @returns {string} - Response for the "ranking" command.
+ * @returns {object} - Response for the "ranking" command.
  */
-const resolver = (data, options) => {
+export default (data, options) => {
   const xs = Array.isArray(data.x[0]) ? [data.x[0]] : [data.x];
   let sentence = '';
   let rankedData = orderBy(
@@ -55,5 +55,3 @@ const resolver = (data, options) => {
     sentence: sentence.trim(),
   };
 };
-
-export default resolver;
