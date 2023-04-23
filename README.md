@@ -157,10 +157,6 @@ Ather Sharif, Andrew Mingwei Zhang, Anna Shih, Jacob O. Wobbrock, and Katharina 
 
 [PDF](https://athersharif.me/documents/assets-2022-voxlens-geospatial.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
 
-Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In Extended Abstracts of the 20th International Web for All Conference (W4A '23). Association for Computing Machinery, New York, NY, USA. To Appear. 
-
-[PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down-ea.pdf) | [Presentation]()
-
-Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In Proceedings of the 20th International Web for All Conference (W4A '23). Association for Computing Machinery, New York, NY, USA. To Appear. 
+Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In 20th International Web for All Conference (W4A23). Association for Computing Machinery, New York, NY, USA, 18–31. 
 
 [PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down.pdf) | [Presentation]()
