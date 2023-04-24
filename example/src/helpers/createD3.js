@@ -6,7 +6,16 @@ import drawMap from './maps';
 import voxlens from '../../../src';
 
 const createD3 = (options) => {
-  let { chartType, data, dataModule, fillColor, title, xKey, yKey } = options;
+  let {
+    chartType,
+    data,
+    dataModule,
+    fillColor,
+    title,
+    withVoxLens,
+    xKey,
+    yKey,
+  } = options;
 
   const getDimensions = (maxXLabel) => {
     const margin = { top: 20, right: 40, bottom: maxXLabel * 5 + 10, left: 70 };
@@ -60,7 +69,7 @@ const createD3 = (options) => {
       .attr('width', x.bandwidth())
       .attr('y', (d) => y(d[yKey]))
       .attr('height', (d) => height - y(d[yKey]))
-      .call((d) => voxlens('d3', d, data, voxlensOptions));
+      .call((d) => (withVoxLens ? voxlens('d3', d, data, voxlensOptions) : {}));
 
     svg
       .append('text')
@@ -137,7 +146,7 @@ const createD3 = (options) => {
       .attr('cy', (d) => y(d[yKey]))
       .attr('r', 5)
       .style('fill', fillColor)
-      .call((d) => voxlens('d3', d, data, voxlensOptions));
+      .call((d) => (withVoxLens ? voxlens('d3', d, data, voxlensOptions) : {}));
 
     svg
       .append('text')
@@ -225,7 +234,7 @@ const createD3 = (options) => {
           .x((d) => x(d[xKey]) + x.bandwidth() / 2)
           .y((d) => y(d[yKey]))
       )
-      .call((d) => voxlens('d3', d, data, voxlensOptions));
+      .call((d) => (withVoxLens ? voxlens('d3', d, data, voxlensOptions) : {}));
 
     svg
       .append('text')
@@ -305,7 +314,7 @@ const createD3 = (options) => {
       .attr('fill', (d) => colors(d.data[xKey]))
       .attr('stroke', 'white')
       .attr('stroke-width', 2)
-      .call((d) => voxlens('d3', d, data, voxlensOptions));
+      .call((d) => (withVoxLens ? voxlens('d3', d, data, voxlensOptions) : {}));
 
     const existingContainer = document.getElementById('d3-pie-legend');
 
@@ -497,7 +506,7 @@ const createD3 = (options) => {
       .enter()
       .append('g')
       .style('opacity', 0)
-      .call((d) => voxlens('d3', d, data, voxlensOptions));
+      .call((d) => (withVoxLens ? voxlens('d3', d, data, voxlensOptions) : {}));
 
     const legend = svg
       .selectAll('.legend')
@@ -600,7 +609,7 @@ const createD3 = (options) => {
 
     svg
       .selectAll('.' + dataModule)
-      .call((d) => voxlens('d3', d, data, voxlensOptions));
+      .call((d) => (withVoxLens ? voxlens('d3', d, data, voxlensOptions) : {}));
   }
 };
 

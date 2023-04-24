@@ -3,7 +3,7 @@ import startCase from 'lodash/startCase';
 import voxlens from '../../../src';
 
 const createChartJS = (options) => {
-  const { data, fillColor, title, xKey, yKey } = options;
+  const { data, fillColor, title, withVoxLens, xKey, yKey } = options;
 
   const container = document.getElementById('chart');
   const margin = { top: 20, right: 40, bottom: 40, left: 70 };
@@ -73,7 +73,8 @@ const createChartJS = (options) => {
     title,
   };
 
-  voxlens('chartjs', container, data, voxlensOptions);
+  if (withVoxLens) voxlens('chartjs', container, data, voxlensOptions);
+  else container.setAttribute('alt', title);
 };
 
 export default createChartJS;

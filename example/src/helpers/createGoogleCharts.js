@@ -2,7 +2,7 @@ import startCase from 'lodash/startCase';
 import voxlens from '../../../src';
 
 const createGoogleCharts = (options) => {
-  let { data, fillColor, title, xKey, yKey } = options;
+  let { data, fillColor, title, withVoxLens, xKey, yKey } = options;
 
   const container = document.getElementById('chart');
   const margin = { top: 20, right: 40, bottom: 20, left: 70 };
@@ -51,7 +51,7 @@ const createGoogleCharts = (options) => {
       title,
     };
 
-    voxlens('googlecharts', chart, data, voxlensOptions);
+    if (withVoxLens) voxlens('googlecharts', chart, data, voxlensOptions);
   };
 
   google.charts.load('current', { packages: ['corechart'] });

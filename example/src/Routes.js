@@ -30,7 +30,9 @@ const Routes = (appProps) => {
         <Route
           key={combination.library + '-' + combination.type}
           exact
-          path={'/' + combination.library + '/' + combination.type}
+          path={
+            '/' + combination.library + '/' + combination.type + '/:accessible?'
+          }
           render={(props) => renderComponent(appProps, props, combination)}
         />
       ))}

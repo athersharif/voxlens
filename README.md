@@ -153,10 +153,8 @@ Ather Sharif, Olivia H. Wang, Alida T. Muongchan, Katharina Reinecke, and Jacob 
 
 [PDF](https://athersharif.me/documents/chi-2022-voxlens.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
 
-Ather Sharif, Andrew Mingwei Zhang, Anna Shih, Jacob O. Wobbrock, and Katharina Reinecke. 2022. Understanding and Improving Information Extraction From Online Geospatial Data Visualizations for Screen-Reader Users. In Proceedings of the 24th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '22). Association for Computing Machinery, New York, NY, USA, Article 61, 1–5.
-
-[PDF](https://athersharif.me/documents/assets-2022-voxlens-geospatial.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
-
 Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In 20th International Web for All Conference (W4A23). Association for Computing Machinery, New York, NY, USA, 18–31. 
 
 [PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down.pdf) | [Presentation]()
+
+Read more about our work on accessibility of online data visualizations [here](https://athersharif.me/projects/VOX).

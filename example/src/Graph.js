@@ -23,7 +23,12 @@ class Graph extends Component {
   };
 
   createChart = () => {
-    const { combination } = this.props;
+    const {
+      combination,
+      match: { params },
+    } = this.props;
+    const isAccessible =
+      params.accessible == null || params.accessible !== 'inaccessible';
     const chartContainer = document.getElementById('chart');
 
     if (chartContainer) {
@@ -38,6 +43,7 @@ class Graph extends Component {
         chartType: combination.type,
         dataModule: combination.type === 'map' ? 'state' : null,
         data: combination.type === 'multiseries' ? data : shuffle(data),
+        withVoxLens: isAccessible,
       };
 
       let func = null;
