@@ -27,7 +27,7 @@ Currently, VoxLens supports:
 |x|Required|The key name(s) of the indepedent variable(s) in the dataset. Can be an array for multi-series data.|
 |y|Required|The key name of the depedent variable in the dataset.|
 |title|Required|The title of the visualization. Should be kept concise.|
-|chartType|Required|The chart type of the visualization. Must be one of `bar`, `scatter`, `line`, `map`, `multiseries`.|
+|chartType|Required|The chart type of the visualization. Must be one of `bar`, `scatter`, `line`, `map`, `multiseries`. Defaults to `bar`.|
 |dataModule|Required|Data module for geospatial data. Only required when chartType is `map`. Must be one of `state`, `country`.|
 |xLabel|Optional|The label for x. Defaults to the value of x. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
 |yLabel|Optional|The label for y. Defaults to the value of y. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
@@ -50,13 +50,13 @@ const voxlensOptions = {
   y: 'value',
   title: 'This is the title of my visualization',
   xLabel: 'My-X-Label',
-  yLabel: 'My-Y-Label,
+  yLabel: 'My-Y-Label',
 };
 ```
 
 #### **For D3:** 
 
-Add this line to the appropriate nested element:
+Add this line to the appropriate nested element (see [this](https://github.com/athersharif/voxlens/blob/main/example/src/helpers/createD3.js#L72) for example):
 
 ```
 .call((d) => voxlens('d3', d, data, voxlensOptions));
@@ -64,11 +64,15 @@ Add this line to the appropriate nested element:
 
 #### **For Google Charts:**
 
+(see [this](https://github.com/athersharif/voxlens/blob/main/example/src/helpers/createGoogleCharts.js#L54) for example)
+
 ```
 voxlens('googlecharts', chart, data, voxlensOptions);
 ```
 
 #### **For ChartJS:**
+
+(see [this](https://github.com/athersharif/voxlens/blob/main/example/src/helpers/createChartJS.js#L76) for example)
 
 ```
 voxlens('chartjs', container, data, voxlensOptions);
@@ -76,7 +80,7 @@ voxlens('chartjs', container, data, voxlensOptions);
 
 ### Examples
 
-Examples are provided under the `example` folder. Run `npm start` from within the `example` folder. A sample React app will run on `localhost:3000`. URLs for each library are as follows:
+Examples are provided under the `example` [folder](https://github.com/athersharif/voxlens/tree/main/example). Run `npm start` from within the `example` folder. A sample React app will run on `localhost:3000`. URLs for each library are as follows:
 
 - *ChartJS*: localhost:3000/voxlens/playground/chartjs
 - *D3*: localhost:3000/voxlens/playground/d3
@@ -90,10 +94,11 @@ Modifier Keys: Ctrl + Shift (Windows) and Option (MacOS)
 
 |Mode|Activation Key|Description|
 |--- |--- |--- |
-|Question-and-Answer|Modifier Keys + A/Modifier Keys + 1|Enables users to interact with the visualization through voice commands using their microphone|
-|Summary|Modifier Keys + S/Modifier Keys + 2|Provides a holistic summary of the data contained in the visualization
-|Sonification|Modifier Keys + M/Modifier Keys + 3|Plays a sonified version of the data using the [`sonifier`](https://www.npmjs.com/package/sonifier) library|
-|Instructions|Modifier Keys + I/Modifier Keys + 4|Provides the user with instructions on how to interact with VoxLens|
+|Question-and-Answer|Modifier Keys + A or Modifier Keys + 1|Enables users to interact with the visualization through voice commands using their microphone|
+|Summary|Modifier Keys + S or Modifier Keys + 2|Provides a holistic summary of the data contained in the visualization
+|Sonification|Modifier Keys + M or Modifier Keys + 3|Plays a sonified version of the data using the [`sonifier`](https://www.npmjs.com/package/sonifier) library|
+|Instructions|Modifier Keys + I or Modifier Keys + 4|Provides the user with instructions on how to interact with VoxLens|
+|Pause|Modifier Keys + P or Modifier Keys + 5|Pauses the output from VoxLens. Also works with sonification|
 
 ### Testing VoxLens
 
@@ -141,20 +146,20 @@ Pull requests are welcome and appreciated. Contributing guidelines can be found 
 
 ## License
 
-Licensed under MIT. Can be found [here](https://github.com/athersharif/voxlens/blob/main/LICENSE).
+Licensed under BSD. Can be found [here](https://github.com/athersharif/voxlens/blob/main/LICENSE).
 
 ## Citations
 
-Ather Sharif, Sanjana Shivani Chintalapati, Jacob O. Wobbrock, and Katharina Reinecke. 2021. Understanding Screen-Reader Users’ Experiences with Online Data Visualizations. In The 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21). Association for Computing Machinery, New York, NY, USA, Article 14, 1–16.
+Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In 20th International Web for All Conference (W4A23). Association for Computing Machinery, New York, NY, USA, 18–31. 
 
-[PDF](https://athersharif.me/documents/assets-2021-understanding-sru-experiences-online-data-viz.pdf) | [Presentation](https://www.youtube.com/watch?v=nOHcQYm9HKQ)
+[PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down.pdf) | [Presentation]() | Best Paper Award
 
 Ather Sharif, Olivia H. Wang, Alida T. Muongchan, Katharina Reinecke, and Jacob O. Wobbrock. 2022. VoxLens: Making Online Data Visualizations Accessible with an Interactive JavaScript Plug-In. In Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems (CHI '22). Association for Computing Machinery, New York, NY, USA, Article 478, 1–19.
 
 [PDF](https://athersharif.me/documents/chi-2022-voxlens.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
 
-Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In 20th International Web for All Conference (W4A23). Association for Computing Machinery, New York, NY, USA, 18–31. 
+Ather Sharif, Sanjana S. Chintalapati, Jacob O. Wobbrock, and Katharina Reinecke. 2021. Understanding Screen-Reader Users’ Experiences with Online Data Visualizations. In The 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21). Association for Computing Machinery, New York, NY, USA, Article 14, 1–16.
 
-[PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down.pdf) | [Presentation]()
+[PDF](https://athersharif.me/documents/assets-2021-understanding-sru-experiences-online-data-viz.pdf) | [Presentation](https://www.youtube.com/watch?v=nOHcQYm9HKQ)
 
 Read more about our work on accessibility of online data visualizations [here](https://athersharif.me/projects/VOX).
