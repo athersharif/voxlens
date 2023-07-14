@@ -68,9 +68,9 @@ const createChartJS = (options) => {
   });
 
   const voxlensOptions = {
+    ...options,
     x: xKey,
     y: yKey,
-    title,
   };
 
   if (withVoxLens) voxlens('chartjs', container, data, voxlensOptions);

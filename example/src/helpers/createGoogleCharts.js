@@ -4,6 +4,12 @@ import voxlens from '../../../src';
 const createGoogleCharts = (options) => {
   let { data, fillColor, title, withVoxLens, xKey, yKey } = options;
 
+  const voxlensOptions = {
+    ...options,
+    x: xKey,
+    y: yKey,
+  };
+
   const container = document.getElementById('chart');
   const margin = { top: 20, right: 40, bottom: 20, left: 70 };
   const height = 700 - margin.top - margin.bottom;
@@ -38,18 +44,15 @@ const createGoogleCharts = (options) => {
         gridlines: {
           color: 'black',
         },
+        minorGridlines: {
+          color: 'black',
+        },
       },
     };
 
     const chart = new Chart(container);
 
     chart.draw(dataTable, options);
-
-    const voxlensOptions = {
-      x: xKey,
-      y: yKey,
-      title,
-    };
 
     if (withVoxLens) voxlens('googlecharts', chart, data, voxlensOptions);
   };

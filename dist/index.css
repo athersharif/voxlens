@@ -1,0 +1,55 @@
+div[name^='voxlens-'] {
+  width: 80%;
+  margin: 20px auto 20px auto;
+  padding: 20px;
+  border: 2px solid black;
+  border-radius: 5px;
+  text-align: justify;
+}
+
+div[name^='voxlens-'].hidden {
+  position: absolute;
+  left: -10000px;
+  top: auto;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+
+div[name^='voxlens-']:first-of-type {
+  margin-top: 0px;
+}
+
+div[name^='voxlens-']:last-of-type {
+  margin-bottom: 0px;
+}
+
+div[name^='voxlens-'] p {
+  text-align: justify !important;
+}
+
+div[name^='voxlens-'] button {
+  text-transform: uppercase;
+  background: white;
+  border: 2px solid steelblue;
+  color: steelblue;
+  border-radius: 5px;
+  padding: 10px 15px;
+  cursor: pointer;
+}
+
+div[name^='voxlens-'] button:hover {
+  background-color: steelblue;
+  color: white;
+}
+
+div[name^='voxlens-'] textarea {
+  width: calc(100% - 30px);
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 50px;
+  border: 1px solid black;
+  border-radius: 4px;
+  padding: 10px 15px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}

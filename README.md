@@ -4,7 +4,7 @@ VoxLens is a JavaScript library that improves the accessibility of online data v
 
 This library is part of an ongoing research project being conducted at the University of Washington, led by [Ather Sharif](https://athersharif.me). Citations and links to our published work can be found at the end of this document.
 
-[![GitHub license](https://img.shields.io/badge/license-MIT-blue.svg)](https://github.com/athersharif/voxlens/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/voxlens.svg?style=flat)](https://www.npmjs.com/package/voxlens) [![CircleCI](https://circleci.com/gh/athersharif/voxlens/tree/main.svg?style=svg)](https://circleci.com/gh/athersharif/voxlens/?branch=main)
+[![GitHub license](https://img.shields.io/badge/license-BSD-blue.svg)](https://github.com/athersharif/voxlens/blob/main/LICENSE) [![npm version](https://img.shields.io/npm/v/voxlens.svg?style=flat)](https://www.npmjs.com/package/voxlens) [![CircleCI](https://circleci.com/gh/athersharif/voxlens/tree/main.svg?style=svg)](https://circleci.com/gh/athersharif/voxlens/?branch=main)
 
 ## Installation
 
@@ -17,7 +17,7 @@ This library is part of an ongoing research project being conducted at the Unive
 Currently, VoxLens supports:
 
 - Visualization Libraries: `D3`, `Google Charts`, and `ChartJS`. 
-- Data Types: 2-D single-series and geosptial data. Sample data sets are provided under `examples/src/data`.
+- Data Types: 2-D, single-series and geosptial data. Multi-series line graphs are also supported. Sample data sets are provided under `examples/src/data`.
 - Browser: Chrome
 
 ### Configuration Options
@@ -36,6 +36,14 @@ Currently, VoxLens supports:
 |vx_metadata.max|Optional|The maximum value in the data series, if the data is an average value|
 |vx_metadata.stdev|Optional|The standard deviation of the data series, if the data is an average value|
 |vx_metadata.isAverage|Optional|The boolean flag `true` or `false` if the data is an average value|
+|debug|Optional|Debug options for developers. Could be a boolean flag or an object for granular control over debugging tools. If set to `true`, all tools are activated|
+|debug.instructions|Optional|Outputs instructions to use the emulator tool. Could be a boolean flag or an object for granular control. Defaults to `true`|
+|debug.instructions.onlyMain|Optional|Outputs only the main instructions (less verbose). Defaults to `false`|
+|debug.hideFeedbackCollector|Optional|Hides feedback collector. Defaults to `false`|
+|debug.contrastChecker|Optional|Enables or disables contrast checker. Defaults to `false`|
+|debug.responses.onlyText|Optional|Enables or disables audio output from emulators. Defaults to `false`|
+|feedbackCollector.scales|Optional|Range of Likert scale from 1 to _N_. Defaults to `5`|
+|feedbackCollector.email|Required|Email to send the feedback to. Required if feedback collector is activated.|
 
 ### Sample Implementation
 
@@ -56,6 +64,7 @@ const voxlensOptions = {
   title: 'This is the title of my visualization',
   xLabel: 'My-X-Label',
   yLabel: 'My-Y-Label',
+  debug: true,
 };
 ```
 
@@ -107,7 +116,7 @@ Modifier Keys: Ctrl + Shift (Windows) and Option (MacOS)
 
 ### Testing VoxLens
 
-In order to interact with the VoxLens, basic knowledge of screen reader usage is required, as well as a microphone. We understand that most people are not familiar with the screen readers, so we've also enabled console logs to show the output. When the screen reader reads the visualization, it also speaks out the instructions to interact with the graph, which is not presented visually to non-screen-reader users. For example, activating the question-and-answer mode will make a beep sound, after which a command such as "what is the maximum" or "tell me the average" can be said. The response for non-screen-reader users will appear in the console log (can be accessed via Chrome Developer Tools).
+In order to fully interact with the VoxLens, basic knowledge of screen reader usage is required. A microphone is also needed. For creators not familiar with screen readers, debugging tools are available to test their visualizations for accessibility (see configuration options above). Additionally, console logs are also in place to show the output of the commands. For example, activating the question-and-answer mode will make a beep sound, after which a command such as "what is the maximum" or "tell me the average" can be said. The response for non-screen-reader users will appear in the console log (can be accessed via Chrome Developer Tools).
 
 ## Dev Tools
 
@@ -155,13 +164,4 @@ Licensed under BSD. Can be found [here](https://github.com/athersharif/voxlens/b
 
 ## Citations
 
-Ather Sharif, Ruican Zhong, and Yadi Wang. 2023. Conveying Uncertainty in Data Visualizations to Screen-Reader Users Through Non-Visual Means. In The 25th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '23). Association for Computing Machinery, New York, NY, USA. To Appear. https://doi.org/10.1145/3597638.3614502 ([PDF](https://athersharif.me/documents/assets-2023-voxlens-uncertainty.pdf) | Presentation)
-
-Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In 20th International Web for All Conference (W4A23). Association for Computing Machinery, New York, NY, USA, 18–31. https://doi.org/10.1145/3587281.3587284 ([PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down.pdf) | [Presentation]() | Best Paper Award)
-
-Ather Sharif, Olivia H. Wang, Alida T. Muongchan, Katharina Reinecke, and Jacob O. Wobbrock. 2022. VoxLens: Making Online Data Visualizations Accessible with an Interactive JavaScript Plug-In. In Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems (CHI '22). Association for Computing Machinery, New York, NY, USA, Article 478, 1–19. https://doi.org/10.1145/3517428.3550360 ([PDF](https://athersharif.me/documents/chi-2022-voxlens.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU))
-
-Ather Sharif, Sanjana S. Chintalapati, Jacob O. Wobbrock, and Katharina Reinecke. 2021. Understanding Screen-Reader Users’ Experiences with Online Data Visualizations. In The 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21). Association for Computing Machinery, New York, NY, USA, Article 14, 1–16. https://doi.org/10.1145/3441852.3471202
-([PDF](https://athersharif.me/documents/assets-2021-understanding-sru-experiences-online-data-viz.pdf) | [Presentation](https://www.youtube.com/watch?v=nOHcQYm9HKQ))
-
-Read more about our work on accessibility of online data visualizations [here](https://athersharif.me/projects/VOX).
+All publications and our work on the accessibility of online data visualizations can be found [here](https://athersharif.me/projects/VOX).

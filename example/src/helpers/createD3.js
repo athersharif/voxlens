@@ -5,20 +5,22 @@ import uniq from 'lodash/uniq';
 import drawMap from './maps';
 import voxlens from '../../../src';
 
+const multiseriesColors = [
+  '#e41a1c',
+  '#377eb8',
+  '#5e9400',
+  '#984ea3',
+  '#d66b00',
+  '#0398fc',
+  '#a65628',
+];
+
 const createD3 = (options) => {
-  let {
-    chartType,
-    data,
-    dataModule,
-    fillColor,
-    title,
-    withVoxLens,
-    xKey,
-    yKey,
-  } = options;
+  let { chartType, data, dataModule, fillColor, withVoxLens, xKey, yKey } =
+    options;
 
   const getDimensions = (maxXLabel) => {
-    const margin = { top: 20, right: 40, bottom: maxXLabel * 5 + 10, left: 70 };
+    const margin = { top: 20, right: 40, bottom: maxXLabel * 5 + 10, left: 90 };
 
     return {
       margin,
@@ -35,16 +37,13 @@ const createD3 = (options) => {
     let transform = margin.left + ',' + margin.top;
 
     const voxlensOptions = {
+      ...options,
       x: xKey,
       y: yKey,
-      title,
-      chartType,
-      dataModule,
     };
 
     const svg = d3
       .select('#chart')
-      .append('center')
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + 40 + margin.top + margin.bottom)
@@ -92,6 +91,7 @@ const createD3 = (options) => {
     svg
       .append('g')
       .attr('transform', 'translate(0, ' + height + ')')
+      .attr('class', 'bar-axis')
       .call(d3.axisBottom(x).ticks(data.length))
       .selectAll('text')
       .attr('y', 0)
@@ -101,23 +101,20 @@ const createD3 = (options) => {
       .style('text-anchor', 'start')
       .style('opacity', 1);
 
-    svg.append('g').call(d3.axisLeft(y));
+    svg.append('g').attr('class', 'bar-axis').call(d3.axisLeft(y));
   } else if (chartType === 'scatter') {
     let maxXLabel = max(data.map((d) => d[xKey].toString().length));
     let { height, margin, width } = getDimensions(maxXLabel);
     let transform = margin.left + ',' + margin.top;
 
     const voxlensOptions = {
+      ...options,
       x: xKey,
       y: yKey,
-      title,
-      chartType,
-      dataModule,
     };
 
     const svg = d3
       .select('#chart')
-      .append('center')
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + 40 + margin.top + margin.bottom)
@@ -169,6 +166,7 @@ const createD3 = (options) => {
     svg
       .append('g')
       .attr('transform', 'translate(0, ' + height + ')')
+      .attr('class', 'bar-axis')
       .call(d3.axisBottom(x).ticks(data.length).tickFormat(d3.format('d')))
       .selectAll('text')
       .attr('y', 0)
@@ -181,6 +179,7 @@ const createD3 = (options) => {
     svg
       .append('g')
       .attr('transform', 'translate(0, ' + height + ')')
+      .attr('class', 'bar-axis')
       .call(d3.axisBottom(x).ticks(data.length))
       .selectAll('text')
       .attr('y', 0)
@@ -190,18 +189,16 @@ const createD3 = (options) => {
       .style('text-anchor', 'start')
       .style('opacity', 1);
 
-    svg.append('g').call(d3.axisLeft(y));
+    svg.append('g').attr('class', 'bar-axis').call(d3.axisLeft(y));
   } else if (chartType === 'line') {
     let maxXLabel = max(data.map((d) => d[xKey].toString().length));
     let { height, margin, width } = getDimensions(maxXLabel);
     let transform = margin.left + ',' + margin.top;
 
     const voxlensOptions = {
+      ...options,
       x: xKey,
       y: yKey,
-      title,
-      chartType,
-      dataModule,
     };
 
     const svg = d3
@@ -257,6 +254,7 @@ const createD3 = (options) => {
     svg
       .append('g')
       .attr('transform', 'translate(0, ' + height + ')')
+      .attr('class', 'bar-axis')
       .call(d3.axisBottom(x).ticks(data.length))
       .selectAll('text')
       .attr('y', 0)
@@ -266,23 +264,20 @@ const createD3 = (options) => {
       .style('text-anchor', 'start')
       .style('opacity', 1);
 
-    svg.append('g').call(d3.axisLeft(y));
+    svg.append('g').attr('class', 'bar-axis').call(d3.axisLeft(y));
   } else if (chartType === 'pie') {
     let maxXLabel = 2;
     let { height, margin, width } = getDimensions(maxXLabel);
     let transform = width / 2 + ',' + height / 2;
 
     const voxlensOptions = {
+      ...options,
       x: xKey,
       y: yKey,
-      title,
-      chartType,
-      dataModule,
     };
 
     const svg = d3
       .select('#chart')
-      .append('center')
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + 40 + margin.top + margin.bottom)
@@ -408,11 +403,9 @@ const createD3 = (options) => {
     let transform = margin.left + ',' + margin.top;
 
     const voxlensOptions = {
+      ...options,
       x: xKeys,
       y: yKey,
-      title,
-      chartType,
-      dataModule,
     };
 
     const svg = d3
@@ -439,8 +432,9 @@ const createD3 = (options) => {
       .x((d) => x(d[xKeys[0]]) + x.bandwidth() / 2)
       .y((d) => y(d[xKeys[1]]));
 
-    const preferences = categoriesNames.map((c) => ({
+    const preferences = categoriesNames.map((c, i) => ({
       category: c,
+      index: i,
       datapoints: data.map((d) => ({
         [xKeys[0]]: d[xKeys[0]],
         [xKeys[1]]: +d[c],
@@ -455,6 +449,7 @@ const createD3 = (options) => {
       .append('g')
       .attr('class', 'x axis')
       .attr('transform', 'translate(0,' + height + ')')
+      .attr('class', 'bar-axis')
       .call(xAxis)
       .selectAll('text')
       .attr('y', 0)
@@ -476,6 +471,7 @@ const createD3 = (options) => {
     svg
       .append('g')
       .attr('class', 'y axis')
+      .attr('class', 'bar-axis')
       .call(yAxis)
       .append('text')
       .attr('transform', 'rotate(-90)')
@@ -497,7 +493,7 @@ const createD3 = (options) => {
       .attr('fill', 'none')
       .attr('stroke-width', '2px')
       .attr('d', (d) => line(d.datapoints))
-      .style('stroke', (d) => color(d.category));
+      .style('stroke', (d) => multiseriesColors[d.index]);
 
     svg
       .selectAll('.category')
@@ -521,7 +517,7 @@ const createD3 = (options) => {
       .attr('x', width - 18)
       .attr('width', 18)
       .attr('height', 18)
-      .style('fill', (d) => color(d));
+      .style('fill', (d) => multiseriesColors[categoriesNames.indexOf(d)]);
 
     legend
       .append('text')
@@ -536,16 +532,13 @@ const createD3 = (options) => {
     let transform = margin.left + ',' + margin.top;
 
     const voxlensOptions = {
+      ...options,
       x: xKey,
       y: yKey,
-      title,
-      chartType,
-      dataModule,
     };
 
     const svg = d3
       .select('#chart')
-      .append('center')
       .append('svg')
       .attr('width', width + margin.left + margin.right)
       .attr('height', height + 40 + margin.top + margin.bottom)

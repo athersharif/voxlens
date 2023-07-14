@@ -15,6 +15,7 @@ const options = {
   y: 'label',
   xLabel: 'dummy',
   yLabel: 'label',
+  element: document.body,
 };
 
 const stateData = {
@@ -29,6 +30,7 @@ const stateOptions = {
   y: 'score',
   xLabel: 'state',
   yLabel: 'score',
+  element: document.body,
 };
 
 const countryData = {
@@ -94,6 +96,7 @@ const countryOptions = {
   y: 'score',
   xLabel: 'country',
   yLabel: 'score',
+  element: document.body,
 };
 
 const multiSeriesData = {
@@ -110,6 +113,7 @@ const multiSeriesOptions = {
   y: 'cars',
   xLabel: 'Name And Year',
   yLabel: 'Cars',
+  element: document.body,
 };
 
 describe('getIndividualDataPoint', () => {
@@ -194,7 +198,7 @@ describe('getIndividualDataPoint', () => {
       'Command issued: value'
     );
     expect(consoleStub.getCall(3).args.join('')).to.contain(
-      'label for different is 22. label for something is 12. label for unique is 33. label for unique is the highest, followed by different, and something.'
+      'label for unique is 33. label for different is 22. label for something is 12. label for unique is the highest, followed by different, and something.'
     );
   });
 
@@ -267,7 +271,7 @@ describe('getIndividualDataPoint', () => {
       'Command issued: average'
     );
     expect(consoleStub.getCall(3).args.join('')).to.contain(
-      'Average score for north region Easts is 37. Average score for North regions is 65. Average score for Greatlakes regions is 93. score for Greatlakes region average is the highest, followed by North region average, and north region East average.'
+      'Average score for Greatlakes regions is 93. Average score for North regions is 65. Average score for north region Easts is 37. score for Greatlakes region average is the highest, followed by North region average, and north region East average.'
     );
   });
 
@@ -492,7 +496,7 @@ describe('getIndividualDataPoint', () => {
       'Command issued: blah'
     );
     expect(consoleStub.getCall(1).args.join('')).to.contain(
-      'I heard you say blah. Unable to get data. Please try again.'
+      'blah. Unable to get data. Please try again.'
     );
   });
 });

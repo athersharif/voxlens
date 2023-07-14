@@ -19,12 +19,6 @@ var _modules = _interopRequireDefault(require("../modules"));
 var _utils = require("../utils");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
-function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
-function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
-function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
-function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
-function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
-function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
@@ -90,87 +84,36 @@ var getPossibleDataPoints = function getPossibleDataPoints(data, voiceText, char
   if (!voiceText || voiceText.replaceAll(' ', '') === '') return {
     indices: []
   };
-  var xFilter = function xFilter(arr, text) {
-    return _get__("uniq")(arr.filter(function (x) {
-      return Number.isNaN(parseInt(x)) && Number.isNaN(parseInt(text)) ? x.toString().toLowerCase().includes(text) : x.toString().toLowerCase() === text;
-    }));
-  };
-  var filteredData = [];
   voiceText = voiceText.split(' ').map(function (text) {
     return _get__("wordsToNumbers")(text.toString().toLowerCase());
   });
   if (chartType === 'multiseries') {
-    voiceText.forEach(function (text) {
-      data.x.forEach(function (arr, i) {
-        filteredData[i] = [].concat(_toConsumableArray(filteredData[i] || []), _toConsumableArray(xFilter(arr, text)));
-      });
-    });
-    var indices = [[], []];
-    var extraOptions = {};
-    filteredData[0].forEach(function (d) {
-      indices[0] = [].concat(_toConsumableArray(indices[0]), _toConsumableArray(data.x[0].map(function (d, i) {
-        return {
-          d: d,
-          i: i
-        };
-      }).filter(function (x) {
-        return x.d === d;
-      }).map(function (x) {
-        return x.i;
-      })));
-    });
-    filteredData[1].forEach(function (d) {
-      indices[1] = [].concat(_toConsumableArray(indices[1]), _toConsumableArray(data.x[1].map(function (d, i) {
-        return {
-          d: d,
-          i: i
-        };
-      }).filter(function (x) {
-        return x.d === d;
-      }).map(function (x) {
-        return x.i;
-      })));
+    var indices = data.x.map(function (x) {
+      return _get__("performFuzzySearch")(x, voiceText);
     });
     var finalIndices = _get__("intersection")(indices[0], indices[1]);
-    if (filteredData[0].length > 0 && filteredData[1].length === 0) {
+    var extraOptions = {};
+    var nonZeroLengthIndices = indices.map(function (i) {
+      return i.length;
+    }).filter(function (i) {
+      return i !== 0;
+    });
+    if (nonZeroLengthIndices.length > 0 && nonZeroLengthIndices.length < indices.length) {
+      var combineIndex = indices[0].length > indices[1].length ? 0 : 1;
       extraOptions = {
         combine: true,
-        combineIndex: 0,
+        combineIndex: combineIndex,
         combineCommand: 'average'
       };
-      finalIndices = indices[0];
-    }
-    if (filteredData[1].length > 0 && filteredData[0].length === 0) {
-      extraOptions = {
-        combine: true,
-        combineIndex: 1,
-        combineCommand: 'average'
-      };
-      finalIndices = indices[1];
+      finalIndices = indices[combineIndex];
     }
     return {
       extraOptions: extraOptions,
       indices: finalIndices
     };
   } else {
-    voiceText.forEach(function (text) {
-      filteredData = [].concat(_toConsumableArray(filteredData), _toConsumableArray(xFilter(data.x, text)));
-    });
-    var _indices = [];
-    filteredData.forEach(function (d) {
-      _indices = [].concat(_toConsumableArray(_indices), _toConsumableArray(data.x.map(function (d, i) {
-        return {
-          d: d,
-          i: i
-        };
-      }).filter(function (x) {
-        return x.d === d;
-      }).map(function (x) {
-        return x.i;
-      })));
-    });
     return {
-      indices: _indices
+      indices: _get__("performFuzzySearch")(data.x, voiceText)
     };
   }
 };
@@ -275,6 +218,7 @@ var processCommand = function processCommand(voiceText, data, options) {
     dataModule = options.dataModule;
   var allData = [];
   var regions = [];
+  var originalVoiceText = voiceText;
   var mod = dataModule ? _get__("dataModules")[dataModule] : null;
   var factors = _get__("getMatchingFactors")(options, voiceText);
   if (factors && factors.factors && factors.factors.length > 0) {
@@ -316,6 +260,7 @@ var processCommand = function processCommand(voiceText, data, options) {
     regions = moduleHelper.getMatchingRegions(voiceText, dataModule);
     if (regions.length > 0) {
       regions.forEach(function (r) {
+        voiceText = voiceText.replace(r.name.replace('.', ' '), '');
         var filteredData = moduleHelper.filterDataByRegion(data, r, mod);
         if (filteredData.x.length > 0) {
           if (activatedCommands.length > 0) {
@@ -369,7 +314,7 @@ var processCommand = function processCommand(voiceText, data, options) {
     }).join(','),
     time: Date.now()
   };
-  var response = 'Found the following possible results in the data. ';
+  var response = '';
   var commandsStaged = [];
   var dataValues = [];
   allData.forEach(function (_ref) {
@@ -409,29 +354,33 @@ var processCommand = function processCommand(voiceText, data, options) {
         kind: kind,
         type: type,
         key: functionResponse.key,
-        value: functionResponse.value
+        value: functionResponse.value,
+        sentence: functionResponse.sentence
       });
-      response += functionResponse.sentence + ' ';
       _get__("logCommand")(name, response);
       commandsStaged.push(name);
     });
   });
   if (dataValues.length === 0) {
     response = 'Unable to get data. Please try again.';
-    if (voiceText && voiceText.trim() !== '') response = "I heard you say ".concat(voiceText.trim(), ". ") + response;
-    _get__("logCommand")(voiceText, response);
+    _get__("logCommand")(originalVoiceText, response);
+  } else {
+    response = _get__("orderBy")(dataValues, ['value'], ['desc']).map(function (dv) {
+      return dv.sentence;
+    }).join(' ');
+    dataValues = dataValues.filter(function (d) {
+      return d.type === 'region' && d.command === 'average' || d.type !== 'region' && (d.kind === 'stats' || d.command === 'value');
+    });
+    if (dataValues.length > 1) {
+      response = response.trim() + ' ' + _get__("getComparisonText")(dataValues, options);
+    }
   }
-  response = _get__("addFeedbackToResponse")(response, _get__("uniq")(commandsStaged));
-  dataValues = dataValues.filter(function (d) {
-    return d.type === 'region' && d.command === 'average' || d.type !== 'region' && (d.kind === 'stats' || d.command === 'value');
-  });
-  if (dataValues.length > 1) {
-    response = response.trim() + ' ' + _get__("getComparisonText")(dataValues, options);
-  }
+  response = _get__("addFeedbackToResponse")(response, originalVoiceText);
   console.log('Response is ', response);
-  _get__("createTemporaryElement")(response);
+  _get__("createTemporaryElement")(response, options);
   return {
-    lastIssuedCommand: lastIssuedCommand
+    lastIssuedCommand: lastIssuedCommand,
+    response: response
   };
 };
 exports.processCommand = processCommand;
@@ -600,12 +549,14 @@ function _get_original__(variableName) {
       return _utils.sanitizeVoiceText;
     case "wordsToNumbers":
       return _wordsToNumbers["default"];
-    case "uniq":
-      return _uniq["default"];
+    case "performFuzzySearch":
+      return _utils.performFuzzySearch;
     case "intersection":
       return _intersection["default"];
     case "getPossibleDataPoints":
       return getPossibleDataPoints;
+    case "uniq":
+      return _uniq["default"];
     case "pluralize":
       return _pluralize["default"];
     case "dataModules":
@@ -628,10 +579,10 @@ function _get_original__(variableName) {
       return _utils.isCommandDuplicate;
     case "logCommand":
       return _utils.logCommand;
-    case "addFeedbackToResponse":
-      return _utils.addFeedbackToResponse;
     case "getComparisonText":
       return getComparisonText;
+    case "addFeedbackToResponse":
+      return _utils.addFeedbackToResponse;
     case "createTemporaryElement":
       return _utils.createTemporaryElement;
   }

@@ -77,6 +77,7 @@ const options = {
   xLabel: 'X Label',
   yLabel: 'Y Label',
   title: 'some title',
+  element,
 };
 
 describe('index.js', () => {
@@ -93,6 +94,12 @@ describe('index.js', () => {
 
     process.env.TEST_P5_RESULT = '';
     process.env.TEST_P5_FAIL = '';
+
+    voxlens.__set__('isListening', false);
+
+    document.getElementsByName('voxlens-feedback-collector')[0]?.remove();
+    document.getElementsByName('voxlens-instructions')[0]?.remove();
+    document.getElementsByName('voxlens-response')[0]?.remove();
   });
 
   it('should call d3Voxlens when library is d3', () => {
@@ -146,6 +153,28 @@ describe('index.js', () => {
     voxlens.__set__('startApp', originalFunc);
   });
 
+  it('should call d3Voxlens when library is d3 body as viewport element', () => {
+    const stub = sinon.stub();
+    const originalFunc = voxlens.__get__('startApp');
+    voxlens.__set__('startApp', stub);
+
+    const viewportElement = {
+      node: () => document.body,
+      data: () => [data],
+    };
+
+    voxlens('d3', viewportElement, null, options);
+
+    sinon.assert.calledWith(
+      stub,
+      expectedData,
+      { ...options, element: document.body },
+      'unique-id'
+    );
+
+    voxlens.__set__('startApp', originalFunc);
+  });
+
   it('should call googleChartsVoxlens when library is googlecharts', () => {
     const stub = sinon.stub();
     const originalFunc = voxlens.__get__('run');
@@ -156,7 +185,7 @@ describe('index.js', () => {
 
     voxlens('googlecharts', viewportElement, data);
 
-    sinon.assert.calledWith(stub, viewportElement.container, data, {});
+    sinon.assert.calledWith(stub, undefined, data, {});
 
     voxlens.__set__('run', originalFunc);
   });
@@ -166,11 +195,16 @@ describe('index.js', () => {
     const originalFunc = voxlens.__get__('startApp');
     voxlens.__set__('startApp', stub);
 
-    const viewportElement = { container: element };
+    const viewportElement = { container: document.body };
 
     voxlens('googlecharts', viewportElement, data, options);
 
-    sinon.assert.calledWith(stub, expectedData, options, 'unique-id');
+    sinon.assert.calledWith(
+      stub,
+      expectedData,
+      { ...options, element: document.getElementById('svg') },
+      'unique-id'
+    );
 
     voxlens.__set__('startApp', originalFunc);
   });
@@ -206,15 +240,15 @@ describe('index.js', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: maximum'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Maximum Y Label for X Labels is 2 belonging to fake.'
     );
   });
@@ -226,7 +260,7 @@ describe('index.js', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 1);
+    sinon.assert.callCount(consoleStub, 2);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
@@ -261,6 +295,16 @@ describe('index.js', () => {
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+s'
     );
+  });
+
+  it('should start the app but skip execution if command issued while mic is listening with key S', () => {
+    voxlens.__set__('isListening', true);
+
+    voxlens('chartjs', element, data, options);
+
+    fireEvent('s');
+
+    sinon.assert.callCount(consoleStub, 0);
   });
 
   it('should start the app and play sonification when activated with key M', () => {
@@ -316,6 +360,16 @@ describe('index.js', () => {
     );
   });
 
+  it('should start the app but skip execution if command issued while mic is listening with key I', () => {
+    voxlens.__set__('isListening', true);
+
+    voxlens('chartjs', element, data, options);
+
+    fireEvent('i');
+
+    sinon.assert.callCount(consoleStub, 0);
+  });
+
   it('should start the app and pause output when activated with key P', () => {
     voxlens('chartjs', element, data, options);
 
@@ -335,15 +389,15 @@ describe('index.js', () => {
 
     fireEvent('1');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+1'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: maximum'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Maximum Y Label for X Labels is 2 belonging to fake.'
     );
   });
@@ -373,12 +427,12 @@ describe('index.js', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 2);
+    sinon.assert.callCount(consoleStub, 3);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command not recognized. Please try again.'
     );
   });
@@ -405,15 +459,15 @@ describe('index.js', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: blah'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Unable to get data. Please try again.'
     );
   });
@@ -443,18 +497,18 @@ describe('index.js', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 4);
+    sinon.assert.callCount(consoleStub, 5);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: average'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Command issued: minimum'
     );
-    expect(consoleStub.getCall(3).args.join('')).to.contain(
+    expect(consoleStub.getCall(4).args.join('')).to.contain(
       'Average Y Label for X Labels is 1.5. Minimum Y Label for X Labels is 1 belonging to dummy.'
     );
   });
@@ -472,10 +526,12 @@ describe('index.js', () => {
   });
 
   it('should error out when library is not supported', () => {
-    expect(function () {
-      voxlens('some-unsupported-library');
-    }).to.throw(
-      'Library not supported. Supported libraries are: chartjs, d3, googlecharts.'
+    voxlens('some-unsupported-library');
+
+    sinon.assert.callCount(consoleStub, 1);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'VoxLens error: Library not supported. Supported libraries are: chartjs, d3, googlecharts.'
     );
   });
 
@@ -486,12 +542,12 @@ describe('index.js', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: value'
     );
   });
@@ -503,12 +559,12 @@ describe('index.js', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: value'
     );
   });
@@ -520,13 +576,107 @@ describe('index.js', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: value'
+    );
+  });
+
+  it('should start the app and perform all operations when debug flag is set to true', () => {
+    const stub = sinon.stub();
+    const originalFunc = voxlens.__get__('startApp');
+    voxlens.__set__('startApp', stub);
+
+    const viewportElement = {
+      node: () => document.body,
+      data: () => [data],
+    };
+
+    voxlens('d3', viewportElement, null, { ...options, debug: true });
+
+    expect(document.documentElement.innerHTML).to.contain(
+      'You’re now using the VoxLens debug mode'
+    );
+
+    voxlens.__set__('startApp', originalFunc);
+  });
+
+  it('should start the app and perform all operations when feedbackCollector flag is set', () => {
+    const stub = sinon.stub();
+    const originalFunc = voxlens.__get__('startApp');
+    voxlens.__set__('startApp', stub);
+
+    const viewportElement = {
+      node: () => document.body,
+      data: () => [data],
+    };
+
+    voxlens('d3', viewportElement, null, {
+      ...options,
+      debug: true,
+      feedbackCollector: { email: 'blah@blah.com' },
+    });
+
+    expect(document.documentElement.innerHTML).to.contain(
+      'How accessible is the visualization?'
+    );
+
+    voxlens.__set__('startApp', originalFunc);
+  });
+
+  it('should start the app and perform all operations when instructions flag is set to false', () => {
+    const stub = sinon.stub();
+    const originalFunc = voxlens.__get__('startApp');
+    voxlens.__set__('startApp', stub);
+
+    const viewportElement = {
+      node: () => document.body,
+      data: () => [data],
+    };
+
+    voxlens('d3', viewportElement, null, {
+      ...options,
+      debug: { instructions: false },
+    });
+
+    expect(document.documentElement.innerHTML).to.not.contain(
+      'Click on the start button to hear what a screen reader would announce when encountering the visualization element'
+    );
+
+    voxlens.__set__('startApp', originalFunc);
+  });
+
+  it('should start the app and perform all operations when contrastChecker flag is set to false', () => {
+    const stub = sinon.stub();
+    const originalFunc = voxlens.__get__('startApp');
+    voxlens.__set__('startApp', stub);
+
+    const viewportElement = {
+      node: () => document.body,
+      data: () => [data],
+    };
+
+    voxlens('d3', viewportElement, null, {
+      ...options,
+      debug: { contrastChecker: false },
+    });
+
+    expect(document.documentElement.innerHTML).to.not.contain(
+      'Contrast checker is experimental'
+    );
+
+    voxlens.__set__('startApp', originalFunc);
+  });
+
+  it('should start the app and perform all operations when debug flag is set to true and error happens', () => {
+    voxlens('something', null, null, { ...options, debug: true });
+
+    expect(document.documentElement.innerHTML).to.contain(
+      'VoxLens error: Library not supported. Supported libraries are: chartjs, d3, googlecharts.'
     );
   });
 });

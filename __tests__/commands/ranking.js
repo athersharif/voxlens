@@ -39,6 +39,7 @@ const options = {
   xLabel: 'dummy',
   yLabel: 'label',
   title: 'some title',
+  element: document.body,
 };
 
 describe('getRanking', () => {
@@ -113,15 +114,15 @@ describe('getRanking', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 5);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Command issued: ranking'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(4).args.join('')).to.contain(
       'The top 2 Dummies are: x2, x4.'
     );
   });
@@ -135,7 +136,7 @@ describe('getRanking', () => {
       'Command issued: top blah'
     );
     expect(consoleStub.getCall(1).args.join('')).to.contain(
-      'I heard you say top blah. Unable to get data. Please try again.'
+      'top blah. Unable to get data. Please try again.'
     );
   });
 
@@ -148,7 +149,7 @@ describe('getRanking', () => {
       'Command issued: top blah'
     );
     expect(consoleStub.getCall(1).args.join('')).to.contain(
-      'I heard you say top blah. Unable to get data. Please try again.'
+      'top blah. Unable to get data. Please try again.'
     );
   });
 });

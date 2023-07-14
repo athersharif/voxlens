@@ -11,10 +11,19 @@ exports.__GetDependency__ = exports.__get__ = _get__;
 exports["default"] = void 0;
 var _isArray = _interopRequireDefault(require("lodash/isArray"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-var _DefaultExportValue = function _DefaultExportValue(viewportElement) {
-  var data = viewportElement.data();
+var _DefaultExportValue = function _DefaultExportValue(element) {
+  var data = element.data();
+  var svgFound = false;
   if (_get__("isArray")(data[0])) data = data[0];
-  viewportElement = viewportElement.node().parentElement.parentElement.parentElement;
+  var viewportElement = element.node();
+  while (!svgFound && viewportElement) {
+    var _viewportElement$tagN;
+    var tag = (_viewportElement$tagN = viewportElement.tagName) === null || _viewportElement$tagN === void 0 ? void 0 : _viewportElement$tagN.toLowerCase();
+    if (tag !== 'body' && tag !== 'svg') viewportElement = viewportElement.parentElement;else {
+      if (tag === 'body') viewportElement = element.node();
+      svgFound = true;
+    }
+  }
   return {
     data: data,
     viewportElement: viewportElement
