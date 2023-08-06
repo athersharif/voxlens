@@ -56,7 +56,7 @@ const voxlensOptions = {
 
 #### **For D3:** 
 
-Add this line to the appropriate nested element:
+Add this line to the appropriate nested element (see [this](https://github.com/athersharif/voxlens/blob/main/example/src/helpers/createD3.js#L72) for example):
 
 ```
 .call((d) => voxlens('d3', d, data, voxlensOptions));
@@ -64,11 +64,15 @@ Add this line to the appropriate nested element:
 
 #### **For Google Charts:**
 
+(see [this](https://github.com/athersharif/voxlens/blob/main/example/src/helpers/createGoogleCharts.js#L54) for example)
+
 ```
 voxlens('googlecharts', chart, data, voxlensOptions);
 ```
 
 #### **For ChartJS:**
+
+(see [this](https://github.com/athersharif/voxlens/blob/main/example/src/helpers/createChartJS.js#L76) for example)
 
 ```
 voxlens('chartjs', container, data, voxlensOptions);
@@ -153,7 +157,7 @@ Ather Sharif, Olivia H. Wang, Alida T. Muongchan, Katharina Reinecke, and Jacob 
 
 [PDF](https://athersharif.me/documents/chi-2022-voxlens.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
 
-Ather Sharif, Sanjana Shivani Chintalapati, Jacob O. Wobbrock, and Katharina Reinecke. 2021. Understanding Screen-Reader Users’ Experiences with Online Data Visualizations. In The 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21). Association for Computing Machinery, New York, NY, USA, Article 14, 1–16.
+Ather Sharif, Sanjana S. Chintalapati, Jacob O. Wobbrock, and Katharina Reinecke. 2021. Understanding Screen-Reader Users’ Experiences with Online Data Visualizations. In The 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21). Association for Computing Machinery, New York, NY, USA, Article 14, 1–16.
 
 [PDF](https://athersharif.me/documents/assets-2021-understanding-sru-experiences-online-data-viz.pdf) | [Presentation](https://www.youtube.com/watch?v=nOHcQYm9HKQ)
 
