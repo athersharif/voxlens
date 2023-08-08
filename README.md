@@ -50,7 +50,7 @@ const voxlensOptions = {
   y: 'value',
   title: 'This is the title of my visualization',
   xLabel: 'My-X-Label',
-  yLabel: 'My-Y-Label,
+  yLabel: 'My-Y-Label',
 };
 ```
 
@@ -80,7 +80,7 @@ voxlens('chartjs', container, data, voxlensOptions);
 
 ### Examples
 
-Examples are provided under the `example` folder. Run `npm start` from within the `example` folder. A sample React app will run on `localhost:3000`. URLs for each library are as follows:
+Examples are provided under the `example` [folder](https://github.com/athersharif/voxlens/tree/main/example). Run `npm start` from within the `example` folder. A sample React app will run on `localhost:3000`. URLs for each library are as follows:
 
 - *ChartJS*: localhost:3000/voxlens/playground/chartjs
 - *D3*: localhost:3000/voxlens/playground/d3
@@ -94,10 +94,11 @@ Modifier Keys: Ctrl + Shift (Windows) and Option (MacOS)
 
 |Mode|Activation Key|Description|
 |--- |--- |--- |
-|Question-and-Answer|Modifier Keys + A/Modifier Keys + 1|Enables users to interact with the visualization through voice commands using their microphone|
-|Summary|Modifier Keys + S/Modifier Keys + 2|Provides a holistic summary of the data contained in the visualization
-|Sonification|Modifier Keys + M/Modifier Keys + 3|Plays a sonified version of the data using the [`sonifier`](https://www.npmjs.com/package/sonifier) library|
-|Instructions|Modifier Keys + I/Modifier Keys + 4|Provides the user with instructions on how to interact with VoxLens|
+|Question-and-Answer|Modifier Keys + A or Modifier Keys + 1|Enables users to interact with the visualization through voice commands using their microphone|
+|Summary|Modifier Keys + S or Modifier Keys + 2|Provides a holistic summary of the data contained in the visualization
+|Sonification|Modifier Keys + M or Modifier Keys + 3|Plays a sonified version of the data using the [`sonifier`](https://www.npmjs.com/package/sonifier) library|
+|Instructions|Modifier Keys + I or Modifier Keys + 4|Provides the user with instructions on how to interact with VoxLens|
+|Pause|Modifier Keys + P or Modifier Keys + 5|Pauses the output from VoxLens. Also works with sonification|
 
 ### Testing VoxLens
 
