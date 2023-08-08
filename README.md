@@ -27,7 +27,7 @@ Currently, VoxLens supports:
 |x|Required|The key name(s) of the indepedent variable(s) in the dataset. Can be an array for multi-series data.|
 |y|Required|The key name of the depedent variable in the dataset.|
 |title|Required|The title of the visualization. Should be kept concise.|
-|chartType|Required|The chart type of the visualization. Must be one of `bar`, `scatter`, `line`, `map`, `multiseries`.|
+|chartType|Required|The chart type of the visualization. Must be one of `bar`, `scatter`, `line`, `map`, `multiseries`. Defaults to `bar`.|
 |dataModule|Required|Data module for geospatial data. Only required when chartType is `map`. Must be one of `state`, `country`.|
 |xLabel|Optional|The label for x. Defaults to the value of x. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
 |yLabel|Optional|The label for y. Defaults to the value of y. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
