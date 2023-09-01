@@ -7,19 +7,20 @@ exports.__ResetDependency__ = _reset__;
 exports.__RewireAPI__ = void 0;
 exports.__set__ = exports.__Rewire__ = _set__;
 exports.__GetDependency__ = exports.__get__ = _get__;
-exports.verbalise = exports.validate = exports.sanitizeVoiceText = exports.logKeyPresses = exports.logCommand = exports.isCommandDuplicate = exports.getSettings = exports.getModifier = exports.getKeyFromEvent = exports.getKeyBinds = exports.getInstructionsText = exports.getDefaults = exports.getArrayFromObject = exports.generateInstructions = exports.formatOptions = exports["default"] = exports.createTemporaryElement = exports.addThousandsSeparators = exports.addFeedbackToResponse = void 0;
+exports.verbalise = exports.validate = exports.sanitizeVoiceText = exports.logKeyPresses = exports.logCommand = exports.isCommandDuplicate = exports.getSettings = exports.getModifier = exports.getKeyFromEvent = exports.getKeyBinds = exports.getInstructionsText = exports.getDefaults = exports.getArrayFromObject = exports.generateInstructions = exports.formatOptions = exports["default"] = exports.createTemporaryElement = exports.computeMetadata = exports.addVariationInformation = exports.addThousandsSeparators = exports.addFeedbackToResponse = void 0;
 var _isNumber = _interopRequireDefault(require("lodash/isNumber"));
 var _isEmpty = _interopRequireDefault(require("lodash/isEmpty"));
 var _random = _interopRequireDefault(require("lodash/random"));
 var _round = _interopRequireDefault(require("lodash/round"));
 var _startCase = _interopRequireDefault(require("lodash/startCase"));
+var _statsLite = _interopRequireDefault(require("stats-lite"));
 var _uaParserJs = _interopRequireDefault(require("ua-parser-js"));
 var _wordsToNumbers = _interopRequireDefault(require("words-to-numbers"));
 var _settings = _interopRequireDefault(require("./settings"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
@@ -221,6 +222,29 @@ var sanitizeVoiceText = function sanitizeVoiceText() {
 };
 exports.sanitizeVoiceText = sanitizeVoiceText;
 var stopWords = ['a', 'able', 'about', 'across', 'after', 'all', 'almost', 'also', 'am', 'among', 'an', 'and', 'any', 'are', 'as', 'at', 'be', 'because', 'been', 'but', 'by', 'can', 'cannot', 'could', 'dear', 'did', 'do', 'does', 'either', 'else', 'ever', 'every', 'for', 'from', 'get', 'got', 'had', 'has', 'have', 'he', 'her', 'hers', 'him', 'his', 'how', 'however', 'i', 'if', 'in', 'into', 'is', 'it', 'its', 'just', 'let', 'like', 'likely', 'may', 'me', 'might', 'must', 'my', 'neither', 'no', 'nor', 'not', 'of', 'off', 'often', 'on', 'only', 'or', 'other', 'our', 'own', 'rather', 'said', 'say', 'says', 'she', 'should', 'since', 'so', 'some', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'these', 'they', 'this', 'tis', 'to', 'too', 'twas', 'us', 'wants', 'was', 'we', 'were', 'what', 'when', 'where', 'which', 'while', 'who', 'whom', 'why', 'will', 'with', 'would', 'yet', 'you', 'your', "ain't", "aren't", "can't", "could've", "couldn't", "didn't", "doesn't", "don't", "hasn't", "he'd", "he'll", "he's", "how'd", "how'll", "how's", "i'd", "i'll", "i'm", "i've", "isn't", "it's", "might've", "mightn't", "must've", "mustn't", "shan't", "she'd", "she'll", "she's", "should've", "shouldn't", "that'll", "that's", "there's", "they'd", "they'll", "they're", "they've", "wasn't", "we'd", "we'll", "we're", "weren't", "what'd", "what's", "when'd", "when'll", "when's", "where'd", "where'll", "where's", "who'd", "who'll", "who's", "why'd", "why'll", "why's", "won't", "would've", "wouldn't", "you'd", "you'll", "you're", "you've"];
+var computeMetadata = function computeMetadata(metadata, value) {
+  if (metadata.stdev != null && value > 0) {
+    metadata.cv = metadata.stdev / value;
+  }
+  return metadata;
+};
+exports.computeMetadata = computeMetadata;
+var addVariationInformation = function addVariationInformation(data) {
+  var cvs = data.map(function (d) {
+    return d['vx_metadata'].cv;
+  });
+  var percentileThreshold = 0.5;
+  var percentileLimit = _get__("stats").percentile(cvs, percentileThreshold);
+  return data.map(function (d) {
+    return _objectSpread(_objectSpread({}, d), {}, {
+      vx_metadata: _objectSpread(_objectSpread({}, d['vx_metadata']), {}, {
+        isCVHigh: d['vx_metadata'].cv >= percentileLimit,
+        percentileThreshold: percentileThreshold * 100
+      })
+    });
+  });
+};
+exports.addVariationInformation = addVariationInformation;
 function _getGlobalObject() {
   try {
     if (!!global) {
@@ -337,6 +361,8 @@ function _get_original__(variableName) {
       return _wordsToNumbers["default"];
     case "stopWords":
       return stopWords;
+    case "stats":
+      return _statsLite["default"];
   }
   return undefined;
 }

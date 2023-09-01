@@ -31,6 +31,11 @@ Currently, VoxLens supports:
 |dataModule|Required|Data module for geospatial data. Only required when chartType is `map`. Must be one of `state`, `country`.|
 |xLabel|Optional|The label for x. Defaults to the value of x. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
 |yLabel|Optional|The label for y. Defaults to the value of y. Used to contruct sentences for the screen-reader users. If your dataset has key names that are not well named or reflect the data column appropriately, please consider setting this value.|
+|vx_metadata|Optional|Metadata for relaying uncertainty in the data to the user. Possible values are specified below.|
+|vx_metadata.min|Optional|The minimum value in the data series, if the data is an average value|
+|vx_metadata.max|Optional|The maximum value in the data series, if the data is an average value|
+|vx_metadata.stdev|Optional|The standard deviation of the data series, if the data is an average value|
+|vx_metadata.isAverage|Optional|The boolean flag `true` or `false` if the data is an average value|
 
 ### Sample Implementation
 
@@ -150,16 +155,13 @@ Licensed under BSD. Can be found [here](https://github.com/athersharif/voxlens/b
 
 ## Citations
 
-Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In 20th International Web for All Conference (W4A23). Association for Computing Machinery, New York, NY, USA, 18–31. 
+Ather Sharif, Ruican Zhong, and Yadi Wang. 2023. Conveying Uncertainty in Data Visualizations to Screen-Reader Users Through Non-Visual Means. In The 25th International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '23). Association for Computing Machinery, New York, NY, USA. To Appear. https://doi.org/10.1145/3597638.3614502 ([PDF](https://athersharif.me/documents/assets-2023-voxlens-uncertainty.pdf) | Presentation)
 
-[PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down.pdf) | [Presentation]() | Best Paper Award
+Ather Sharif, Andrew M. Zhang, Katharina Reinecke, and Jacob O. Wobbrock. 2023. Understanding and Improving Drilled-Down Information Extraction from Online Data Visualizations for Screen-Reader Users. In 20th International Web for All Conference (W4A23). Association for Computing Machinery, New York, NY, USA, 18–31. https://doi.org/10.1145/3587281.3587284 ([PDF](https://athersharif.me/documents/w4a-2023-voxlens-drilled-down.pdf) | [Presentation]() | Best Paper Award)
 
-Ather Sharif, Olivia H. Wang, Alida T. Muongchan, Katharina Reinecke, and Jacob O. Wobbrock. 2022. VoxLens: Making Online Data Visualizations Accessible with an Interactive JavaScript Plug-In. In Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems (CHI '22). Association for Computing Machinery, New York, NY, USA, Article 478, 1–19.
+Ather Sharif, Olivia H. Wang, Alida T. Muongchan, Katharina Reinecke, and Jacob O. Wobbrock. 2022. VoxLens: Making Online Data Visualizations Accessible with an Interactive JavaScript Plug-In. In Proceedings of the 2022 CHI Conference on Human Factors in Computing Systems (CHI '22). Association for Computing Machinery, New York, NY, USA, Article 478, 1–19. https://doi.org/10.1145/3517428.3550360 ([PDF](https://athersharif.me/documents/chi-2022-voxlens.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU))
 
-[PDF](https://athersharif.me/documents/chi-2022-voxlens.pdf) | [Presentation](https://www.youtube.com/watch?v=_ACIJafIRuU)
-
-Ather Sharif, Sanjana S. Chintalapati, Jacob O. Wobbrock, and Katharina Reinecke. 2021. Understanding Screen-Reader Users’ Experiences with Online Data Visualizations. In The 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21). Association for Computing Machinery, New York, NY, USA, Article 14, 1–16.
-
-[PDF](https://athersharif.me/documents/assets-2021-understanding-sru-experiences-online-data-viz.pdf) | [Presentation](https://www.youtube.com/watch?v=nOHcQYm9HKQ)
+Ather Sharif, Sanjana S. Chintalapati, Jacob O. Wobbrock, and Katharina Reinecke. 2021. Understanding Screen-Reader Users’ Experiences with Online Data Visualizations. In The 23rd International ACM SIGACCESS Conference on Computers and Accessibility (ASSETS '21). Association for Computing Machinery, New York, NY, USA, Article 14, 1–16. https://doi.org/10.1145/3441852.3471202
+([PDF](https://athersharif.me/documents/assets-2021-understanding-sru-experiences-online-data-viz.pdf) | [Presentation](https://www.youtube.com/watch?v=nOHcQYm9HKQ))
 
 Read more about our work on accessibility of online data visualizations [here](https://athersharif.me/projects/VOX).
