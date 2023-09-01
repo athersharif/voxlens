@@ -1,6 +1,6 @@
 "use strict";
 
-function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
@@ -9,16 +9,30 @@ exports.__RewireAPI__ = void 0;
 exports.__set__ = exports.__Rewire__ = _set__;
 exports.__GetDependency__ = exports.__get__ = _get__;
 exports["default"] = void 0;
+var _pluralize = _interopRequireDefault(require("pluralize"));
 var _round = _interopRequireDefault(require("lodash/round"));
 var _utils = require("../utils");
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 var _DefaultExportValue = function _DefaultExportValue(data, options) {
   var key = data.x[0];
   var value = data.y[0];
+  var min, max, isAverage, isCVHigh, percentileThreshold;
+  if (data.metadata) {
+    min = data.metadata[0].min;
+    max = data.metadata[0].max;
+    isAverage = data.metadata[0].isAverage;
+    isCVHigh = data.metadata[0].isCVHigh;
+    percentileThreshold = data.metadata[0].percentileThreshold;
+  }
+  var sentence = "".concat(isAverage === true ? 'Average ' : '').concat(options.yLabel, " for ").concat(key, " is ").concat(_get__("addThousandsSeparators")(_get__("round")(value, 2)), ".");
+  if (min != null) sentence += " The minimum ".concat(options.y, " for ").concat(key, " was ").concat(min, ".");
+  if (max != null) sentence += " The maximum ".concat(options.y, " for ").concat(key, " was ").concat(max, ".");
+  if (isCVHigh === true) sentence += " Use the data with caution. Data has higher variation than ".concat(percentileThreshold, " percent of other ").concat(_get__("pluralize")(options.x), " and may not be reliable.");
+  if (isCVHigh === false) sentence += " Data has lower variation than ".concat(percentileThreshold, " percent of other ").concat(_get__("pluralize")(options.x), " and may be reliable.");
   return {
     key: key,
     value: value,
-    sentence: "".concat(options.yLabel, " for ").concat(key, " is ").concat(_get__("addThousandsSeparators")(_get__("round")(value, 2)), ".")
+    sentence: sentence
   };
 };
 var _default = _DefaultExportValue;
@@ -113,6 +127,8 @@ function _get_original__(variableName) {
       return _utils.addThousandsSeparators;
     case "round":
       return _round["default"];
+    case "pluralize":
+      return _pluralize["default"];
   }
   return undefined;
 }

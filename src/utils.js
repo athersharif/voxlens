@@ -7,6 +7,7 @@ import isEmpty from 'lodash/isEmpty';
 import random from 'lodash/random';
 import round from 'lodash/round';
 import startCase from 'lodash/startCase';
+import stats from 'stats-lite';
 import UAParser from 'ua-parser-js';
 import wordsToNumbers from 'words-to-numbers';
 import settings from './settings';
@@ -574,3 +575,39 @@ const stopWords = [
   "you're",
   "you've",
 ];
+
+/**
+ * Computes CV from metadata for relaying uncertainty information.
+ * @memberOf utils
+ * @param {Object} metadata - Object with min, max, stdev, isAverage.
+ * @param {number} value - Value of the data point.
+ * @return {Object} - The metadata with CV information.
+ */
+export const computeMetadata = (metadata, value) => {
+  if (metadata.stdev != null && value > 0) {
+    metadata.cv = metadata.stdev / value;
+  }
+
+  return metadata;
+};
+
+/**
+ * Adds CV information to the data.
+ * @memberOf utils
+ * @param {Object} data - Object with data values.
+ * @return {Object} - The modified data with CV and percentile threshold information.
+ */
+export const addVariationInformation = (data) => {
+  const cvs = data.map((d) => d['vx_metadata'].cv);
+  const percentileThreshold = 0.5;
+  const percentileLimit = stats.percentile(cvs, percentileThreshold);
+
+  return data.map((d) => ({
+    ...d,
+    vx_metadata: {
+      ...d['vx_metadata'],
+      isCVHigh: d['vx_metadata'].cv >= percentileLimit,
+      percentileThreshold: percentileThreshold * 100,
+    },
+  }));
+};

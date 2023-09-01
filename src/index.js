@@ -11,7 +11,9 @@ import sonifier, { resetSonifier } from 'sonifier';
 import { processCommand } from './commands';
 import libraries from './libraries';
 import {
+  addVariationInformation,
   createTemporaryElement,
+  computeMetadata,
   formatOptions,
   generateInstructions,
   getArrayFromObject,
@@ -177,9 +179,26 @@ const run = (viewportElement, data, options) => {
   const { title, triggers, x, y } = options;
   const hotkeysId = uniqueId();
 
+  const metadataKey = 'vx_metadata';
+  const isMetaDataPresent = data.every(
+    (d) => d[metadataKey] != null && d[metadataKey]['isAverage']
+  );
+
+  if (isMetaDataPresent) {
+    data = data.map((d) => ({
+      ...d,
+      [metadataKey]: computeMetadata(d[metadataKey], d[y]),
+    }));
+
+    data = addVariationInformation(data);
+  }
+
   data = {
     x: getArrayFromObject(data, x),
     y: getArrayFromObject(data, y),
+    ...(isMetaDataPresent
+      ? { metadata: getArrayFromObject(data, metadataKey) }
+      : {}),
   };
 
   validate(data.y, options);

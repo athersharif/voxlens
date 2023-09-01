@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/voxlens/playground/static/css/main.ea29cc34.css",
-    "main.js": "/voxlens/playground/static/js/main.162c84c1.js",
+    "main.js": "/voxlens/playground/static/js/main.f38a9a24.js",
     "index.html": "/voxlens/playground/index.html",
     "main.ea29cc34.css.map": "/voxlens/playground/static/css/main.ea29cc34.css.map",
-    "main.162c84c1.js.map": "/voxlens/playground/static/js/main.162c84c1.js.map"
+    "main.f38a9a24.js.map": "/voxlens/playground/static/js/main.f38a9a24.js.map"
   },
   "entrypoints": [
     "static/css/main.ea29cc34.css",
-    "static/js/main.162c84c1.js"
+    "static/js/main.f38a9a24.js"
   ]
 }

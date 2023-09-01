@@ -1,0 +1,102 @@
+[
+  {
+    "name": "Jake",
+    "score": 72,
+    "vx_metadata": {
+      "min": 53,
+      "max": 95,
+      "stdev": 18,
+      "isAverage": true
+    }
+  },
+  {
+    "name": "Susan",
+    "score": 62,
+    "vx_metadata": {
+      "min": 52,
+      "max": 87,
+      "stdev": 12.62,
+      "isAverage": true
+    }
+  },
+  {
+    "name": "Kyle",
+    "score": 80,
+    "vx_metadata": {
+      "min": 56,
+      "max": 100,
+      "stdev": 15.99,
+      "isAverage": true
+    }
+  },
+  {
+    "name": "Karen",
+    "score": 78,
+    "vx_metadata": {
+      "min": 66,
+      "max": 90,
+      "stdev": 9.27,
+      "isAverage": true
+    }
+  },
+  {
+    "name": "Emma",
+    "score": 72,
+    "vx_metadata": {
+      "min": 60,
+      "max": 86,
+      "stdev": 12.24,
+      "isAverage": true
+    }
+  },
+  {
+    "name": "Alex",
+    "score": 79,
+    "vx_metadata": {
+      "min": 56,
+      "max": 89,
+      "stdev": 13.11,
+      "isAverage": true
+    }
+  },
+  {
+    "name": "Emily",
+    "score": 81,
+    "vx_metadata": {
+      "min": 69,
+      "max": 95,
+      "stdev": 12.36,
+      "isAverage": true
+    }
+  },
+  {
+    "name": "Ellen",
+    "score": 70,
+    "vx_metadata": {
+      "min": 53,
+      "max": 89,
+      "stdev": 17.02,
+      "isAverage": true
+    }
+  },
+  {
+    "name": "Daniel",
+    "score": 74,
+    "vx_metadata": {
+      "min": 54,
+      "max": 99,
+      "stdev": 17.8,
+      "isAverage": true
+    }
+  },
+  {
+    "name": "Brandon",
+    "score": 83,
+    "vx_metadata": {
+      "min": 74,
+      "max": 96,
+      "stdev": 8.91,
+      "isAverage": true
+    }
+  }
+]
