@@ -266,6 +266,7 @@ const getMatchingDataPoints = (data, voiceText, options, activatedCommands) => {
         data: {
           x: [key],
           y: [data.y[i]],
+          ...(data.metadata && { metadata: [data.metadata[i]] }),
         },
       };
     });

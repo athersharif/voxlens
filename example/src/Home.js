@@ -40,6 +40,12 @@ const Home = () => (
         <Link to="/d3/map/inaccessible">Without VoxLens)</Link>
       </li>
     </ul>
+    <h2>Additional Features</h2>
+    <ul>
+      <li>
+        <Link to="/d3/uncertainty">Uncertainty in Data Visualizations</Link>
+      </li>
+    </ul>
   </div>
 );
 

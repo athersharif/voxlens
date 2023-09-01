@@ -36,6 +36,57 @@ const countryData = {
   y: [58, 38, 63],
 };
 
+const uncertaintyData = [
+  {
+    x: ['dummy'],
+    y: [72],
+    metadata: [
+      {
+        min: 53,
+        max: 95,
+        stdev: 18,
+        isAverage: true,
+        isCVHigh: true,
+      },
+    ],
+  },
+  {
+    x: ['fake'],
+    y: [78],
+    metadata: [
+      {
+        min: 66,
+        max: 90,
+        stdev: 9.27,
+        isAverage: true,
+        isCVHigh: false,
+      },
+    ],
+  },
+  {
+    x: ['blah'],
+    y: [78],
+    metadata: [
+      {
+        min: 66,
+        max: 90,
+        isAverage: true,
+      },
+    ],
+  },
+  {
+    x: ['blah2'],
+    y: [0],
+    metadata: [
+      {
+        min: 0,
+        max: 0,
+        isAverage: true,
+      },
+    ],
+  },
+];
+
 const countryOptions = {
   chartType: 'map',
   dataModule: 'country',
@@ -302,6 +353,38 @@ describe('getIndividualDataPoint', () => {
     );
     expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Average Cars for Jakes is 17.'
+    );
+  });
+
+  it('should return correct response when value command is issued for uncertainty data when cv high', () => {
+    const result = command.func(uncertaintyData[0], options);
+
+    expect(result.sentence).to.equal(
+      'Average label for dummy is 72. The minimum label for dummy was 53. The maximum label for dummy was 95. Use the data with caution. Data has higher variation than undefined percent of other dummies and may not be reliable.'
+    );
+  });
+
+  it('should return correct response when value command is issued for uncertainty data when cv not high', () => {
+    const result = command.func(uncertaintyData[1], options);
+
+    expect(result.sentence).to.equal(
+      'Average label for fake is 78. The minimum label for fake was 66. The maximum label for fake was 90. Data has lower variation than undefined percent of other dummies and may be reliable.'
+    );
+  });
+
+  it('should return correct response when value command is issued for uncertainty data when stdev not present', () => {
+    const result = command.func(uncertaintyData[2], options);
+
+    expect(result.sentence).to.equal(
+      'Average label for blah is 78. The minimum label for blah was 66. The maximum label for blah was 90.'
+    );
+  });
+
+  it('should return correct response when value command is issued for uncertainty data when value is zero', () => {
+    const result = command.func(uncertaintyData[3], options);
+
+    expect(result.sentence).to.equal(
+      'Average label for blah2 is 0. The minimum label for blah2 was 0. The maximum label for blah2 was 0.'
     );
   });
 

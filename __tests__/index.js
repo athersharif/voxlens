@@ -15,9 +15,60 @@ const data = [
   },
 ];
 
+const uncertaintyData = [
+  {
+    xKey: 'dummy',
+    yKey: 72,
+    vx_metadata: {
+      min: 53,
+      max: 95,
+      stdev: 18,
+      isAverage: true,
+    },
+  },
+  {
+    xKey: 'fake',
+    yKey: 78,
+    vx_metadata: {
+      min: 66,
+      max: 90,
+      isAverage: true,
+    },
+  },
+  {
+    xKey: 'something',
+    yKey: 0,
+    vx_metadata: {
+      min: 0,
+      max: 0,
+      stdev: 9.27,
+      isAverage: true,
+    },
+  },
+];
+
 const expectedData = {
   x: ['dummy', 'fake'],
   y: [1, 2],
+};
+
+const expectedUncertaintyData = {
+  x: ['dummy', 'fake'],
+  y: [72, 78],
+  metadata: [
+    {
+      min: 53,
+      max: 95,
+      stdev: 18,
+      isAverage: true,
+    },
+    {
+      min: 66,
+      max: 90,
+      stdev: 9.27,
+      isAverage: true,
+    },
+  ],
 };
 
 const options = {
@@ -425,6 +476,57 @@ describe('index.js', () => {
       voxlens('some-unsupported-library');
     }).to.throw(
       'Library not supported. Supported libraries are: chartjs, d3, googlecharts.'
+    );
+  });
+
+  it('should start the app and perform all operations when uncertainty data issued and stdev present', () => {
+    process.env.TEST_P5_RESULT = 'dummy';
+
+    voxlens('chartjs', element, uncertaintyData, options);
+
+    fireEvent('a');
+
+    sinon.assert.callCount(consoleStub, 3);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Key combination issued: option+a'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Command issued: value'
+    );
+  });
+
+  it('should start the app and perform all operations when uncertainty data issued and stdev absent', () => {
+    process.env.TEST_P5_RESULT = 'fake';
+
+    voxlens('chartjs', element, uncertaintyData, options);
+
+    fireEvent('a');
+
+    sinon.assert.callCount(consoleStub, 3);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Key combination issued: option+a'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Command issued: value'
+    );
+  });
+
+  it('should start the app and perform all operations when uncertainty data issued and value zero', () => {
+    process.env.TEST_P5_RESULT = 'something';
+
+    voxlens('chartjs', element, uncertaintyData, options);
+
+    fireEvent('a');
+
+    sinon.assert.callCount(consoleStub, 3);
+
+    expect(consoleStub.getCall(0).args.join('')).to.contain(
+      'Key combination issued: option+a'
+    );
+    expect(consoleStub.getCall(1).args.join('')).to.contain(
+      'Command issued: value'
     );
   });
 });

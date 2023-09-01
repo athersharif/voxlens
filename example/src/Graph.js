@@ -22,6 +22,12 @@ class Graph extends Component {
     yKey: 'medal_count',
   };
 
+  uncertaintySettings = {
+    title: 'Average Test Scores for Students',
+    xKey: 'name',
+    yKey: 'score',
+  };
+
   createChart = () => {
     const {
       combination,
@@ -36,11 +42,17 @@ class Graph extends Component {
 
       const data = require('./data/' + combination.type);
 
+      let visualizationSettings = this.settings;
+
+      if (combination.type === 'multiseries')
+        visualizationSettings = this.multiSeriesSettings;
+      else if (combination.type === 'uncertainty')
+        visualizationSettings = this.uncertaintySettings;
+
       const settings = {
-        ...(combination.type === 'multiseries'
-          ? this.multiSeriesSettings
-          : this.settings),
-        chartType: combination.type,
+        ...visualizationSettings,
+        chartType:
+          combination.type === 'uncertainty' ? 'bar' : combination.type,
         dataModule: combination.type === 'map' ? 'state' : null,
         data: combination.type === 'multiseries' ? data : shuffle(data),
         withVoxLens: isAccessible,
