@@ -37,6 +37,7 @@ const options = {
   xLabel: 'dummy',
   yLabel: 'label',
   title: 'some title',
+  element: document.body,
 };
 
 describe('getRange', () => {
@@ -69,15 +70,15 @@ describe('getRange', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: range'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Label ranges from 12 to 52.'
     );
   });

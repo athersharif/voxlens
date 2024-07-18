@@ -55,6 +55,10 @@ class Graph extends Component {
           combination.type === 'uncertainty' ? 'bar' : combination.type,
         dataModule: combination.type === 'map' ? 'state' : null,
         data: combination.type === 'multiseries' ? data : shuffle(data),
+        debug: true,
+        feedbackCollector: {
+          email: 'visualization.creator@example.com',
+        },
         withVoxLens: isAccessible,
       };
 
@@ -82,7 +86,7 @@ class Graph extends Component {
       <div id="graph">
         {combination.library === 'd3' && <h1>{settings.title}</h1>}
         {combination.library === 'chartjs' ? (
-          <canvas id="chart" tabIndex="0" role="img" />
+          <canvas id="chart" tabIndex="0" role="img"></canvas>
         ) : (
           <div id="chart" />
         )}

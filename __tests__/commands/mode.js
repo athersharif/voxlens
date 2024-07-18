@@ -11,6 +11,7 @@ const data = {
 const options = {
   xLabel: 'dummy',
   yLabel: 'label',
+  element: document.body,
 };
 
 describe('getModeSummary', () => {

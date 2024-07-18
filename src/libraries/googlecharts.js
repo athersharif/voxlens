@@ -11,5 +11,5 @@
  */
 export default (viewportElement, data) => ({
   data,
-  viewportElement: viewportElement.container,
+  viewportElement: viewportElement.container?.getElementsByTagName('svg')[0],
 });

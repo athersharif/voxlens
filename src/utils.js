@@ -7,10 +7,14 @@ import isEmpty from 'lodash/isEmpty';
 import random from 'lodash/random';
 import round from 'lodash/round';
 import startCase from 'lodash/startCase';
+import uniq from 'lodash/uniq';
 import stats from 'stats-lite';
 import UAParser from 'ua-parser-js';
+import uFuzzy from '@leeoniya/ufuzzy';
 import wordsToNumbers from 'words-to-numbers';
 import settings from './settings';
+
+const fuzzy = uFuzzy();
 
 /**
  * Finds the operating system of the user.
@@ -25,10 +29,7 @@ const os = new UAParser().getOS();
  * @returns {string} - Human-friendly verbose response.
  */
 const getFeedbackText = () => {
-  const feedbacks = [
-    "I understand you're looking for",
-    'It seems like you asked about the',
-  ];
+  const feedbacks = ['I understand you said', 'It seems like you asked'];
   const randomIndex = random(0, feedbacks.length - 1);
 
   return feedbacks[randomIndex];
@@ -143,27 +144,28 @@ export const generateInstructions = (
  * Creates a temporary element to relay response to screen readers.
  * @memberOf utils
  * @param {string} text - The response to relay to the screen reader.
- * @param {number} timeout - Time after which the element is automatically removed from the DOM tree.
+ * @param {Object} options - Time after which the element is automatically removed from the DOM tree.
  */
-export const createTemporaryElement = (text, timeout = 1000) => {
+export const createTemporaryElement = (text, options) => {
+  const name = options.name || 'voxlens-response';
+  const existingElement = document.getElementsByName(name)[0];
+
+  if (existingElement) existingElement.remove();
+
   const div = document.createElement('div');
 
-  div.style.position = 'absolute';
-  div.style.left = '-10000px';
-  div.style.top = 'auto';
-  div.style.width = '1px';
-  div.style.height = '1px';
-  div.style.overflow = 'hidden';
+  if (options.stopElement || !options.debug)
+    div.setAttribute('class', 'hidden');
+
+  div.setAttribute('name', name);
   div.setAttribute('aria-live', 'assertive');
 
   if (!os.name.includes('Mac OS')) {
     div.setAttribute('role', 'alert');
   }
 
-  document.body.appendChild(div);
+  options.element.parentElement.appendChild(div);
   div.innerHTML = text;
-
-  window.setTimeout(() => div.remove(), timeout);
 };
 
 /**
@@ -251,14 +253,13 @@ export const getSettings = () => {
  * Generates the final response by adding feedback and commands to it.
  * @memberOf utils
  * @param {string} response - The response from commands.
- * @param {string} commands - Commands issued by the user.
+ * @param {string} voiceText - Query issued by the user.
  * @return {string} - The response relayed to the user's screen reader.
  */
-export const addFeedbackToResponse = (response, commands) => {
-  commands = verbalise(commands);
+export const addFeedbackToResponse = (response, voiceText) => {
   response = response.replace(/ +(?= )/g, '');
 
-  return commands ? `${getFeedbackText()} ${commands}. ${response}` : response;
+  return `${getFeedbackText()} ${voiceText}. ${response}`;
 };
 
 /**
@@ -386,6 +387,51 @@ export const sanitizeVoiceText = (voiceText = '') => {
     .trim();
 
   return voiceText;
+};
+
+export const performFuzzySearch = (data, voiceText) => {
+  const haystack = data.map((e) => e.toString().toLowerCase());
+  let results = [];
+  let result = {};
+  let maxScore = 0;
+
+  uniq(voiceText).forEach((needle) => {
+    let [fuzzyresults] = fuzzy.search(haystack, needle.toString());
+
+    fuzzyresults.forEach((i) => {
+      const value = data[i];
+      let score = 1;
+
+      if (result[value]) score = result[value] + 1;
+
+      result[value] = score;
+
+      if (score > maxScore) maxScore = score;
+    });
+
+    Object.keys(result).forEach((r) => {
+      results.push({
+        score: result[r],
+        value: r,
+      });
+    });
+  });
+
+  results = results.filter((v) => v.score === maxScore).map((v) => v.value);
+
+  const indices = data
+    .map((v, i) => ({ v: v.toString(), i }))
+    .filter((v) => results.includes(v.v))
+    .map((v) => v.i);
+
+  return indices;
+};
+
+export const speakResponse = (text, options) => {
+  if (options.debug && options.debug?.responses?.onlyText !== true) {
+    options.speaker.stop();
+    options.speaker.speak(text);
+  }
 };
 
 /**

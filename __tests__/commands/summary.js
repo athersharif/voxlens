@@ -2,8 +2,6 @@ import { expect } from 'chai';
 import sinon from 'sinon';
 import * as allCommands from '../../src/commands';
 
-const commands = allCommands.commands;
-
 const data = {
   x: ['x1', 'x2', 'x3', 'x4'],
   y: [12, 52, 33, 44],
@@ -15,6 +13,7 @@ const options = {
   xLabel: 'dummy',
   yLabel: 'label',
   title: 'some title',
+  element: document.body,
 };
 
 describe('getSummary', () => {

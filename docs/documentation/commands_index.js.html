@@ -43,6 +43,7 @@ import {
   createTemporaryElement,
   isCommandDuplicate,
   logCommand,
+  performFuzzySearch,
   sanitizeVoiceText,
 } from '../utils';
 
@@ -125,68 +126,34 @@ const getPossibleDataPoints = (data, voiceText, chartType) => {
   if (!voiceText || voiceText.replaceAll(' ', '') === '')
     return { indices: [] };
 
-  const xFilter = (arr, text) =>
-    uniq(
-      arr.filter((x) =>
-        Number.isNaN(parseInt(x)) &amp;&amp; Number.isNaN(parseInt(text))
-          ? x.toString().toLowerCase().includes(text)
-          : x.toString().toLowerCase() === text
-      )
-    );
-
-  let filteredData = [];
   voiceText = voiceText
     .split(' ')
     .map((text) => wordsToNumbers(text.toString().toLowerCase()));
 
   if (chartType === 'multiseries') {
-    voiceText.forEach((text) => {
-      data.x.forEach((arr, i) => {
-        filteredData[i] = [...(filteredData[i] || []), ...xFilter(arr, text)];
-      });
-    });
-
-    let indices = [[], []];
-    let extraOptions = {};
-
-    filteredData[0].forEach((d) => {
-      indices[0] = [
-        ...indices[0],
-        ...data.x[0]
-          .map((d, i) => ({ d, i }))
-          .filter((x) => x.d === d)
-          .map((x) => x.i),
-      ];
-    });
-
-    filteredData[1].forEach((d) => {
-      indices[1] = [
-        ...indices[1],
-        ...data.x[1]
-          .map((d, i) => ({ d, i }))
-          .filter((x) => x.d === d)
-          .map((x) => x.i),
-      ];
-    });
+    const indices = data.x.map((x) => performFuzzySearch(x, voiceText));
 
     let finalIndices = intersection(indices[0], indices[1]);
 
-    if (filteredData[0].length > 0 &amp;&amp; filteredData[1].length === 0) {
-      extraOptions = {
-        combine: true,
-        combineIndex: 0,
-        combineCommand: 'average',
-      };
-      finalIndices = indices[0];
-    }
+    let extraOptions = {};
 
-    if (filteredData[1].length > 0 &amp;&amp; filteredData[0].length === 0) {
+    const nonZeroLengthIndices = indices
+      .map((i) => i.length)
+      .filter((i) => i !== 0);
+
+    if (
+      nonZeroLengthIndices.length > 0 &amp;&amp;
+      nonZeroLengthIndices.length &lt; indices.length
+    ) {
+      const combineIndex = indices[0].length > indices[1].length ? 0 : 1;
+
       extraOptions = {
         combine: true,
-        combineIndex: 1,
+        combineIndex,
         combineCommand: 'average',
       };
-      finalIndices = indices[1];
+
+      finalIndices = indices[combineIndex];
     }
 
     return {
@@ -194,23 +161,7 @@ const getPossibleDataPoints = (data, voiceText, chartType) => {
       indices: finalIndices,
     };
   } else {
-    voiceText.forEach((text) => {
-      filteredData = [...filteredData, ...xFilter(data.x, text)];
-    });
-
-    let indices = [];
-
-    filteredData.forEach((d) => {
-      indices = [
-        ...indices,
-        ...data.x
-          .map((d, i) => ({ d, i }))
-          .filter((x) => x.d === d)
-          .map((x) => x.i),
-      ];
-    });
-
-    return { indices };
+    return { indices: performFuzzySearch(data.x, voiceText) };
   }
 };
 
@@ -355,6 +306,7 @@ export const processCommand = (
   const { chartType, dataModule } = options;
   let allData = [];
   let regions = [];
+  const originalVoiceText = voiceText;
 
   const mod = dataModule ? dataModules[dataModule] : null;
 
@@ -406,6 +358,8 @@ export const processCommand = (
 
     if (regions.length > 0) {
       regions.forEach((r) => {
+        voiceText = voiceText.replace(r.name.replace('.', ' '), '');
+
         const filteredData = moduleHelper.filterDataByRegion(data, r, mod);
 
         if (filteredData.x.length > 0) {
@@ -471,7 +425,7 @@ export const processCommand = (
     time: Date.now(),
   };
 
-  let response = 'Found the following possible results in the data. ';
+  let response = '';
   let commandsStaged = [];
   let dataValues = [];
 
@@ -513,8 +467,8 @@ export const processCommand = (
         type,
         key: functionResponse.key,
         value: functionResponse.value,
+        sentence: functionResponse.sentence,
       });
-      response += functionResponse.sentence + ' ';
 
       logCommand(name, response);
       commandsStaged.push(name);
@@ -524,29 +478,31 @@ export const processCommand = (
   if (dataValues.length === 0) {
     response = 'Unable to get data. Please try again.';
 
-    if (voiceText &amp;&amp; voiceText.trim() !== '')
-      response = `I heard you say ${voiceText.trim()}. ` + response;
+    logCommand(originalVoiceText, response);
+  } else {
+    response = orderBy(dataValues, ['value'], ['desc'])
+      .map((dv) => dv.sentence)
+      .join(' ');
 
-    logCommand(voiceText, response);
+    dataValues = dataValues.filter(
+      (d) =>
+        (d.type === 'region' &amp;&amp; d.command === 'average') ||
+        (d.type !== 'region' &amp;&amp; (d.kind === 'stats' || d.command === 'value'))
+    );
+
+    if (dataValues.length > 1) {
+      response = response.trim() + ' ' + getComparisonText(dataValues, options);
+    }
   }
 
-  response = addFeedbackToResponse(response, uniq(commandsStaged));
-  dataValues = dataValues.filter(
-    (d) =>
-      (d.type === 'region' &amp;&amp; d.command === 'average') ||
-      (d.type !== 'region' &amp;&amp; (d.kind === 'stats' || d.command === 'value'))
-  );
-
-  if (dataValues.length > 1) {
-    response = response.trim() + ' ' + getComparisonText(dataValues, options);
-  }
+  response = addFeedbackToResponse(response, originalVoiceText);
 
   // eslint-disable-next-line no-console
   console.log('Response is ', response);
 
-  createTemporaryElement(response);
+  createTemporaryElement(response, options);
 
-  return { lastIssuedCommand };
+  return { lastIssuedCommand, response };
 };
 
 /**
@@ -590,13 +546,13 @@ export const commands = [
 </div>
 
 <nav>
-    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="p5.module_speech.html">speech</a></li></ul><h3>Namespaces</h3><ul><li><a href="commands.html">commands</a></li><li><a href="commands.average.html">average</a></li><li><a href="commands.commands.html">commands</a></li><li><a href="commands.factor.html">factor</a></li><li><a href="commands.helpers.html">helpers</a></li><li><a href="commands.instructions.html">instructions</a></li><li><a href="commands.maximum.html">maximum</a></li><li><a href="commands.median.html">median</a></li><li><a href="commands.minimum.html">minimum</a></li><li><a href="commands.mode.html">mode</a></li><li><a href="commands.range.html">range</a></li><li><a href="commands.ranking.html">ranking</a></li><li><a href="commands.standardDeviation.html">standardDeviation</a></li><li><a href="commands.summary.html">summary</a></li><li><a href="commands.total.html">total</a></li><li><a href="commands.value.html">value</a></li><li><a href="commands.variance.html">variance</a></li><li><a href="index_.html">index</a></li><li><a href="libraries.html">libraries</a></li><li><a href="libraries.chartJS.html">chartJS</a></li><li><a href="libraries.d3.html">d3</a></li><li><a href="libraries.googleCharts.html">googleCharts</a></li><li><a href="settings.html">settings</a></li><li><a href="utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="p5.module_speech-p5.Speech.html">Speech</a></li><li><a href="p5.module_speech-p5.SpeechRec.html">SpeechRec</a></li></ul>
+    <h2><a href="index.html">Home</a></h2><h3>Modules</h3><ul><li><a href="p5.module_speech.html">speech</a></li></ul><h3>Namespaces</h3><ul><li><a href="commands.html">commands</a></li><li><a href="commands.average.html">average</a></li><li><a href="commands.commands.html">commands</a></li><li><a href="commands.factor.html">factor</a></li><li><a href="commands.helpers.html">helpers</a></li><li><a href="commands.instructions.html">instructions</a></li><li><a href="commands.maximum.html">maximum</a></li><li><a href="commands.median.html">median</a></li><li><a href="commands.minimum.html">minimum</a></li><li><a href="commands.mode.html">mode</a></li><li><a href="commands.range.html">range</a></li><li><a href="commands.ranking.html">ranking</a></li><li><a href="commands.standardDeviation.html">standardDeviation</a></li><li><a href="commands.summary.html">summary</a></li><li><a href="commands.total.html">total</a></li><li><a href="commands.value.html">value</a></li><li><a href="commands.variance.html">variance</a></li><li><a href="index_.html">index</a></li><li><a href="libraries.html">libraries</a></li><li><a href="libraries.chartJS.html">chartJS</a></li><li><a href="libraries.d3.html">d3</a></li><li><a href="libraries.googleCharts.html">googleCharts</a></li><li><a href="settings.html">settings</a></li><li><a href="tools.html">tools</a></li><li><a href="utils.html">utils</a></li></ul><h3>Classes</h3><ul><li><a href="p5.module_speech-p5.Speech.html">Speech</a></li><li><a href="p5.module_speech-p5.SpeechRec.html">SpeechRec</a></li></ul>
 </nav>
 
 <br class="clear">
 
 <footer>
-    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Fri Sep 01 2023 16:49:14 GMT-0700 (Pacific Daylight Time)
+    Documentation generated by <a href="https://github.com/jsdoc/jsdoc">JSDoc 4.0.2</a> on Thu Jul 18 2024 12:04:24 GMT-0700 (Pacific Daylight Time)
 </footer>
 
 <script> prettyPrint(); </script>

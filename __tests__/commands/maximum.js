@@ -37,6 +37,7 @@ const options = {
   xLabel: 'dummy',
   yLabel: 'label',
   title: 'some title',
+  element: document.body,
 };
 
 describe('maximum', () => {
@@ -71,15 +72,15 @@ describe('maximum', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: maximum'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Maximum Label for Dummies is 52 belonging to x2.'
     );
   });

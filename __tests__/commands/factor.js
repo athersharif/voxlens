@@ -39,6 +39,7 @@ const options = {
   xLabel: 'dummy',
   yLabel: 'label',
   title: 'some title',
+  element: document.body,
 };
 
 describe('getFactor', () => {
@@ -84,15 +85,15 @@ describe('getFactor', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: factor'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Data is from 4 xKeys. Say tell me factor levels for xKey to hear all xKeys.'
     );
   });
@@ -106,15 +107,15 @@ describe('getFactor', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: factor'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Data is from 4 xKeys: allen, jake, susan, megan.'
     );
   });
@@ -159,18 +160,18 @@ describe('getFactor', () => {
 
     fireEvent('a');
 
-    sinon.assert.callCount(consoleStub, 3);
+    sinon.assert.callCount(consoleStub, 4);
 
     expect(consoleStub.getCall(0).args.join('')).to.contain(
       'Key combination issued: option+a'
     );
-    expect(consoleStub.getCall(1).args.join('')).to.contain(
+    expect(consoleStub.getCall(2).args.join('')).to.contain(
       'Command issued: factor'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Data is from 4 xKeys.'
     );
-    expect(consoleStub.getCall(2).args.join('')).to.contain(
+    expect(consoleStub.getCall(3).args.join('')).to.contain(
       'Data is from 2 zKeys.'
     );
   });

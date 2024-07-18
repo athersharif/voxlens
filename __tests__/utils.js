@@ -74,7 +74,7 @@ describe('utils.js', () => {
       mockUAParser('Windows');
       utils = mock.reRequire('../src/utils');
 
-      utils.createTemporaryElement('random text');
+      utils.createTemporaryElement('random text', { element: document.body });
 
       const divs = document.getElementsByTagName('div');
       const div = divs[divs.length - 1];
@@ -87,12 +87,12 @@ describe('utils.js', () => {
     });
 
     it('should generate temporary element when os is mac', () => {
-      utils.createTemporaryElement('random text2', 200);
+      utils.createTemporaryElement('random text 2', { element: document.body });
 
       const divs = document.getElementsByTagName('div');
       const div = divs[divs.length - 1];
 
-      expect(div.innerHTML).to.equal('random text2');
+      expect(div.innerHTML).to.equal('random text 2');
       expect(div.getAttribute('role')).to.be.null;
     });
   });

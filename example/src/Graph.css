@@ -49,3 +49,7 @@
 #graph .tooltip tr td:nth-child(1) {
   width: 50px;
 }
+
+#graph .bar-axis path {
+  stroke: black;
+}

@@ -7,26 +7,35 @@ exports.__ResetDependency__ = _reset__;
 exports.__RewireAPI__ = void 0;
 exports.__set__ = exports.__Rewire__ = _set__;
 exports.__GetDependency__ = exports.__get__ = _get__;
-exports.verbalise = exports.validate = exports.sanitizeVoiceText = exports.logKeyPresses = exports.logCommand = exports.isCommandDuplicate = exports.getSettings = exports.getModifier = exports.getKeyFromEvent = exports.getKeyBinds = exports.getInstructionsText = exports.getDefaults = exports.getArrayFromObject = exports.generateInstructions = exports.formatOptions = exports["default"] = exports.createTemporaryElement = exports.computeMetadata = exports.addVariationInformation = exports.addThousandsSeparators = exports.addFeedbackToResponse = void 0;
+exports.verbalise = exports.validate = exports.speakResponse = exports.sanitizeVoiceText = exports.performFuzzySearch = exports.logKeyPresses = exports.logCommand = exports.isCommandDuplicate = exports.getSettings = exports.getModifier = exports.getKeyFromEvent = exports.getKeyBinds = exports.getInstructionsText = exports.getDefaults = exports.getArrayFromObject = exports.generateInstructions = exports.formatOptions = exports["default"] = exports.createTemporaryElement = exports.computeMetadata = exports.addVariationInformation = exports.addThousandsSeparators = exports.addFeedbackToResponse = void 0;
 var _isNumber = _interopRequireDefault(require("lodash/isNumber"));
 var _isEmpty = _interopRequireDefault(require("lodash/isEmpty"));
 var _random = _interopRequireDefault(require("lodash/random"));
 var _round = _interopRequireDefault(require("lodash/round"));
 var _startCase = _interopRequireDefault(require("lodash/startCase"));
+var _uniq = _interopRequireDefault(require("lodash/uniq"));
 var _statsLite = _interopRequireDefault(require("stats-lite"));
 var _uaParserJs = _interopRequireDefault(require("ua-parser-js"));
+var _ufuzzy = _interopRequireDefault(require("@leeoniya/ufuzzy"));
 var _wordsToNumbers = _interopRequireDefault(require("words-to-numbers"));
 var _settings = _interopRequireDefault(require("./settings"));
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { "default": obj }; }
 function _typeof(o) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) { return typeof o; } : function (o) { return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o; }, _typeof(o); }
+function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
+function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
+function _iterableToArrayLimit(r, l) { var t = null == r ? null : "undefined" != typeof Symbol && r[Symbol.iterator] || r["@@iterator"]; if (null != t) { var e, n, i, u, a = [], f = !0, o = !1; try { if (i = (t = t.call(r)).next, 0 === l) { if (Object(t) !== t) return; f = !1; } else for (; !(f = (e = i.call(t)).done) && (a.push(e.value), a.length !== l); f = !0); } catch (r) { o = !0, n = r; } finally { try { if (!f && null != t["return"] && (u = t["return"](), Object(u) !== u)) return; } finally { if (o) throw n; } } return a; } }
+function _arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
 function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
 function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { _defineProperty(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
 function _defineProperty(obj, key, value) { key = _toPropertyKey(key); if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 function _toPropertyKey(arg) { var key = _toPrimitive(arg, "string"); return _typeof(key) === "symbol" ? key : String(key); }
 function _toPrimitive(input, hint) { if (_typeof(input) !== "object" || input === null) return input; var prim = input[Symbol.toPrimitive]; if (prim !== undefined) { var res = prim.call(input, hint || "default"); if (_typeof(res) !== "object") return res; throw new TypeError("@@toPrimitive must return a primitive value."); } return (hint === "string" ? String : Number)(input); }
+var fuzzy = _get__("uFuzzy")();
 var os = new (_get__("UAParser"))().getOS();
 var getFeedbackText = function getFeedbackText() {
-  var feedbacks = ["I understand you're looking for", 'It seems like you asked about the'];
+  var feedbacks = ['I understand you said', 'It seems like you asked'];
   var randomIndex = _get__("random")(0, feedbacks.length - 1);
   return feedbacks[randomIndex];
 };
@@ -82,24 +91,19 @@ var generateInstructions = function generateInstructions(viewportElement, trigge
   }
 };
 exports.generateInstructions = generateInstructions;
-var createTemporaryElement = function createTemporaryElement(text) {
-  var timeout = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 1000;
+var createTemporaryElement = function createTemporaryElement(text, options) {
+  var name = options.name || 'voxlens-response';
+  var existingElement = document.getElementsByName(name)[0];
+  if (existingElement) existingElement.remove();
   var div = document.createElement('div');
-  div.style.position = 'absolute';
-  div.style.left = '-10000px';
-  div.style.top = 'auto';
-  div.style.width = '1px';
-  div.style.height = '1px';
-  div.style.overflow = 'hidden';
+  if (options.stopElement || !options.debug) div.setAttribute('class', 'hidden');
+  div.setAttribute('name', name);
   div.setAttribute('aria-live', 'assertive');
   if (!_get__("os").name.includes('Mac OS')) {
     div.setAttribute('role', 'alert');
   }
-  document.body.appendChild(div);
+  options.element.parentElement.appendChild(div);
   div.innerHTML = text;
-  window.setTimeout(function () {
-    return div.remove();
-  }, timeout);
 };
 exports.createTemporaryElement = createTemporaryElement;
 var getArrayFromObject = function getArrayFromObject(data, key) {
@@ -149,10 +153,9 @@ var getSettings = function getSettings() {
   }
 };
 exports.getSettings = getSettings;
-var addFeedbackToResponse = function addFeedbackToResponse(response, commands) {
-  commands = _get__("verbalise")(commands);
+var addFeedbackToResponse = function addFeedbackToResponse(response, voiceText) {
   response = response.replace(/ +(?= )/g, '');
-  return commands ? "".concat(_get__("getFeedbackText")(), " ").concat(commands, ". ").concat(response) : response;
+  return "".concat(_get__("getFeedbackText")(), " ").concat(voiceText, ". ").concat(response);
 };
 exports.addFeedbackToResponse = addFeedbackToResponse;
 var verbalise = function verbalise(values) {
@@ -221,6 +224,57 @@ var sanitizeVoiceText = function sanitizeVoiceText() {
   return voiceText;
 };
 exports.sanitizeVoiceText = sanitizeVoiceText;
+var performFuzzySearch = function performFuzzySearch(data, voiceText) {
+  var haystack = data.map(function (e) {
+    return e.toString().toLowerCase();
+  });
+  var results = [];
+  var result = {};
+  var maxScore = 0;
+  _get__("uniq")(voiceText).forEach(function (needle) {
+    var _get__$search = _get__("fuzzy").search(haystack, needle.toString()),
+      _get__$search2 = _slicedToArray(_get__$search, 1),
+      fuzzyresults = _get__$search2[0];
+    fuzzyresults.forEach(function (i) {
+      var value = data[i];
+      var score = 1;
+      if (result[value]) score = result[value] + 1;
+      result[value] = score;
+      if (score > maxScore) maxScore = score;
+    });
+    Object.keys(result).forEach(function (r) {
+      results.push({
+        score: result[r],
+        value: r
+      });
+    });
+  });
+  results = results.filter(function (v) {
+    return v.score === maxScore;
+  }).map(function (v) {
+    return v.value;
+  });
+  var indices = data.map(function (v, i) {
+    return {
+      v: v.toString(),
+      i: i
+    };
+  }).filter(function (v) {
+    return results.includes(v.v);
+  }).map(function (v) {
+    return v.i;
+  });
+  return indices;
+};
+exports.performFuzzySearch = performFuzzySearch;
+var speakResponse = function speakResponse(text, options) {
+  var _options$debug;
+  if (options.debug && ((_options$debug = options.debug) === null || _options$debug === void 0 || (_options$debug = _options$debug.responses) === null || _options$debug === void 0 ? void 0 : _options$debug.onlyText) !== true) {
+    options.speaker.stop();
+    options.speaker.speak(text);
+  }
+};
+exports.speakResponse = speakResponse;
 var stopWords = ['a', 'able', 'about', 'across', 'after', 'all', 'almost', 'also', 'am', 'among', 'an', 'and', 'any', 'are', 'as', 'at', 'be', 'because', 'been', 'but', 'by', 'can', 'cannot', 'could', 'dear', 'did', 'do', 'does', 'either', 'else', 'ever', 'every', 'for', 'from', 'get', 'got', 'had', 'has', 'have', 'he', 'her', 'hers', 'him', 'his', 'how', 'however', 'i', 'if', 'in', 'into', 'is', 'it', 'its', 'just', 'let', 'like', 'likely', 'may', 'me', 'might', 'must', 'my', 'neither', 'no', 'nor', 'not', 'of', 'off', 'often', 'on', 'only', 'or', 'other', 'our', 'own', 'rather', 'said', 'say', 'says', 'she', 'should', 'since', 'so', 'some', 'than', 'that', 'the', 'their', 'them', 'then', 'there', 'these', 'they', 'this', 'tis', 'to', 'too', 'twas', 'us', 'wants', 'was', 'we', 'were', 'what', 'when', 'where', 'which', 'while', 'who', 'whom', 'why', 'will', 'with', 'would', 'yet', 'you', 'your', "ain't", "aren't", "can't", "could've", "couldn't", "didn't", "doesn't", "don't", "hasn't", "he'd", "he'll", "he's", "how'd", "how'll", "how's", "i'd", "i'll", "i'm", "i've", "isn't", "it's", "might've", "mightn't", "must've", "mustn't", "shan't", "she'd", "she'll", "she's", "should've", "shouldn't", "that'll", "that's", "there's", "they'd", "they'll", "they're", "they've", "wasn't", "we'd", "we'll", "we're", "weren't", "what'd", "what's", "when'd", "when'll", "when's", "where'd", "where'll", "where's", "who'd", "who'll", "who's", "why'd", "why'll", "why's", "won't", "would've", "wouldn't", "you'd", "you'll", "you're", "you've"];
 var computeMetadata = function computeMetadata(metadata, value) {
   if (metadata.stdev != null && value > 0) {
@@ -331,6 +385,8 @@ function _get__(variableName) {
 }
 function _get_original__(variableName) {
   switch (variableName) {
+    case "uFuzzy":
+      return _ufuzzy["default"];
     case "UAParser":
       return _uaParserJs["default"];
     case "random":
@@ -351,8 +407,6 @@ function _get_original__(variableName) {
       return _startCase["default"];
     case "settings":
       return _settings["default"];
-    case "verbalise":
-      return verbalise;
     case "getFeedbackText":
       return getFeedbackText;
     case "getKeyFromEvent":
@@ -361,6 +415,10 @@ function _get_original__(variableName) {
       return _wordsToNumbers["default"];
     case "stopWords":
       return stopWords;
+    case "uniq":
+      return _uniq["default"];
+    case "fuzzy":
+      return fuzzy;
     case "stats":
       return _statsLite["default"];
   }

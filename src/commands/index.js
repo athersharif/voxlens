@@ -15,6 +15,7 @@ import {
   createTemporaryElement,
   isCommandDuplicate,
   logCommand,
+  performFuzzySearch,
   sanitizeVoiceText,
 } from '../utils';
 
@@ -97,68 +98,34 @@ const getPossibleDataPoints = (data, voiceText, chartType) => {
   if (!voiceText || voiceText.replaceAll(' ', '') === '')
     return { indices: [] };
 
-  const xFilter = (arr, text) =>
-    uniq(
-      arr.filter((x) =>
-        Number.isNaN(parseInt(x)) && Number.isNaN(parseInt(text))
-          ? x.toString().toLowerCase().includes(text)
-          : x.toString().toLowerCase() === text
-      )
-    );
-
-  let filteredData = [];
   voiceText = voiceText
     .split(' ')
     .map((text) => wordsToNumbers(text.toString().toLowerCase()));
 
   if (chartType === 'multiseries') {
-    voiceText.forEach((text) => {
-      data.x.forEach((arr, i) => {
-        filteredData[i] = [...(filteredData[i] || []), ...xFilter(arr, text)];
-      });
-    });
-
-    let indices = [[], []];
-    let extraOptions = {};
-
-    filteredData[0].forEach((d) => {
-      indices[0] = [
-        ...indices[0],
-        ...data.x[0]
-          .map((d, i) => ({ d, i }))
-          .filter((x) => x.d === d)
-          .map((x) => x.i),
-      ];
-    });
-
-    filteredData[1].forEach((d) => {
-      indices[1] = [
-        ...indices[1],
-        ...data.x[1]
-          .map((d, i) => ({ d, i }))
-          .filter((x) => x.d === d)
-          .map((x) => x.i),
-      ];
-    });
+    const indices = data.x.map((x) => performFuzzySearch(x, voiceText));
 
     let finalIndices = intersection(indices[0], indices[1]);
 
-    if (filteredData[0].length > 0 && filteredData[1].length === 0) {
-      extraOptions = {
-        combine: true,
-        combineIndex: 0,
-        combineCommand: 'average',
-      };
-      finalIndices = indices[0];
-    }
+    let extraOptions = {};
 
-    if (filteredData[1].length > 0 && filteredData[0].length === 0) {
+    const nonZeroLengthIndices = indices
+      .map((i) => i.length)
+      .filter((i) => i !== 0);
+
+    if (
+      nonZeroLengthIndices.length > 0 &&
+      nonZeroLengthIndices.length < indices.length
+    ) {
+      const combineIndex = indices[0].length > indices[1].length ? 0 : 1;
+
       extraOptions = {
         combine: true,
-        combineIndex: 1,
+        combineIndex,
         combineCommand: 'average',
       };
-      finalIndices = indices[1];
+
+      finalIndices = indices[combineIndex];
     }
 
     return {
@@ -166,23 +133,7 @@ const getPossibleDataPoints = (data, voiceText, chartType) => {
       indices: finalIndices,
     };
   } else {
-    voiceText.forEach((text) => {
-      filteredData = [...filteredData, ...xFilter(data.x, text)];
-    });
-
-    let indices = [];
-
-    filteredData.forEach((d) => {
-      indices = [
-        ...indices,
-        ...data.x
-          .map((d, i) => ({ d, i }))
-          .filter((x) => x.d === d)
-          .map((x) => x.i),
-      ];
-    });
-
-    return { indices };
+    return { indices: performFuzzySearch(data.x, voiceText) };
   }
 };
 
@@ -327,6 +278,7 @@ export const processCommand = (
   const { chartType, dataModule } = options;
   let allData = [];
   let regions = [];
+  const originalVoiceText = voiceText;
 
   const mod = dataModule ? dataModules[dataModule] : null;
 
@@ -378,6 +330,8 @@ export const processCommand = (
 
     if (regions.length > 0) {
       regions.forEach((r) => {
+        voiceText = voiceText.replace(r.name.replace('.', ' '), '');
+
         const filteredData = moduleHelper.filterDataByRegion(data, r, mod);
 
         if (filteredData.x.length > 0) {
@@ -443,7 +397,7 @@ export const processCommand = (
     time: Date.now(),
   };
 
-  let response = 'Found the following possible results in the data. ';
+  let response = '';
   let commandsStaged = [];
   let dataValues = [];
 
@@ -485,8 +439,8 @@ export const processCommand = (
         type,
         key: functionResponse.key,
         value: functionResponse.value,
+        sentence: functionResponse.sentence,
       });
-      response += functionResponse.sentence + ' ';
 
       logCommand(name, response);
       commandsStaged.push(name);
@@ -496,29 +450,31 @@ export const processCommand = (
   if (dataValues.length === 0) {
     response = 'Unable to get data. Please try again.';
 
-    if (voiceText && voiceText.trim() !== '')
-      response = `I heard you say ${voiceText.trim()}. ` + response;
+    logCommand(originalVoiceText, response);
+  } else {
+    response = orderBy(dataValues, ['value'], ['desc'])
+      .map((dv) => dv.sentence)
+      .join(' ');
 
-    logCommand(voiceText, response);
+    dataValues = dataValues.filter(
+      (d) =>
+        (d.type === 'region' && d.command === 'average') ||
+        (d.type !== 'region' && (d.kind === 'stats' || d.command === 'value'))
+    );
+
+    if (dataValues.length > 1) {
+      response = response.trim() + ' ' + getComparisonText(dataValues, options);
+    }
   }
 
-  response = addFeedbackToResponse(response, uniq(commandsStaged));
-  dataValues = dataValues.filter(
-    (d) =>
-      (d.type === 'region' && d.command === 'average') ||
-      (d.type !== 'region' && (d.kind === 'stats' || d.command === 'value'))
-  );
-
-  if (dataValues.length > 1) {
-    response = response.trim() + ' ' + getComparisonText(dataValues, options);
-  }
+  response = addFeedbackToResponse(response, originalVoiceText);
 
   // eslint-disable-next-line no-console
   console.log('Response is ', response);
 
-  createTemporaryElement(response);
+  createTemporaryElement(response, options);
 
-  return { lastIssuedCommand };
+  return { lastIssuedCommand, response };
 };
 
 /**
